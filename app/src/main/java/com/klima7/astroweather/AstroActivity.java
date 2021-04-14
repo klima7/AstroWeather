@@ -8,7 +8,6 @@ import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -27,6 +26,8 @@ public class AstroActivity extends FragmentActivity {
     private SunFragment sunFragment;
     private MoonFragment moonFragment;
     private SunMoonFragment sunMoonFragment;
+
+    private AstroCalculator.SunInfo sunInfo;
 
     private Timer timer;
     private TimerTask refreshTask;
@@ -49,72 +50,48 @@ public class AstroActivity extends FragmentActivity {
         float latitude = preferences.getFloat(MenuActivity.PREFERENCE_LATITUDE, 0);
         float longitude = preferences.getFloat(MenuActivity.PREFERENCE_LONGITUDE, 0);
 
-//        if(savedInstanceState == null) {
-//            infoFragment = InfoFragment.newInstance(latitude, longitude);
-//            sunFragment = SunFragment.newInstance();
-//            moonFragment = MoonFragment.newInstance();
-//
-//            FragmentManager fm = getSupportFragmentManager();
-//            FragmentTransaction transaction = fm.beginTransaction();
-//            transaction.add(R.id.info_container, infoFragment, "info");
-//            transaction.add(R.id.info_container, sunFragment, "sun");
-//            transaction.add(R.id.info_container, moonFragment, "moon");
-//            transaction.commit();
-//        }
-//        else {
-//            FragmentManager fm = getSupportFragmentManager();
-//            sunFragment = (SunFragment) fm.findFragmentByTag("sun");
-//            moonFragment = (MoonFragment) fm.findFragmentByTag("moon");
-//        }
-//
+        // Get sun info
+        if(savedInstanceState == null) {
+            AstroDateTime time = new AstroDateTime();
+            AstroCalculator.Location location = new AstroCalculator.Location(51.759445, 19.457216);
+            AstroCalculator calculator = new AstroCalculator(time, location);
+            sunInfo = calculator.getSunInfo();
+        }
+        else {
+            DataWrapper wrapper = (DataWrapper) savedInstanceState.getSerializable("data");
+            sunInfo = wrapper.getSunInfo();
+            Log.i("Hello", "sunInfo " + sunInfo.getAzimuthRise());
+        }
 
+        // Create fragments
+        infoFragment = InfoFragment.newInstance(latitude, longitude);
+        sunFragment = SunFragment.newInstance();
+        moonFragment = MoonFragment.newInstance();
+        sunMoonFragment = SunMoonFragment.newInstance(sunFragment, moonFragment);
+
+        sunFragment.setInfo(sunInfo);
+
+        // Get configuration
         int orientation = getResources().getConfiguration().orientation;
         int size = getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
 
-        if(savedInstanceState == null) {
-
-            infoFragment = InfoFragment.newInstance(latitude, longitude);
-            sunFragment = SunFragment.newInstance();
-            moonFragment = MoonFragment.newInstance();
-            sunMoonFragment = SunMoonFragment.newInstance(sunFragment, moonFragment);
-
-            if(size == Configuration.SCREENLAYOUT_SIZE_LARGE || size == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.info_container, infoFragment, "infoFragment");
-                transaction.add(R.id.sun_container, sunFragment, "sunFragment");
-                transaction.add(R.id.moon_container, moonFragment, "moonFragment");
-                transaction.commit();
-            }
-
-            else {
-                ViewPager2 pager = findViewById(R.id.pager);
-                FragmentStateAdapter adapter;
-                if (orientation == Configuration.ORIENTATION_PORTRAIT) adapter = new PortraitPagerAdapter(this);
-                else adapter = new LandscapePagerAdapter(this);
-                pager.setAdapter(adapter);
-            }
+        // Tablet
+        if(size == Configuration.SCREENLAYOUT_SIZE_LARGE || size == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(R.id.info_container, infoFragment, "infoFragment");
+            transaction.add(R.id.sun_container, sunFragment, "sunFragment");
+            transaction.add(R.id.moon_container, moonFragment, "moonFragment");
+            transaction.commit();
         }
 
+        // Mobile
         else {
-            if(size == Configuration.SCREENLAYOUT_SIZE_LARGE || size == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
-                FragmentManager manager = getSupportFragmentManager();
-                infoFragment = (InfoFragment) manager.findFragmentByTag("infoFragment");
-                sunFragment = (SunFragment) manager.findFragmentByTag("sunFragment");
-                moonFragment = (MoonFragment) manager.findFragmentByTag("moonFragment");
-            }
-
-            else {
-                infoFragment = InfoFragment.newInstance(latitude, longitude);
-                sunFragment = SunFragment.newInstance();
-                moonFragment = MoonFragment.newInstance();
-                sunMoonFragment = SunMoonFragment.newInstance(sunFragment, moonFragment);
-
-                ViewPager2 pager = findViewById(R.id.pager);
-                FragmentStateAdapter adapter;
-                if (orientation == Configuration.ORIENTATION_PORTRAIT) adapter = new PortraitPagerAdapter(this);
-                else adapter = new LandscapePagerAdapter(this);
-                pager.setAdapter(adapter);
-            }
+            ViewPager2 pager = findViewById(R.id.pager);
+            FragmentStateAdapter adapter;
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) adapter = new PortraitPagerAdapter(this);
+            else adapter = new LandscapePagerAdapter(this);
+            pager.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         }
 
 //        timer = new Timer();
@@ -126,6 +103,13 @@ public class AstroActivity extends FragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
 //        refreshTask.cancel();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        DataWrapper wrapper = new DataWrapper(null, sunInfo, null);
+        outState.putSerializable("data", wrapper);
     }
 
     class RefreshTask extends TimerTask {
@@ -153,9 +137,6 @@ public class AstroActivity extends FragmentActivity {
 
         @Override
         public Fragment createFragment(int position) {
-            Log.i("Hello", "info " + (infoFragment==null));
-            Log.i("Hello", "sun " + (sunFragment==null));
-            Log.i("Hello", "moon " + (moonFragment==null));
             switch (position) {
                 case 0: return infoFragment;
                 case 1: return sunFragment;
