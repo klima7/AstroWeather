@@ -15,8 +15,11 @@ import android.widget.Toast;
 public class MenuActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public static final String EXTRA_LATITUDE = "latitude";
-    public static final String EXTRA_LONGITUDE = "latitude";
+    public static final String EXTRA_LONGITUDE = "longitude";
     public static final String EXTRA_REFRESH = "refresh";
+
+    public static final int REFRESH_TIMES[] = {10, 30, 60, 300, 600, 900, 3600};
+    private int selectedRefreshTime = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +36,12 @@ public class MenuActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Log.i("Hello", "Selected");
+        selectedRefreshTime = REFRESH_TIMES[position];
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        Log.i("Hello", "Nothing selected");
+        selectedRefreshTime = 0;
     }
 
     public void confirmClicked(View view) {
@@ -58,11 +61,16 @@ public class MenuActivity extends AppCompatActivity implements AdapterView.OnIte
             return;
         }
 
+        if(selectedRefreshTime == 0) {
+            Toast.makeText(this, R.string.invalid_refresh, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Intent intent = new Intent(this, AstroActivity.class);
         Bundle bundle = new Bundle();
         bundle.putFloat(EXTRA_LATITUDE, latitude);
         bundle.putFloat(EXTRA_LONGITUDE, longitude);
-        bundle.putInt(EXTRA_REFRESH, 0);
+        bundle.putInt(EXTRA_REFRESH, selectedRefreshTime);
         intent.putExtras(bundle);
         startActivity(intent);
     }

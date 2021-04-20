@@ -1,6 +1,7 @@
 package com.klima7.astroweather;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,11 +45,14 @@ public class SunFragment extends Fragment {
 
     public void setInfo(AstroCalculator.SunInfo info) {
         this.info = info;
+        applyInfo();
     }
 
-    public void applyInfo() {
-        if(info == null)
+    private void applyInfo() {
+        Log.i("Hello", "info " + (info==null));
+        if(info == null || sunriseTimeView == null) {
             return;
+        }
 
         sunriseTimeView.setText(Formatter.formatTime(info.getSunrise()));
         sunriseAzimuthView.setText(Formatter.formatAzimuth(info.getAzimuthRise()));

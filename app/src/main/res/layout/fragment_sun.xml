@@ -24,14 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Czas" />
-
-        <TextView
-            android:id="@+id/sunrise_azimuth"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Czas" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -52,6 +44,39 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Czas" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Azymut wschodu" />
+
+        <TextView
+            android:id="@+id/sunrise_azimuth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Czas" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Azymut zachodu" />
 
         <TextView
             android:id="@+id/sunset_azimuth"
@@ -59,7 +84,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Czas" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -80,13 +104,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Czas" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -107,13 +124,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Czas" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="" />
-
     </LinearLayout>
 
 </LinearLayout>

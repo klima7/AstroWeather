@@ -42,14 +42,15 @@ public class MoonFragment extends Fragment {
 
     public void setInfo(AstroCalculator.MoonInfo info) {
         this.info = info;
+        applyInfo();
     }
 
-    public void applyInfo() {
-        if(info == null)
+    private void applyInfo() {
+        if(info == null || moonriseTimeView == null)
             return;
 
         moonriseTimeView.setText(Formatter.formatTime(info.getMoonrise()));
-        moonriseTimeView.setText(Formatter.formatTime(info.getMoonset()));
+        moonsetTimeView.setText(Formatter.formatTime(info.getMoonset()));
 
         interlunarTimeView.setText(Formatter.formatDate(info.getNextNewMoon()));
         fullMoonTimeView.setText(Formatter.formatDate(info.getNextFullMoon()));
