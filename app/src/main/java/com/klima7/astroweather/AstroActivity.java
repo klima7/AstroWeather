@@ -1,7 +1,5 @@
 package com.klima7.astroweather;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,14 +18,13 @@ import java.util.TimerTask;
 
 public class AstroActivity extends FragmentActivity {
 
-    private SharedPreferences preferences;
-
     private InfoFragment infoFragment;
     private SunFragment sunFragment;
     private MoonFragment moonFragment;
     private SunMoonFragment sunMoonFragment;
 
     private AstroCalculator.SunInfo sunInfo;
+    private AstroCalculator.MoonInfo moonInfo;
 
     private Timer timer;
     private TimerTask refreshTask;
@@ -40,27 +37,25 @@ public class AstroActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_astro);
 
-        preferences = getSharedPreferences(MenuActivity.PREFERENCE_FILE, MODE_PRIVATE);
-        boolean configured = preferences.getBoolean(MenuActivity.PREFERENCE_CONFIGURED, false);
-        if(!configured) {
-            Intent intent = new Intent(this, MenuActivity.class);
-            startActivity(intent);
-        }
+        Bundle extras = getIntent().getExtras();
+        float longitude = extras.getFloat(MenuActivity.EXTRA_LONGITUDE, 0);
+        float latitude = extras.getFloat(MenuActivity.EXTRA_LATITUDE, 0);
+        int refresh = extras.getInt(MenuActivity.EXTRA_REFRESH, 0);
 
-        float latitude = preferences.getFloat(MenuActivity.PREFERENCE_LATITUDE, 0);
-        float longitude = preferences.getFloat(MenuActivity.PREFERENCE_LONGITUDE, 0);
-
-        // Get sun info
+        // Calculate info
         if(savedInstanceState == null) {
             AstroDateTime time = new AstroDateTime();
-            AstroCalculator.Location location = new AstroCalculator.Location(51.759445, 19.457216);
+            AstroCalculator.Location location = new AstroCalculator.Location(longitude, latitude);
             AstroCalculator calculator = new AstroCalculator(time, location);
             sunInfo = calculator.getSunInfo();
+            moonInfo = calculator.getMoonInfo();
         }
+
+        // Retrive info from saved state
         else {
             DataWrapper wrapper = (DataWrapper) savedInstanceState.getSerializable("data");
             sunInfo = wrapper.getSunInfo();
-            Log.i("Hello", "sunInfo " + sunInfo.getAzimuthRise());
+            moonInfo = wrapper.getMoonInfo();
         }
 
         // Create fragments
@@ -69,14 +64,17 @@ public class AstroActivity extends FragmentActivity {
         moonFragment = MoonFragment.newInstance();
         sunMoonFragment = SunMoonFragment.newInstance(sunFragment, moonFragment);
 
+        // Set info in fragments
         sunFragment.setInfo(sunInfo);
+        moonFragment.setInfo(moonInfo);
 
         // Get configuration
         int orientation = getResources().getConfiguration().orientation;
         int size = getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
+        boolean tablet = size == Configuration.SCREENLAYOUT_SIZE_LARGE || size == Configuration.SCREENLAYOUT_SIZE_XLARGE;
 
         // Tablet
-        if(size == Configuration.SCREENLAYOUT_SIZE_LARGE || size == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+        if (savedInstanceState == null && tablet) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.add(R.id.info_container, infoFragment, "infoFragment");
             transaction.add(R.id.sun_container, sunFragment, "sunFragment");
@@ -85,13 +83,15 @@ public class AstroActivity extends FragmentActivity {
         }
 
         // Mobile
-        else {
+        if(!tablet) {
             ViewPager2 pager = findViewById(R.id.pager);
             FragmentStateAdapter adapter;
-            if (orientation == Configuration.ORIENTATION_PORTRAIT) adapter = new PortraitPagerAdapter(this);
+            if (orientation == Configuration.ORIENTATION_PORTRAIT)
+                adapter = new PortraitPagerAdapter(this);
             else adapter = new LandscapePagerAdapter(this);
             pager.setAdapter(adapter);
             adapter.notifyDataSetChanged();
+            pager.invalidate();
         }
 
 //        timer = new Timer();
@@ -149,6 +149,8 @@ public class AstroActivity extends FragmentActivity {
         public int getItemCount() {
             return 3;
         }
+
+
     }
 
     private class LandscapePagerAdapter extends FragmentStateAdapter {

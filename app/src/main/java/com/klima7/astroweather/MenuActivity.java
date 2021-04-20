@@ -2,7 +2,7 @@ package com.klima7.astroweather;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,10 +14,9 @@ import android.widget.Toast;
 
 public class MenuActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    public static final String PREFERENCE_FILE = "data";
-    public static final String PREFERENCE_LATITUDE = "latitude";
-    public static final String PREFERENCE_LONGITUDE = "longitude";
-    public static final String PREFERENCE_CONFIGURED = "configured";
+    public static final String EXTRA_LATITUDE = "latitude";
+    public static final String EXTRA_LONGITUDE = "latitude";
+    public static final String EXTRA_REFRESH = "refresh";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +58,12 @@ public class MenuActivity extends AppCompatActivity implements AdapterView.OnIte
             return;
         }
 
-        SharedPreferences preferences = getSharedPreferences(PREFERENCE_FILE, MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putFloat(PREFERENCE_LATITUDE, latitude);
-        editor.putFloat(PREFERENCE_LONGITUDE, longitude);
-        editor.putBoolean(PREFERENCE_CONFIGURED, true);
-        editor.apply();
-
-        finish();
+        Intent intent = new Intent(this, AstroActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putFloat(EXTRA_LATITUDE, latitude);
+        bundle.putFloat(EXTRA_LONGITUDE, longitude);
+        bundle.putInt(EXTRA_REFRESH, 0);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }
