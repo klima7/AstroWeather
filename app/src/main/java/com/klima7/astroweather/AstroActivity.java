@@ -85,13 +85,17 @@ public class AstroActivity extends FragmentActivity {
         // Mobile
         if(!tablet) {
             ViewPager2 pager = findViewById(R.id.pager);
+            Log.i("Hello", "" + (pager.getAdapter()==null));
             FragmentStateAdapter adapter;
-            if (orientation == Configuration.ORIENTATION_PORTRAIT)
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                 adapter = new PortraitPagerAdapter(this);
-            else adapter = new LandscapePagerAdapter(this);
+                Log.i("Hello", "Portrait");
+            }
+            else {
+                adapter = new LandscapePagerAdapter(this);
+                Log.i("Hello", "Landscape");
+            }
             pager.setAdapter(adapter);
-            adapter.notifyDataSetChanged();
-            pager.invalidate();
         }
 
 //        timer = new Timer();

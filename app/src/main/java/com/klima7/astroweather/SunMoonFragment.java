@@ -30,9 +30,6 @@ public class SunMoonFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if(savedInstanceState == null) {
-            sunFragment = new SunFragment();
-            moonFragment = new MoonFragment();
-
             FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
             transaction.add(R.id.sun_container, sunFragment, "sun");
             transaction.add(R.id.moon_container, moonFragment, "moon");
