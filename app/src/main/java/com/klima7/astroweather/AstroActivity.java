@@ -70,19 +70,19 @@ public class AstroActivity extends FragmentActivity {
         boolean tablet = size == Configuration.SCREENLAYOUT_SIZE_LARGE || size == Configuration.SCREENLAYOUT_SIZE_XLARGE;
 
         // Tablet
-        if (tablet) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.info_container, infoFragment, "infoFragment");
-            transaction.replace(R.id.sun_container, sunFragment, "sunFragment");
-            transaction.replace(R.id.moon_container, moonFragment, "moonFragment");
-            transaction.commit();
-        }
+//        if (tablet) {
+//            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//            transaction.replace(R.id.info_container, infoFragment, "infoFragment");
+//            transaction.replace(R.id.sun_container, sunFragment, "sunFragment");
+//            transaction.replace(R.id.moon_container, moonFragment, "moonFragment");
+//            transaction.commit();
+//        }
 
         // Mobile
-        else {
+        if (savedInstanceState == null) {
             ViewPager2 pager = findViewById(R.id.pager);
             Log.i("Hello", "" + (pager.getAdapter()==null));
-            FragmentStateAdapter adapter = new PortraitPagerAdapter(this, infoFragment, sunFragment, moonFragment);
+            FragmentStateAdapter adapter = new Adapter(this, infoFragment, sunFragment, moonFragment);
             pager.setAdapter(adapter);
         }
 
@@ -128,33 +128,5 @@ public class AstroActivity extends FragmentActivity {
             runOnUiThread(() -> Toast.makeText(AstroActivity.this, "Odświeżenie", Toast.LENGTH_LONG).show());
             refreshAstroInfo();
         }
-    }
-}
-
-class PortraitPagerAdapter extends FragmentStateAdapter {
-    private InfoFragment info;
-    private SunFragment sun;
-    private MoonFragment moon;
-
-    public PortraitPagerAdapter(FragmentActivity fa, InfoFragment info, SunFragment sun, MoonFragment moon) {
-        super(fa);
-        this.info = info;
-        this.sun = sun;
-        this.moon = moon;
-    }
-
-    @Override
-    public Fragment createFragment(int position) {
-        switch (position) {
-            case 0: return info;
-            case 1: return sun;
-            case 2: return moon;
-            default: return null;
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return 3;
     }
 }
