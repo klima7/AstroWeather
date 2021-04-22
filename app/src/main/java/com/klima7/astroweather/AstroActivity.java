@@ -70,16 +70,16 @@ public class AstroActivity extends FragmentActivity {
         boolean tablet = size == Configuration.SCREENLAYOUT_SIZE_LARGE || size == Configuration.SCREENLAYOUT_SIZE_XLARGE;
 
         // Tablet
-//        if (tablet) {
-//            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//            transaction.replace(R.id.info_container, infoFragment, "infoFragment");
-//            transaction.replace(R.id.sun_container, sunFragment, "sunFragment");
-//            transaction.replace(R.id.moon_container, moonFragment, "moonFragment");
-//            transaction.commit();
-//        }
+        if (tablet) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.info_container, infoFragment, "infoFragment");
+            transaction.replace(R.id.sun_container, sunFragment, "sunFragment");
+            transaction.replace(R.id.moon_container, moonFragment, "moonFragment");
+            transaction.commit();
+        }
 
         // Mobile
-        if (savedInstanceState == null) {
+        else {
             ViewPager2 pager = findViewById(R.id.pager);
             Log.i("Hello", "" + (pager.getAdapter()==null));
             FragmentStateAdapter adapter = new Adapter(this, infoFragment, sunFragment, moonFragment);

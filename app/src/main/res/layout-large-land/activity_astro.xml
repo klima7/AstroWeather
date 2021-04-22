@@ -9,9 +9,11 @@
         android:id="@+id/moon_container"
         android:layout_width="445dp"
         android:layout_height="177dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="20dp"
         android:layout_weight="1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.634"
         app:layout_constraintStart_toEndOf="@+id/sun_container"
         app:layout_constraintTop_toTopOf="@+id/sun_container"></FrameLayout>
 
@@ -19,7 +21,7 @@
         android:id="@+id/sun_container"
         android:layout_width="462dp"
         android:layout_height="0dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="208dp"
         android:layout_marginBottom="144dp"
         android:layout_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,13 +30,14 @@
 
     <FrameLayout
         android:id="@+id/info_container"
-        android:layout_width="465dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="86dp"
+        android:layout_width="455dp"
+        android:layout_height="211dp"
+        android:layout_marginTop="186dp"
         android:layout_marginBottom="86dp"
         android:layout_weight="1"
         app:layout_constraintBottom_toTopOf="@+id/sun_container"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></FrameLayout>
 
