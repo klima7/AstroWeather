@@ -42,7 +42,8 @@
             android:id="@+id/info_latitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="---" />
     </LinearLayout>
 
     <LinearLayout
@@ -61,7 +62,8 @@
             android:id="@+id/info_longitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="---"/>
     </LinearLayout>
 
 </LinearLayout>

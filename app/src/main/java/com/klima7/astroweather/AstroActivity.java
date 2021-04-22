@@ -82,7 +82,7 @@ public class AstroActivity extends FragmentActivity {
         else {
             ViewPager2 pager = findViewById(R.id.pager);
             Log.i("Hello", "" + (pager.getAdapter()==null));
-            FragmentStateAdapter adapter = new PortraitPagerAdapter(this);
+            FragmentStateAdapter adapter = new PortraitPagerAdapter(this, infoFragment, sunFragment, moonFragment);
             pager.setAdapter(adapter);
         }
 
@@ -129,25 +129,32 @@ public class AstroActivity extends FragmentActivity {
             refreshAstroInfo();
         }
     }
+}
 
-    private class PortraitPagerAdapter extends FragmentStateAdapter {
-        public PortraitPagerAdapter(FragmentActivity fa) {
-            super(fa);
-        }
+class PortraitPagerAdapter extends FragmentStateAdapter {
+    private InfoFragment info;
+    private SunFragment sun;
+    private MoonFragment moon;
 
-        @Override
-        public Fragment createFragment(int position) {
-            switch (position) {
-                case 0: return infoFragment;
-                case 1: return sunFragment;
-                case 2: return moonFragment;
-                default: return null;
-            }
-        }
+    public PortraitPagerAdapter(FragmentActivity fa, InfoFragment info, SunFragment sun, MoonFragment moon) {
+        super(fa);
+        this.info = info;
+        this.sun = sun;
+        this.moon = moon;
+    }
 
-        @Override
-        public int getItemCount() {
-            return 3;
+    @Override
+    public Fragment createFragment(int position) {
+        switch (position) {
+            case 0: return info;
+            case 1: return sun;
+            case 2: return moon;
+            default: return null;
         }
+    }
+
+    @Override
+    public int getItemCount() {
+        return 3;
     }
 }
