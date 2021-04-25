@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.klima7.astroweather.fragments.Config;
+
 public class MenuActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public static final String EXTRA_LATITUDE = "latitude";
@@ -73,5 +75,11 @@ public class MenuActivity extends AppCompatActivity implements AdapterView.OnIte
         bundle.putInt(EXTRA_REFRESH, selectedRefreshTime);
         intent.putExtras(bundle);
         startActivity(intent);
+
+        Config config = new Config(0, 0, 0);
+        Intent data = new Intent();
+        Bundle extras = new Bundle();
+        extras.putSerializable("config", config);
+        setResult(RESULT_OK, data);
     }
 }

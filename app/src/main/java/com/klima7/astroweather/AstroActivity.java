@@ -1,11 +1,16 @@
 package com.klima7.astroweather;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -14,6 +19,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.astrocalculator.AstroCalculator;
 import com.astrocalculator.AstroDateTime;
+import com.klima7.astroweather.fragments.Config;
 import com.klima7.astroweather.fragments.InfoFragment;
 import com.klima7.astroweather.fragments.MoonFragment;
 import com.klima7.astroweather.fragments.SunFragment;
@@ -29,9 +35,11 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
     private SunFragment sunFragment;
     private MoonFragment moonFragment;
 
-    private float longitude, latitude;
     private AstroCalculator.SunInfo sunInfo;
     private AstroCalculator.MoonInfo moonInfo;
+
+    Config config;
+    ActivityResultLauncher startMenu;
 
     private Timer timer;
     private TimerTask refreshTask;
@@ -43,10 +51,7 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         setContentView(R.layout.activity_astro);
 
         // Get arguments
-        Bundle extras = getIntent().getExtras();
-        longitude = extras.getFloat(MenuActivity.EXTRA_LONGITUDE, 0);
-        latitude = extras.getFloat(MenuActivity.EXTRA_LATITUDE, 0);
-        int refreshPeriod = extras.getInt(MenuActivity.EXTRA_REFRESH, 0);
+        config = new Config(0, 0, 10);
 
         // Retrieve saved state
         if(savedInstanceState != null) {
@@ -63,7 +68,7 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         moonFragment = (MoonFragment)fm.findFragmentByTag("f1");
 
         // Create new fragments if they not exists
-        if(infoFragment == null) infoFragment = InfoFragment.newInstance(latitude, longitude);
+        if(infoFragment == null) infoFragment = InfoFragment.newInstance(config.getLatitude(), config.getLongitude());
         if(sunFragment == null) sunFragment = SunFragment.newInstance(sunInfo);
         if(moonFragment == null) moonFragment = MoonFragment.newInstance(moonInfo);
 
@@ -102,18 +107,32 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
                 pager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
         }
 
-        // Schedule refresh
-        timer = new Timer();
-        refreshTask = new RefreshTask();
-        long nextRefreshTime = lastRefreshTime + refreshPeriod*1000;
-        long nextRefreshDelay = Math.max(nextRefreshTime - System.currentTimeMillis(), 0);
-        timer.scheduleAtFixedRate(refreshTask, nextRefreshDelay, refreshPeriod*1000);
+        // Create menu launcher
+        startMenu = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                        Intent intent = result.getData();
+                        Bundle extras = intent.getExtras();
+                        Config config = (Config)extras.getSerializable("config");
+                        Log.i("Hello", "Data received " + config.getLatitude());
+                    });
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         refreshTask.cancel();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        timer = new Timer();
+        refreshTask = new RefreshTask();
+        long nextRefreshTime = lastRefreshTime + config.getRefresh()*1000;
+        long nextRefreshDelay = Math.max(nextRefreshTime - System.currentTimeMillis(), 0);
+        timer.scheduleAtFixedRate(refreshTask, nextRefreshDelay, config.getRefresh()*1000);
     }
 
     @Override
@@ -126,12 +145,13 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
 
     @Override
     public void settingsClicked() {
-        Log.i("Hello", "Clicked");
+        Intent intent = new Intent(this, MenuActivity.class);
+        startMenu.launch(intent);
     }
 
     private void refreshAstroInfo() {
         AstroDateTime time = new AstroDateTime();
-        AstroCalculator.Location location = new AstroCalculator.Location(latitude, longitude);
+        AstroCalculator.Location location = new AstroCalculator.Location(config.getLatitude(), config.getLongitude());
         AstroCalculator calculator = new AstroCalculator(time, location);
 
         sunInfo = calculator.getSunInfo();
