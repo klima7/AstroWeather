@@ -13,6 +13,11 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.astrocalculator.AstroCalculator;
 import com.astrocalculator.AstroDateTime;
+import com.klima7.astroweather.fragments.InfoFragment;
+import com.klima7.astroweather.fragments.MoonFragment;
+import com.klima7.astroweather.fragments.SunFragment;
+import com.klima7.astroweather.util.MoonInfoWrapper;
+import com.klima7.astroweather.util.SunInfoWrapper;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -44,9 +49,10 @@ public class AstroActivity extends FragmentActivity {
 
         // Retrieve saved state
         if(savedInstanceState != null) {
-            DataWrapper wrapper = (DataWrapper) savedInstanceState.getSerializable("data");
-            sunInfo = wrapper.getSunInfo();
-            moonInfo = wrapper.getMoonInfo();
+            SunInfoWrapper sunWrapper = (SunInfoWrapper) savedInstanceState.getSerializable("sunInfo");
+            MoonInfoWrapper moonWrapper = (MoonInfoWrapper) savedInstanceState.getSerializable("moonInfo");
+            sunInfo = sunWrapper.get();
+            moonInfo = moonWrapper.get();
             lastRefreshTime = savedInstanceState.getLong("lastRefreshTime");
         }
 
@@ -112,8 +118,8 @@ public class AstroActivity extends FragmentActivity {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        DataWrapper wrapper = new DataWrapper(null, sunInfo, moonInfo);
-        outState.putSerializable("data", wrapper);
+        outState.putSerializable("sunInfo", new SunInfoWrapper(sunInfo));
+        outState.putSerializable("moonInfo", new MoonInfoWrapper(moonInfo));
         outState.putLong("lastRefreshTime", lastRefreshTime);
     }
 

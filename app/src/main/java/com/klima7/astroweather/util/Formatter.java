@@ -1,4 +1,4 @@
-package com.klima7.astroweather;
+package com.klima7.astroweather.util;
 
 import com.astrocalculator.AstroCalculator;
 import com.astrocalculator.AstroDateTime;

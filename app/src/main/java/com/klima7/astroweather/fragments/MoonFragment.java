@@ -1,4 +1,4 @@
-package com.klima7.astroweather;
+package com.klima7.astroweather.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.astrocalculator.AstroCalculator;
+import com.klima7.astroweather.R;
+import com.klima7.astroweather.util.Formatter;
+import com.klima7.astroweather.util.MoonInfoWrapper;
 
 public class MoonFragment extends Fragment {
 

@@ -4,6 +4,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.klima7.astroweather.fragments.MoonFragment;
+import com.klima7.astroweather.fragments.SunFragment;
+
 class Adapter extends FragmentStateAdapter {
 
     private SunFragment sun;
