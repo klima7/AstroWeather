@@ -1,7 +1,6 @@
 package com.klima7.astroweather;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,10 @@ public class MoonFragment extends Fragment {
     private AstroCalculator.MoonInfo info;
     private TextView moonriseTimeView, moonsetTimeView, interlunarTimeView, fullMoonTimeView, moonPhaseView, moonDayView;
 
-    public static MoonFragment newInstance() {
-        return new MoonFragment();
+    public static MoonFragment newInstance(AstroCalculator.MoonInfo moonInfo) {
+        MoonFragment fragment = new MoonFragment();
+        fragment.update(moonInfo);
+        return fragment;
     }
 
     @Override
@@ -40,7 +41,7 @@ public class MoonFragment extends Fragment {
         applyInfo();
     }
 
-    public void setInfo(AstroCalculator.MoonInfo info) {
+    public void update(AstroCalculator.MoonInfo info) {
         this.info = info;
         applyInfo();
     }

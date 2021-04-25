@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -32,20 +31,18 @@ public class AstroActivity extends FragmentActivity {
     private TimerTask refreshTask;
     private long lastRefreshTime;
 
-    public AstroActivity() {
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_astro);
 
+        // Get arguments
         Bundle extras = getIntent().getExtras();
         longitude = extras.getFloat(MenuActivity.EXTRA_LONGITUDE, 0);
         latitude = extras.getFloat(MenuActivity.EXTRA_LATITUDE, 0);
         int refreshPeriod = extras.getInt(MenuActivity.EXTRA_REFRESH, 0);
 
-        // Retrieve data from bundle
+        // Retrieve saved state
         if(savedInstanceState != null) {
             DataWrapper wrapper = (DataWrapper) savedInstanceState.getSerializable("data");
             sunInfo = wrapper.getSunInfo();
@@ -55,22 +52,17 @@ public class AstroActivity extends FragmentActivity {
 
         // Retrieve fragments if they exists
         FragmentManager fm = getSupportFragmentManager();
-        infoFragment = (InfoFragment)fm.findFragmentByTag("f0");
-        sunFragment = (SunFragment)fm.findFragmentByTag("f1");
-        moonFragment = (MoonFragment)fm.findFragmentByTag("f2");
+        sunFragment = (SunFragment)fm.findFragmentByTag("f0");
+        moonFragment = (MoonFragment)fm.findFragmentByTag("f1");
 
         // Create new fragments if they not exists
         if(infoFragment == null) infoFragment = InfoFragment.newInstance(latitude, longitude);
-        if(sunFragment == null) sunFragment = SunFragment.newInstance();
-        if(moonFragment == null) moonFragment = MoonFragment.newInstance();
+        if(sunFragment == null) sunFragment = SunFragment.newInstance(sunInfo);
+        if(moonFragment == null) moonFragment = MoonFragment.newInstance(moonInfo);
 
         // Refresh data if first launch
         if(savedInstanceState == null)
             refreshAstroInfo();
-
-        // Set info in fragments
-        sunFragment.setInfo(sunInfo);
-        moonFragment.setInfo(moonInfo);
 
         // Get configuration
         int orientation = getResources().getConfiguration().orientation;
@@ -90,8 +82,17 @@ public class AstroActivity extends FragmentActivity {
         else {
             ViewPager2 pager = findViewById(R.id.pager);
             Log.i("Hello", "" + (pager.getAdapter()==null));
-            FragmentStateAdapter adapter = new Adapter(this, infoFragment, sunFragment, moonFragment);
+            FragmentStateAdapter adapter = new Adapter(this, sunFragment, moonFragment);
             pager.setAdapter(adapter);
+
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.info_holder_mobile, infoFragment);
+            ft.commit();
+
+            if(orientation == Configuration.ORIENTATION_PORTRAIT)
+                pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+            else
+                pager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
         }
 
         // Schedule refresh
@@ -122,10 +123,10 @@ public class AstroActivity extends FragmentActivity {
         AstroCalculator calculator = new AstroCalculator(time, location);
 
         sunInfo = calculator.getSunInfo();
-        sunFragment.setInfo(sunInfo);
+        sunFragment.update(sunInfo);
 
         moonInfo = calculator.getMoonInfo();
-        moonFragment.setInfo(moonInfo);
+        moonFragment.update(moonInfo);
 
         lastRefreshTime = System.currentTimeMillis();
     }

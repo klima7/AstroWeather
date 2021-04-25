@@ -18,8 +18,10 @@ public class SunFragment extends Fragment {
     private AstroCalculator.SunInfo info;
     private TextView sunriseTimeView, sunriseAzimuthView, sunsetTimeView, sunsetAzimuthView, dawnTimeView, duskTimeView;
 
-    public static SunFragment newInstance() {
-        return new SunFragment();
+    public static SunFragment newInstance(AstroCalculator.SunInfo sunInfo) {
+        SunFragment fragment = new SunFragment();
+        fragment.update(sunInfo);
+        return fragment;
     }
 
     @Override
@@ -43,16 +45,14 @@ public class SunFragment extends Fragment {
         applyInfo();
     }
 
-    public void setInfo(AstroCalculator.SunInfo info) {
+    public void update(AstroCalculator.SunInfo info) {
         this.info = info;
         applyInfo();
     }
 
     private void applyInfo() {
-        Log.i("Hello", "info " + (info==null));
-        if(info == null || sunriseTimeView == null) {
+        if(info == null || sunriseTimeView == null)
             return;
-        }
 
         sunriseTimeView.setText(Formatter.formatTime(info.getSunrise()));
         sunriseAzimuthView.setText(Formatter.formatAzimuth(info.getAzimuthRise()));
