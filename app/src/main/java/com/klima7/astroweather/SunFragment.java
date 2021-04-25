@@ -42,7 +42,18 @@ public class SunFragment extends Fragment {
         dawnTimeView = getView().findViewById(R.id.dawn_time);
         duskTimeView = getView().findViewById(R.id.dusk_time);
 
+        if(savedInstanceState != null) {
+            SunInfoWrapper wrapper = (SunInfoWrapper) savedInstanceState.getSerializable("info");
+            info = wrapper.get();
+        }
+
         applyInfo();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("info", new SunInfoWrapper(info));
     }
 
     public void update(AstroCalculator.SunInfo info) {

@@ -15,7 +15,7 @@ import com.astrocalculator.AstroCalculator;
 public class MoonFragment extends Fragment {
 
     private AstroCalculator.MoonInfo info;
-    private TextView moonriseTimeView, moonsetTimeView, interlunarTimeView, fullMoonTimeView, moonPhaseView, moonDayView;
+    private TextView moonriseTimeView, moonsetTimeView, interlunarTimeView, fullMoonTimeView;
 
     public static MoonFragment newInstance(AstroCalculator.MoonInfo moonInfo) {
         MoonFragment fragment = new MoonFragment();
@@ -38,7 +38,18 @@ public class MoonFragment extends Fragment {
         interlunarTimeView = getView().findViewById(R.id.internular_time);
         fullMoonTimeView = getView().findViewById(R.id.fullmoon_time);
 
+        if(savedInstanceState != null) {
+            MoonInfoWrapper wrapper = (MoonInfoWrapper) savedInstanceState.getSerializable("info");
+            info = wrapper.get();
+        }
+
         applyInfo();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("info", new MoonInfoWrapper(info));
     }
 
     public void update(AstroCalculator.MoonInfo info) {
