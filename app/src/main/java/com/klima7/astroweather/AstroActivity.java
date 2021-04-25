@@ -3,6 +3,7 @@ package com.klima7.astroweather;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
@@ -22,7 +23,7 @@ import com.klima7.astroweather.util.SunInfoWrapper;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class AstroActivity extends FragmentActivity {
+public class AstroActivity extends FragmentActivity implements InfoFragment.InfoInterface {
 
     private InfoFragment infoFragment;
     private SunFragment sunFragment;
@@ -121,6 +122,11 @@ public class AstroActivity extends FragmentActivity {
         outState.putSerializable("sunInfo", new SunInfoWrapper(sunInfo));
         outState.putSerializable("moonInfo", new MoonInfoWrapper(moonInfo));
         outState.putLong("lastRefreshTime", lastRefreshTime);
+    }
+
+    @Override
+    public void settingsClicked() {
+        Log.i("Hello", "Clicked");
     }
 
     private void refreshAstroInfo() {
