@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -44,21 +45,28 @@ public class AstroActivity extends FragmentActivity {
         latitude = extras.getFloat(MenuActivity.EXTRA_LATITUDE, 0);
         int refreshPeriod = extras.getInt(MenuActivity.EXTRA_REFRESH, 0);
 
-        // Create fragments
-        infoFragment = InfoFragment.newInstance(latitude, longitude);
-        sunFragment = SunFragment.newInstance();
-        moonFragment = MoonFragment.newInstance();
-
-        // Get info
-        if(savedInstanceState == null) {
-            refreshAstroInfo();
-        }
-        else {
+        // Retrieve data from bundle
+        if(savedInstanceState != null) {
             DataWrapper wrapper = (DataWrapper) savedInstanceState.getSerializable("data");
             sunInfo = wrapper.getSunInfo();
             moonInfo = wrapper.getMoonInfo();
             lastRefreshTime = savedInstanceState.getLong("lastRefreshTime");
         }
+
+        // Retrieve fragments if they exists
+        FragmentManager fm = getSupportFragmentManager();
+        infoFragment = (InfoFragment)fm.findFragmentByTag("f0");
+        sunFragment = (SunFragment)fm.findFragmentByTag("f1");
+        moonFragment = (MoonFragment)fm.findFragmentByTag("f2");
+
+        // Create new fragments if they not exists
+        if(infoFragment == null) infoFragment = InfoFragment.newInstance(latitude, longitude);
+        if(sunFragment == null) sunFragment = SunFragment.newInstance();
+        if(moonFragment == null) moonFragment = MoonFragment.newInstance();
+
+        // Refresh data if first launch
+        if(savedInstanceState == null)
+            refreshAstroInfo();
 
         // Set info in fragments
         sunFragment.setInfo(sunInfo);
