@@ -4,16 +4,14 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -23,8 +21,6 @@ import com.klima7.astroweather.fragments.Config;
 import com.klima7.astroweather.fragments.InfoFragment;
 import com.klima7.astroweather.fragments.MoonFragment;
 import com.klima7.astroweather.fragments.SunFragment;
-import com.klima7.astroweather.util.MoonInfoWrapper;
-import com.klima7.astroweather.util.SunInfoWrapper;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -35,8 +31,7 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
     private SunFragment sunFragment;
     private MoonFragment moonFragment;
 
-    private AstroCalculator.SunInfo sunInfo;
-    private AstroCalculator.MoonInfo moonInfo;
+    private AstroData astroData;
 
     Config config;
     ActivityResultLauncher startMenu;
@@ -50,15 +45,13 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_astro);
 
+        astroData = new ViewModelProvider(this).get(AstroData.class);
+
         // Get arguments
         config = new Config(0, 0, 10);
 
         // Retrieve saved state
         if(savedInstanceState != null) {
-            SunInfoWrapper sunWrapper = (SunInfoWrapper) savedInstanceState.getSerializable("sunInfo");
-            MoonInfoWrapper moonWrapper = (MoonInfoWrapper) savedInstanceState.getSerializable("moonInfo");
-            sunInfo = sunWrapper.get();
-            moonInfo = moonWrapper.get();
             lastRefreshTime = savedInstanceState.getLong("lastRefreshTime");
         }
 
@@ -69,12 +62,16 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
 
         // Create new fragments if they not exists
         if(infoFragment == null) infoFragment = InfoFragment.newInstance(config.getLatitude(), config.getLongitude());
-        if(sunFragment == null) sunFragment = SunFragment.newInstance(sunInfo);
-        if(moonFragment == null) moonFragment = MoonFragment.newInstance(moonInfo);
+        if(sunFragment == null) sunFragment = new SunFragment();
+        if(moonFragment == null) moonFragment = new MoonFragment();
 
         // Refresh data if first launch
         if(savedInstanceState == null)
             refreshAstroInfo();
+
+        // Update
+        sunFragment.update(sunInfo);
+        moonFragment.update(moonInfo);
 
         // Get configuration
         int orientation = getResources().getConfiguration().orientation;
@@ -93,7 +90,6 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         // Mobile
         else {
             ViewPager2 pager = findViewById(R.id.pager);
-            Log.i("Hello", "" + (pager.getAdapter()==null));
             FragmentStateAdapter adapter = new Adapter(this, sunFragment, moonFragment);
             pager.setAdapter(adapter);
 
@@ -111,9 +107,10 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         startMenu = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
+                        Log.i("Hello", "Ejj");
                         Intent intent = result.getData();
                         Bundle extras = intent.getExtras();
-                        Config config = (Config)extras.getSerializable("config");
+                        config = (Config)extras.getSerializable("config");
                         Log.i("Hello", "Data received " + config.getLatitude());
                     });
     }
@@ -138,9 +135,13 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("sunInfo", new SunInfoWrapper(sunInfo));
-        outState.putSerializable("moonInfo", new MoonInfoWrapper(moonInfo));
         outState.putLong("lastRefreshTime", lastRefreshTime);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("Hello", "Destroyed :(");
     }
 
     @Override

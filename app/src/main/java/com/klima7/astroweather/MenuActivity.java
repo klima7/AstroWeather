@@ -76,10 +76,9 @@ public class MenuActivity extends AppCompatActivity implements AdapterView.OnIte
         intent.putExtras(bundle);
         startActivity(intent);
 
-        Config config = new Config(0, 0, 0);
+        Config config = new Config(1, 1, 0);
         Intent data = new Intent();
-        Bundle extras = new Bundle();
-        extras.putSerializable("config", config);
+        data.putExtra("config", config);
         setResult(RESULT_OK, data);
     }
 }
