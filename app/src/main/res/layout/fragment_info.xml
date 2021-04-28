@@ -16,11 +16,12 @@
         android:layout_width="34dp"
         android:layout_height="32dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="@dimen/icon_margin_bottom"
         android:layout_weight="0"
         android:background="#FFFFFF"
+        android:contentDescription="@string/gear_icon_description"
         android:scaleType="fitCenter"
-        android:src="@drawable/ic_gear"
-        android:layout_marginBottom="@dimen/icon_margin_bottom" />
+        android:src="@drawable/ic_gear" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Czas" />
+            android:text="@string/time_label" />
 
         <TextClock
             android:id="@+id/textClock"
@@ -52,14 +53,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Szerokość geograficzna" />
+            android:text="@string/longitude_label" />
 
         <TextView
             android:id="@+id/info_latitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="---" />
+            android:text="@string/empty_value" />
     </LinearLayout>
 
     <LinearLayout
@@ -72,14 +73,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Wysokość geograficzna" />
+            android:text="@string/latitude_label" />
 
         <TextView
             android:id="@+id/info_longitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="---" />
+            android:text="@string/empty_value" />
     </LinearLayout>
 
 </LinearLayout>

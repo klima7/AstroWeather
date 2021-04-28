@@ -28,14 +28,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Wschód" />
+            android:text="@string/sunrise_label" />
 
         <TextView
             android:id="@+id/sunrise_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="---" />
+            android:text="@string/empty_value" />
     </LinearLayout>
 
     <LinearLayout
@@ -48,14 +48,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Zachód" />
+            android:text="@string/sunset_label" />
 
         <TextView
             android:id="@+id/sunset_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="---" />
+            android:text="@string/empty_value" />
     </LinearLayout>
 
     <LinearLayout
@@ -68,14 +68,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Azymut wschodu" />
+            android:text="@string/sunrise_azimuth_label" />
 
         <TextView
             android:id="@+id/sunrise_azimuth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="---" />
+            android:text="@string/empty_value" />
     </LinearLayout>
 
     <LinearLayout
@@ -88,14 +88,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Azymut zachodu" />
+            android:text="@string/sunset_azimuth_label" />
 
         <TextView
             android:id="@+id/sunset_azimuth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="---" />
+            android:text="@string/empty_value" />
     </LinearLayout>
 
     <LinearLayout
@@ -108,14 +108,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Swit cywilny" />
+            android:text="@string/dawn_label" />
 
         <TextView
             android:id="@+id/dawn_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="---" />
+            android:text="@string/empty_value" />
     </LinearLayout>
 
     <LinearLayout
@@ -128,14 +128,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Zmierzch cywilny" />
+            android:text="@string/dusk_label" />
 
         <TextView
             android:id="@+id/dusk_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="---" />
+            android:text="@string/empty_value" />
     </LinearLayout>
 
 </LinearLayout>

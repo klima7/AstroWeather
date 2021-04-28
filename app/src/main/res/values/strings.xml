@@ -1,29 +1,30 @@
 <resources>
     <string name="app_name">AstroWeather</string>
-    <string name="title_activity_settings">SettingsActivity</string>
-
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="geo_width">Szerokość geograficzna</string>
     <string name="geo_height">Wysokość geograficzna</string>
     <string name="refresh_time">Częstotliwość odświeżania</string>
     <string name="accept">Zatwierdź</string>
     <string name="invalid_position">Nieprawidłowe współrzędne geograficzne</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="invalid_refresh">Musisz wybrać czas odświeżania</string>
     <string name="invalid_latitude">Niepoprawna szerokość geograficzna</string>
     <string name="invalid_longitude">Niepoprawna szerokość geograficzna</string>
+    <string name="gear_icon_description">Gear icon</string>
+    <string name="time_label">Czas</string>
+    <string name="longitude_label">Szerokość geograficzna</string>
+    <string name="latitude_label">Wysokość geograficzna</string>
+    <string name="empty_value">---</string>
+    <string name="moonrise_label">Wschód</string>
+    <string name="moonset_label">Zachód</string>
+    <string name="internular_label">Najbliższy nów</string>
+    <string name="fullmoon_label">Najbliższa pełnia</string>
+    <string name="sunrise_label">Wschód</string>
+    <string name="sunset_label">Zachód</string>
+    <string name="sunrise_azimuth_label">Azymut wschodu</string>
+    <string name="sunset_azimuth_label">Azymut zachodu</string>
+    <string name="dawn_label">Swit cywilny</string>
+    <string name="dusk_label">Zmierzch cywilny</string>
 </resources>

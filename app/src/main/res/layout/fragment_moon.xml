@@ -27,14 +27,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Wschód" />
+            android:text="@string/moonrise_label" />
 
         <TextView
             android:id="@+id/moonrise_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="---" />
+            android:text="@string/empty_value" />
 
     </LinearLayout>
 
@@ -48,14 +48,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Zachód" />
+            android:text="@string/moonset_label" />
 
         <TextView
             android:id="@+id/moonset_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="---" />
+            android:text="@string/empty_value" />
 
     </LinearLayout>
 
@@ -69,14 +69,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Najbliższy nów" />
+            android:text="@string/internular_label" />
 
         <TextView
             android:id="@+id/internular_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="---" />
+            android:text="@string/empty_value" />
 
     </LinearLayout>
 
@@ -90,14 +90,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Najbliższa pełnia" />
+            android:text="@string/fullmoon_label" />
 
         <TextView
             android:id="@+id/fullmoon_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="---" />
+            android:text="@string/empty_value" />
 
     </LinearLayout>
 
