@@ -3,9 +3,9 @@ package com.klima7.astroweather;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.FragmentActivity;
@@ -49,7 +49,7 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         moonFragment = (MoonFragment)fm.findFragmentByTag("f1");
 
         // Create new fragments if they not exists
-        if(infoFragment == null) infoFragment = InfoFragment.newInstance(data.getLatitude(), data.getLongitude());
+        infoFragment = InfoFragment.newInstance(data.getLatitude(), data.getLongitude());
         if(sunFragment == null) sunFragment = SunFragment.newInstance(data.getSunInfo());
         if(moonFragment == null) moonFragment = MoonFragment.newInstance(data.getMoonInfo());
 
@@ -84,23 +84,14 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         }
 
         // Create menu launcher
-        startMenu = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                        Log.i("Hello", "Ejj");
-                        Intent intent = result.getData();
-                        Bundle extras = intent.getExtras();
-                    });
+        startMenu = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> applyConfig(result));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        timer = new Timer();
-        refreshTask = new RefreshTask();
-        long nextRefreshTime = data.getLastRefresh() + data.getRefreshPeriod()*1000;
-        long nextRefreshDelay = Math.max(nextRefreshTime - System.currentTimeMillis(), 0);
-        timer.scheduleAtFixedRate(refreshTask, nextRefreshDelay, data.getRefreshPeriod()*1000);
+        scheduleRefresh();
     }
 
     @Override
@@ -112,16 +103,48 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
     @Override
     public void settingsClicked() {
         Intent intent = new Intent(this, MenuActivity.class);
+        intent.putExtra(MenuActivity.LATITUDE, data.getLatitude());
+        intent.putExtra(MenuActivity.LONGITUDE, data.getLongitude());
+        intent.putExtra(MenuActivity.REFRESH, data.getRefreshPeriod());
         startMenu.launch(intent);
+    }
+
+    private void scheduleRefresh() {
+        timer = new Timer();
+        refreshTask = new RefreshTask();
+        long nextRefreshTime = data.getLastRefresh() + data.getRefreshPeriod()*1000;
+        long nextRefreshDelay = Math.max(nextRefreshTime - System.currentTimeMillis(), 0);
+        timer.scheduleAtFixedRate(refreshTask, nextRefreshDelay, data.getRefreshPeriod() * 1000);
+    }
+
+    private void applyConfig(ActivityResult result) {
+        Intent intent = result.getData();
+        if(intent == null) return;
+        Bundle extras = intent.getExtras();
+
+        data.setLatitude(extras.getFloat(MenuActivity.LATITUDE));
+        data.setLongitude(extras.getFloat(MenuActivity.LONGITUDE));
+        data.setRefreshPeriod(extras.getInt(MenuActivity.REFRESH));
+        refresh();
+
+        infoFragment.update(data.getLatitude(), data.getLongitude());
+
+        refreshTask.cancel();
+        scheduleRefresh();
+    }
+
+    private void refresh() {
+        runOnUiThread(() -> Toast.makeText(AstroActivity.this, "Odświeżenie", Toast.LENGTH_SHORT).show());
+        data.refresh();
+        sunFragment.update(data.getSunInfo());
+        moonFragment.update(data.getMoonInfo());
     }
 
     class RefreshTask extends TimerTask {
         @Override
         public void run() {
-            runOnUiThread(() -> Toast.makeText(AstroActivity.this, "Odświeżenie", Toast.LENGTH_LONG).show());
-            data.refresh();
-            sunFragment.update(data.getSunInfo());
-            moonFragment.update(data.getMoonInfo());
+            refresh();
         }
     }
+
 }

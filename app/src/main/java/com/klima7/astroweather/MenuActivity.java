@@ -11,36 +11,60 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Collections;
+
 public class MenuActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    public static final String EXTRA_LATITUDE = "latitude";
-    public static final String EXTRA_LONGITUDE = "longitude";
-    public static final String EXTRA_REFRESH = "refresh";
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE = "longitude";
+    public static final String REFRESH = "refresh";
 
     public static final int REFRESH_TIMES[] = {10, 30, 60, 300, 600, 900, 3600};
-    private int selectedRefreshTime = 10;
+    private int selectedRefresh = 10;
+
+    private EditText latitudeEdit, longitudeEdit;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        Spinner spinner = findViewById(R.id.refresh_frequency_spinner);
+        // Get views
+        latitudeEdit = findViewById(R.id.latitude_input);
+        longitudeEdit = findViewById(R.id.longitude_input);
+        spinner = findViewById(R.id.refresh_frequency_spinner);
+
+        // Configure spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.refresh_times, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
+
+        // Set position default values
+        Intent intent = getIntent();
+        latitudeEdit.setText(String.valueOf(intent.getFloatExtra(LATITUDE, 0)));
+        longitudeEdit.setText(String.valueOf(intent.getFloatExtra(LONGITUDE, 0)));
+
+        // Set refresh default value
+        int defaultRefresh = intent.getIntExtra(REFRESH, 10);
+        for(int index=0; index<REFRESH_TIMES.length; index++) {
+            if(REFRESH_TIMES[index] == defaultRefresh) {
+                spinner.setSelection(index);
+                break;
+            }
+        }
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        selectedRefreshTime = REFRESH_TIMES[position];
+        selectedRefresh = REFRESH_TIMES[position];
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-        selectedRefreshTime = 0;
+        selectedRefresh = 0;
     }
 
     public void confirmClicked(View view) {
@@ -60,21 +84,16 @@ public class MenuActivity extends AppCompatActivity implements AdapterView.OnIte
             return;
         }
 
-        if(selectedRefreshTime == 0) {
+        if(selectedRefresh == 0) {
             Toast.makeText(this, R.string.invalid_refresh, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Intent intent = new Intent(this, AstroActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putFloat(EXTRA_LATITUDE, latitude);
-        bundle.putFloat(EXTRA_LONGITUDE, longitude);
-        bundle.putInt(EXTRA_REFRESH, selectedRefreshTime);
-        intent.putExtras(bundle);
-        startActivity(intent);
-
         Intent data = new Intent();
-        data.putExtra("config", "Hi!");
+        data.putExtra(LATITUDE, latitude);
+        data.putExtra(LONGITUDE, longitude);
+        data.putExtra(REFRESH, selectedRefresh);
         setResult(RESULT_OK, data);
+        finish();
     }
 }

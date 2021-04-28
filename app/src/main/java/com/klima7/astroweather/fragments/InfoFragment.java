@@ -23,8 +23,8 @@ public class InfoFragment extends Fragment {
     private static final String ARG_LONGITUDE = "longitude";
 
     private InfoInterface infoInterface;
-    private float latitude;
-    private float longitude;
+    private float latitude, longitude;
+    private TextView latitudeView, longitudeView;
 
     public static InfoFragment newInstance(float latitude, float longitude) {
         InfoFragment fragment = new InfoFragment();
@@ -45,28 +45,36 @@ public class InfoFragment extends Fragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_info, container, false);
+    }
+
+    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         infoInterface = (InfoInterface)context;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_info, container, false);
-    }
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView latitudeView = getView().findViewById(R.id.info_latitude);
-        TextView longitudeView = getView().findViewById(R.id.info_longitude);
+        ImageButton button = getView().findViewById(R.id.settingsButton);
+        button.setOnClickListener(v -> infoInterface.settingsClicked());
+
+        latitudeView = getView().findViewById(R.id.info_latitude);
+        longitudeView = getView().findViewById(R.id.info_longitude);
 
         latitudeView.setText(String.valueOf(latitude));
         longitudeView.setText(String.valueOf(longitude));
+    }
 
-        ImageButton button = getView().findViewById(R.id.settingsButton);
-        button.setOnClickListener(v -> infoInterface.settingsClicked());
+    public void update(float latitude, float longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+
+        latitudeView.setText(String.valueOf(latitude));
+        longitudeView.setText(String.valueOf(longitude));
     }
 
     public interface InfoInterface {
