@@ -18,6 +18,9 @@ public class MenuActivity extends AppCompatActivity implements AdapterView.OnIte
     public static final String REFRESH = "refresh";
 
     public static final int REFRESH_TIMES[] = {2, 10, 30, 60, 300, 600, 900, 3600};
+    public static final float MAX_LATITUDE = 65;
+    public static final float MAX_LONGITUDE = 180;
+
     private int selectedRefresh = 10;
 
     private EditText latitudeEdit, longitudeEdit;
@@ -79,6 +82,16 @@ public class MenuActivity extends AppCompatActivity implements AdapterView.OnIte
             longitude = Float.parseFloat(longitudeStr);
         } catch(NumberFormatException e) {
             Toast.makeText(this, R.string.invalid_position, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(latitude < -MAX_LATITUDE || latitude > MAX_LATITUDE) {
+            Toast.makeText(this, R.string.invalid_latitude, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(longitude < -MAX_LONGITUDE || longitude > MAX_LONGITUDE) {
+            Toast.makeText(this, R.string.invalid_longitude, Toast.LENGTH_SHORT).show();
             return;
         }
 
