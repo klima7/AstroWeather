@@ -1,5 +1,7 @@
 package com.klima7.astroweather;
 
+import android.util.Log;
+
 import androidx.lifecycle.ViewModel;
 
 import com.astrocalculator.AstroCalculator;
@@ -28,6 +30,8 @@ public class AstroData extends ViewModel {
 
         sunInfo = calculator.getSunInfo();
         moonInfo = calculator.getMoonInfo();
+
+        Log.i("Hello", "" + sunInfo.getSunrise().getSecond());
 
         lastRefresh = System.currentTimeMillis();
     }

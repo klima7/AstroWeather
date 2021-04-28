@@ -11,15 +11,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Collections;
-
 public class MenuActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     public static final String LATITUDE = "latitude";
     public static final String LONGITUDE = "longitude";
     public static final String REFRESH = "refresh";
 
-    public static final int REFRESH_TIMES[] = {10, 30, 60, 300, 600, 900, 3600};
+    public static final int REFRESH_TIMES[] = {2, 10, 30, 60, 300, 600, 900, 3600};
     private int selectedRefresh = 10;
 
     private EditText latitudeEdit, longitudeEdit;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="refresh_times">
+        <item>2 sekundy</item>
         <item>10 sekund</item>
         <item>30 sekund</item>
         <item>1 minuta</item>
