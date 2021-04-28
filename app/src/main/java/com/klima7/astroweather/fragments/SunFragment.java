@@ -16,8 +16,8 @@ import com.klima7.astroweather.R;
 
 public class SunFragment extends Fragment {
 
-    private static AstroCalculator.SunInfo info;
     private TextView sunriseTimeView, sunriseAzimuthView, sunsetTimeView, sunsetAzimuthView, dawnTimeView, duskTimeView;
+    private String sunriseTimeText, sunriseAzimuthText, sunsetTimeText, sunsetAzimuthText, dawnTimeText, duskTimeText;
 
     public static SunFragment newInstance(AstroCalculator.SunInfo sunInfo) {
         SunFragment fragment = new SunFragment();
@@ -31,37 +31,58 @@ public class SunFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle saved) {
+        super.onViewCreated(view, saved);
 
         sunriseTimeView = getView().findViewById(R.id.sunrise_time);
         sunriseAzimuthView = getView().findViewById(R.id.sunrise_azimuth);
-
         sunsetTimeView = getView().findViewById(R.id.sunset_time);
         sunsetAzimuthView = getView().findViewById(R.id.sunset_azimuth);
-
         dawnTimeView = getView().findViewById(R.id.dawn_time);
         duskTimeView = getView().findViewById(R.id.dusk_time);
 
-        applyInfo();
+        if(saved != null) {
+            sunriseTimeText = saved.getString("sunriseTimeText");
+            sunriseAzimuthText = saved.getString("sunriseAzimuthText");
+            sunsetTimeText = saved.getString("sunsetTimeText");
+            sunsetAzimuthText = saved.getString("sunsetAzimuthText");
+            dawnTimeText = saved.getString("dawnTimeText");
+            duskTimeText = saved.getString("duskTimeText");
+        }
+
+        apply();
     }
 
     public void update(AstroCalculator.SunInfo info) {
-        this.info = info;
-        applyInfo();
+        sunriseTimeText = Formatter.formatTime(info.getSunrise());
+        sunriseAzimuthText = Formatter.formatAzimuth(info.getAzimuthRise());
+        sunsetTimeText = Formatter.formatTime(info.getSunset());
+        sunsetAzimuthText = Formatter.formatAzimuth(info.getAzimuthSet());
+        dawnTimeText = Formatter.formatTime(info.getTwilightMorning());
+        duskTimeText = Formatter.formatTime(info.getTwilightEvening());
+
+        if(sunriseAzimuthView != null)
+            apply();
     }
 
-    private void applyInfo() {
-        if(info == null || sunriseTimeView == null)
-            return;
+    private void apply() {
+        sunriseTimeView.setText(sunriseTimeText);
+        sunriseAzimuthView.setText(sunriseAzimuthText);
+        sunsetTimeView.setText(sunsetTimeText);
+        sunsetAzimuthView.setText(sunsetAzimuthText);
+        dawnTimeView.setText(dawnTimeText);
+        duskTimeView.setText(duskTimeText);
+    }
 
-        sunriseTimeView.setText(Formatter.formatTime(info.getSunrise()));
-        sunriseAzimuthView.setText(Formatter.formatAzimuth(info.getAzimuthRise()));
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-        sunsetTimeView.setText(Formatter.formatTime(info.getSunset()));
-        sunsetAzimuthView.setText(Formatter.formatAzimuth(info.getAzimuthSet()));
-
-        dawnTimeView.setText(Formatter.formatTime(info.getTwilightMorning()));
-        duskTimeView.setText(Formatter.formatTime(info.getTwilightEvening()));
+        outState.putString("sunriseTimeText", sunriseTimeText);
+        outState.putString("sunriseAzimuthText", sunriseAzimuthText);
+        outState.putString("sunsetTimeText", sunsetTimeText);
+        outState.putString("sunsetAzimuthText", sunsetAzimuthText);
+        outState.putString("dawnTimeText", dawnTimeText);
+        outState.putString("duskTimeText", duskTimeText);
     }
 }

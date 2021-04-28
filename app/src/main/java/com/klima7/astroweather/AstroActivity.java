@@ -50,12 +50,8 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
 
         // Create new fragments if they not exists
         if(infoFragment == null) infoFragment = InfoFragment.newInstance(data.getLatitude(), data.getLongitude());
-        if(sunFragment == null) sunFragment = new SunFragment();
-        if(moonFragment == null) moonFragment = new MoonFragment();
-
-        // Update
-        sunFragment.update(data.getSunInfo());
-        moonFragment.update(data.getMoonInfo());
+        if(sunFragment == null) sunFragment = SunFragment.newInstance(data.getSunInfo());
+        if(moonFragment == null) moonFragment = MoonFragment.newInstance(data.getMoonInfo());
 
         // Get configuration
         int orientation = getResources().getConfiguration().orientation;
