@@ -1,10 +1,7 @@
 package com.klima7.astroweather;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,7 +9,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.klima7.astroweather.fragments.Config;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MenuActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -76,9 +73,8 @@ public class MenuActivity extends AppCompatActivity implements AdapterView.OnIte
         intent.putExtras(bundle);
         startActivity(intent);
 
-        Config config = new Config(1, 1, 0);
         Intent data = new Intent();
-        data.putExtra("config", config);
+        data.putExtra("config", "Hi!");
         setResult(RESULT_OK, data);
     }
 }

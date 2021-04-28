@@ -13,8 +13,13 @@ public class AstroData extends ViewModel {
     private float longitude;
     private float latitude;
 
-    private float refreshPeriod;
+    private int refreshPeriod;
     private long lastRefresh;
+
+    public AstroData() {
+        refreshPeriod = 10;
+        refresh();
+    }
 
     public void refresh() {
         AstroDateTime time = new AstroDateTime();
@@ -43,7 +48,7 @@ public class AstroData extends ViewModel {
         return latitude;
     }
 
-    public float getRefreshPeriod() {
+    public int getRefreshPeriod() {
         return refreshPeriod;
     }
 
@@ -59,7 +64,7 @@ public class AstroData extends ViewModel {
         this.latitude = latitude;
     }
 
-    public void setRefreshPeriod(float refreshPeriod) {
+    public void setRefreshPeriod(int refreshPeriod) {
         this.refreshPeriod = refreshPeriod;
     }
 }
