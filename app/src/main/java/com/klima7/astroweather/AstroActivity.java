@@ -25,10 +25,6 @@ import java.util.TimerTask;
 
 public class AstroActivity extends FragmentActivity implements InfoFragment.InfoInterface {
 
-    private InfoFragment infoFragment;
-    private SunFragment sunFragment;
-    private MoonFragment moonFragment;
-
     private AstroData data;
 
     private Timer timer;
@@ -46,11 +42,11 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
 
         // Retrieve fragments if they exists
         FragmentManager fm = getSupportFragmentManager();
-        sunFragment = (SunFragment)fm.findFragmentByTag("f0");
-        moonFragment = (MoonFragment)fm.findFragmentByTag("f1");
+        SunFragment sunFragment = (SunFragment) fm.findFragmentByTag("f0");
+        MoonFragment moonFragment = (MoonFragment) fm.findFragmentByTag("f1");
 
         // Create new fragments if they not exists
-        infoFragment = new InfoFragment();
+        InfoFragment infoFragment = new InfoFragment();
         if(sunFragment == null) sunFragment = new SunFragment();
         if(moonFragment == null) moonFragment = new MoonFragment();
 
@@ -84,6 +80,12 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
                 pager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
         }
 
+        data.refreshPeriod.observe(this, newRefreshPeriod -> {
+            refreshTask.cancel();
+            timer.cancel();
+            scheduleRefresh();
+        });
+
         // Create menu launcher
         startMenu = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> applyConfig(result));
@@ -99,6 +101,7 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
     protected void onStop() {
         super.onStop();
         refreshTask.cancel();
+        timer.cancel();
     }
 
     @Override
@@ -127,9 +130,6 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         data.longitude.setValue(extras.getFloat(MenuActivity.LONGITUDE));
         data.refreshPeriod.setValue(extras.getInt(MenuActivity.REFRESH));
         refresh();
-
-        refreshTask.cancel();
-        scheduleRefresh();
     }
 
     private void refresh() {
