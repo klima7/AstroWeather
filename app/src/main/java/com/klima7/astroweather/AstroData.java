@@ -1,7 +1,6 @@
 package com.klima7.astroweather;
 
-import android.util.Log;
-
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.astrocalculator.AstroCalculator;
@@ -9,66 +8,29 @@ import com.astrocalculator.AstroDateTime;
 
 public class AstroData extends ViewModel {
 
-    private AstroCalculator.SunInfo sunInfo;
-    private AstroCalculator.MoonInfo moonInfo;
+    public MutableLiveData<AstroCalculator.SunInfo> sunInfo = new MutableLiveData<>();
+    public MutableLiveData<AstroCalculator.MoonInfo> moonInfo = new MutableLiveData<>();
 
-    private float longitude;
-    private float latitude;
+    public MutableLiveData<Float> longitude = new MutableLiveData<>();
+    public MutableLiveData<Float> latitude = new MutableLiveData<>();
 
-    private int refreshPeriod;
-    private long lastRefresh;
+    public MutableLiveData<Integer> refreshPeriod = new MutableLiveData<>();
+    public MutableLiveData<Long> lastRefresh = new MutableLiveData<>();
 
     public AstroData() {
-        refreshPeriod = 10;
+        refreshPeriod.setValue(10);
+        latitude.setValue(0f);
+        longitude.setValue(0f);
         refresh();
     }
 
     public void refresh() {
         AstroDateTime time = new AstroDateTime();
-        AstroCalculator.Location location = new AstroCalculator.Location(latitude, longitude);
+        AstroCalculator.Location location = new AstroCalculator.Location(latitude.getValue(), longitude.getValue());
         AstroCalculator calculator = new AstroCalculator(time, location);
 
-        sunInfo = calculator.getSunInfo();
-        moonInfo = calculator.getMoonInfo();
-
-        Log.i("Hello", "" + sunInfo.getSunrise().getSecond());
-
-        lastRefresh = System.currentTimeMillis();
-    }
-
-    public AstroCalculator.SunInfo getSunInfo() {
-        return sunInfo;
-    }
-
-    public AstroCalculator.MoonInfo getMoonInfo() {
-        return moonInfo;
-    }
-
-    public float getLongitude() {
-        return longitude;
-    }
-
-    public float getLatitude() {
-        return latitude;
-    }
-
-    public int getRefreshPeriod() {
-        return refreshPeriod;
-    }
-
-    public long getLastRefresh() {
-        return lastRefresh;
-    }
-
-    public void setLongitude(float longitude) {
-        this.longitude = longitude;
-    }
-
-    public void setLatitude(float latitude) {
-        this.latitude = latitude;
-    }
-
-    public void setRefreshPeriod(int refreshPeriod) {
-        this.refreshPeriod = refreshPeriod;
+        sunInfo.setValue(calculator.getSunInfo());
+        moonInfo.setValue(calculator.getMoonInfo());
+        lastRefresh.setValue(System.currentTimeMillis());
     }
 }

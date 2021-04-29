@@ -2,47 +2,23 @@ package com.klima7.astroweather.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.klima7.astroweather.AstroActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.klima7.astroweather.AstroData;
 import com.klima7.astroweather.R;
 
 public class InfoFragment extends Fragment {
 
-    private static final String ARG_LATITUDE = "latitude";
-    private static final String ARG_LONGITUDE = "longitude";
-
     private InfoInterface infoInterface;
-    private float latitude, longitude;
-    private TextView latitudeView, longitudeView;
-
-    public static InfoFragment newInstance(float latitude, float longitude) {
-        InfoFragment fragment = new InfoFragment();
-        Bundle args = new Bundle();
-        args.putFloat(ARG_LATITUDE, latitude);
-        args.putFloat(ARG_LONGITUDE, longitude);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            latitude = getArguments().getFloat(ARG_LATITUDE);
-            longitude = getArguments().getFloat(ARG_LONGITUDE);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,22 +35,19 @@ public class InfoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        AstroData data = new ViewModelProvider(requireActivity()).get(AstroData.class);
+
         ImageButton button = getView().findViewById(R.id.settingsButton);
         button.setOnClickListener(v -> infoInterface.settingsClicked());
 
-        latitudeView = getView().findViewById(R.id.info_latitude);
-        longitudeView = getView().findViewById(R.id.info_longitude);
+        TextView latitudeView = getView().findViewById(R.id.info_latitude);
+        TextView longitudeView = getView().findViewById(R.id.info_longitude);
 
-        latitudeView.setText(String.valueOf(latitude));
-        longitudeView.setText(String.valueOf(longitude));
-    }
+        latitudeView.setText(String.valueOf(data.latitude.getValue()));
+        longitudeView.setText(String.valueOf(data.longitude.getValue()));
 
-    public void update(float latitude, float longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-
-        latitudeView.setText(String.valueOf(latitude));
-        longitudeView.setText(String.valueOf(longitude));
+        data.longitude.observe(requireActivity(), longitude -> longitudeView.setText(String.valueOf(longitude)));
+        data.latitude.observe(requireActivity(), latitude -> latitudeView.setText(String.valueOf(latitude)));
     }
 
     public interface InfoInterface {
