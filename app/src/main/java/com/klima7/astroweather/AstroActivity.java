@@ -40,15 +40,6 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         // Attach ViewModel
         data = new ViewModelProvider(this).get(AstroData.class);
 
-        // Retrieve fragments if they exists
-        FragmentManager fm = getSupportFragmentManager();
-        SunFragment sunFragment = (SunFragment) fm.findFragmentByTag("f0");
-        MoonFragment moonFragment = (MoonFragment) fm.findFragmentByTag("f1");
-
-        // Create new fragments if they not exists
-        if(sunFragment == null) sunFragment = new SunFragment();
-        if(moonFragment == null) moonFragment = new MoonFragment();
-
         // Get configuration
         int orientation = getResources().getConfiguration().orientation;
         int size = getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -56,24 +47,35 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
 
         // Tablet
         if (tablet) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.sun_container, sunFragment, "sunFragment");
-            transaction.replace(R.id.moon_container, moonFragment, "moonFragment");
-            transaction.commit();
+            if(savedInstanceState == null) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.add(R.id.sun_container, new SunFragment(), "sunFragment");
+                transaction.add(R.id.moon_container, new MoonFragment(), "moonFragment");
+                transaction.commit();
+            }
         }
 
         // Mobile
         else {
+            // Retrieve fragments if they exists
+            FragmentManager fm = getSupportFragmentManager();
+            SunFragment sunFragment = (SunFragment) fm.findFragmentByTag("f0");
+            MoonFragment moonFragment = (MoonFragment) fm.findFragmentByTag("f1");
+
+            // Create new fragments if they not exists
+            if(sunFragment == null) sunFragment = new SunFragment();
+            if(moonFragment == null) moonFragment = new MoonFragment();
+
+            // Set adapter
             ViewPager2 pager = findViewById(R.id.pager);
             FragmentStateAdapter adapter = new Adapter(this, sunFragment, moonFragment);
             pager.setAdapter(adapter);
 
-            if(orientation == Configuration.ORIENTATION_PORTRAIT)
-                pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-            else
-                pager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
+            if(orientation == Configuration.ORIENTATION_PORTRAIT) pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+            else pager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
         }
 
+        // Reconfigure timer on refresh change
         data.refreshPeriod.observe(this, newRefreshPeriod -> {
             refreshTask.cancel();
             timer.cancel();
