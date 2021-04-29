@@ -46,7 +46,6 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         MoonFragment moonFragment = (MoonFragment) fm.findFragmentByTag("f1");
 
         // Create new fragments if they not exists
-        InfoFragment infoFragment = new InfoFragment();
         if(sunFragment == null) sunFragment = new SunFragment();
         if(moonFragment == null) moonFragment = new MoonFragment();
 
@@ -58,7 +57,6 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         // Tablet
         if (tablet) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.info_container, infoFragment, "infoFragment");
             transaction.replace(R.id.sun_container, sunFragment, "sunFragment");
             transaction.replace(R.id.moon_container, moonFragment, "moonFragment");
             transaction.commit();
@@ -69,10 +67,6 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
             ViewPager2 pager = findViewById(R.id.pager);
             FragmentStateAdapter adapter = new Adapter(this, sunFragment, moonFragment);
             pager.setAdapter(adapter);
-
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.replace(R.id.info_holder_mobile, infoFragment);
-            ft.commit();
 
             if(orientation == Configuration.ORIENTATION_PORTRAIT)
                 pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);

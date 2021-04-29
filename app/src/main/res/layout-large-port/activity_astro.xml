@@ -5,11 +5,12 @@
     android:orientation="vertical"
     android:padding="40dp">
 
-    <FrameLayout
-        android:id="@+id/info_container"
+    <fragment
+        android:name="com.klima7.astroweather.fragments.InfoFragment"
+        android:id="@+id/info_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"></FrameLayout>
+        android:layout_weight="1"></fragment>
 
     <FrameLayout
         android:id="@+id/sun_container"

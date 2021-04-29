@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/info_holder_mobile"
+    <fragment
+        android:name="com.klima7.astroweather.fragments.InfoFragment"
+        android:id="@+id/info_fragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1">
-
-    </FrameLayout>
+    </fragment>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager"
