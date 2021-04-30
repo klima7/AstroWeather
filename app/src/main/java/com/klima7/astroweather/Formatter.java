@@ -10,7 +10,7 @@ public class Formatter {
     }
 
     public static String formatAzimuth(double azimuth) {
-        return String.format("%.1f", azimuth);
+        return String.format("%.5f", azimuth);
     }
 
     public static String formatDate(AstroDateTime time) {

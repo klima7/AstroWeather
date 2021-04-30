@@ -50,6 +50,7 @@ public class SunFragment extends Fragment {
         duskTimeView.setText(Formatter.formatTime(info.getTwilightEvening()));
 
         data.sunInfo.observe(requireActivity(), newInfo -> {
+            Log.i("Hello", ""+data.sunInfo.getValue().getAzimuthRise());
             sunriseTimeView.setText(Formatter.formatTime(newInfo.getSunrise()));
             sunriseAzimuthView.setText(Formatter.formatAzimuth(newInfo.getAzimuthRise()));
             sunsetTimeView.setText(Formatter.formatTime(newInfo.getSunset()));
