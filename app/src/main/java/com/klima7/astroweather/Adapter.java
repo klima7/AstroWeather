@@ -9,20 +9,15 @@ import com.klima7.astroweather.fragments.SunFragment;
 
 class Adapter extends FragmentStateAdapter {
 
-    private SunFragment sun;
-    private MoonFragment moon;
-
-    public Adapter(FragmentActivity fa, SunFragment sun, MoonFragment moon) {
+    public Adapter(FragmentActivity fa) {
         super(fa);
-        this.sun = sun;
-        this.moon = moon;
     }
 
     @Override
     public Fragment createFragment(int position) {
         switch (position) {
-            case 0: return sun;
-            case 1: return moon;
+            case 0: return new SunFragment();
+            case 1: return new MoonFragment();
             default: return null;
         }
     }

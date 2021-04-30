@@ -57,18 +57,9 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
 
         // Mobile
         else {
-            // Retrieve fragments if they exists
-            FragmentManager fm = getSupportFragmentManager();
-            SunFragment sunFragment = (SunFragment) fm.findFragmentByTag("f0");
-            MoonFragment moonFragment = (MoonFragment) fm.findFragmentByTag("f1");
-
-            // Create new fragments if they not exists
-            if(sunFragment == null) sunFragment = new SunFragment();
-            if(moonFragment == null) moonFragment = new MoonFragment();
-
-            // Set adapter
             ViewPager2 pager = findViewById(R.id.pager);
-            FragmentStateAdapter adapter = new Adapter(this, sunFragment, moonFragment);
+
+            FragmentStateAdapter adapter = new Adapter(this);
             pager.setAdapter(adapter);
 
             if(orientation == Configuration.ORIENTATION_PORTRAIT) pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
