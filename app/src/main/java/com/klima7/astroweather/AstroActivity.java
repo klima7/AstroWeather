@@ -113,10 +113,16 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         if(intent == null) return;
         Bundle extras = intent.getExtras();
 
-        data.latitude.setValue(extras.getFloat(MenuActivity.LATITUDE));
-        data.longitude.setValue(extras.getFloat(MenuActivity.LONGITUDE));
-        data.refreshPeriod.setValue(extras.getInt(MenuActivity.REFRESH));
-        refresh();
+        float new_latitude = extras.getFloat(MenuActivity.LATITUDE);
+        float new_longitude = extras.getFloat(MenuActivity.LONGITUDE);
+        int new_refresh = extras.getInt(MenuActivity.REFRESH);
+
+        if(new_latitude != data.latitude.getValue() || new_longitude != data.longitude.getValue() || new_refresh != data.refreshPeriod.getValue()) {
+            data.latitude.setValue(new_latitude);
+            data.longitude.setValue(new_longitude);
+            data.refreshPeriod.setValue(new_refresh);
+            refresh();
+        }
     }
 
     private void refresh() {
