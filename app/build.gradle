@@ -46,6 +46,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+    implementation 'com.android.volley:volley:1.2.0'
+    implementation 'net.oauth.core:oauth:20100527'
+    implementation 'com.google.code.gson:gson:2.8.6'
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     testImplementation 'junit:junit:4.+'
