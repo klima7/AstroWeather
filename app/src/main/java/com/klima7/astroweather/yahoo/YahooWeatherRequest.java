@@ -1,5 +1,7 @@
 package com.klima7.astroweather.yahoo;
 
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -21,16 +23,24 @@ import java.util.Map;
 
 public class YahooWeatherRequest extends JsonRequest<YahooWeather> {
 
-    private Gson gson = new Gson();
-
     public static final String appId = "e4fr98gu";
     public static final String CONSUMER_KEY = "dj0yJmk9UnhwNXhycDNSdGhBJmQ9WVdrOVpUUm1jams0WjNVbWNHbzlNQT09JnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTRm";
     public static final String CONSUMER_SECRET = "6f307dc157458f96a02def7f040b143ae2e3b3f3";
     public static final String baseUrl = "https://weather-ydn-yql.media.yahoo.com/forecastrss";
 
-    public YahooWeatherRequest(Response.Listener<YahooWeather> listener, Response.ErrorListener errorListener) {
+    public static final String IMPERIAL_UNIT = "f";
+    public static final String METRIC_UNIT = "c";
+
+    private Gson gson = new Gson();
+    private int woeid;
+    private String unit;
+
+    public YahooWeatherRequest(int woeid, String unit, Response.Listener<YahooWeather> listener, Response.ErrorListener errorListener) {
         super(Request.Method.GET, null, null, listener, errorListener);
         setShouldCache(false);
+
+        this.woeid = woeid;
+        this.unit = unit;
     }
 
     @Override
@@ -54,7 +64,7 @@ public class YahooWeatherRequest extends JsonRequest<YahooWeather> {
 
     @Override
     public String getUrl() {
-        return baseUrl + "?location=sunnyvale,ca&format=json&u=c";
+        return baseUrl + String.format("?woeid=%d&format=json&u=%s", woeid, unit);
     }
 
     @Override
