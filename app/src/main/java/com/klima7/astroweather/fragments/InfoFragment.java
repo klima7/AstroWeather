@@ -20,7 +20,7 @@ public class InfoFragment extends Fragment {
 
     private InfoInterface infoInterface;
     private AppData data;
-    private TextView latitudeView, longitudeView;
+    private TextView cityView, latitudeView, longitudeView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,6 +44,7 @@ public class InfoFragment extends Fragment {
 
         latitudeView = getView().findViewById(R.id.info_latitude);
         longitudeView = getView().findViewById(R.id.info_longitude);
+        cityView = getView().findViewById(R.id.info_city);
 
         updateLocation();
         data.location.observe(requireActivity(), newLocation -> updateLocation());
@@ -53,11 +54,13 @@ public class InfoFragment extends Fragment {
         if(data.location.getValue() != null) {
             latitudeView.setText(String.valueOf(data.location.getValue().getLatitude()));
             longitudeView.setText(String.valueOf(data.location.getValue().getLongitude()));
+            cityView.setText(String.valueOf(data.location.getValue().getCity()));
         }
         else {
             String placeholder = getResources().getString(R.string.placeholder);
             latitudeView.setText(placeholder);
             longitudeView.setText(placeholder);
+            cityView.setText(placeholder);
         }
     }
 

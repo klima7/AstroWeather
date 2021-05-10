@@ -28,4 +28,5 @@
     <string name="dawn_label">Swit cywilny</string>
     <string name="dusk_label">Zmierzch cywilny</string>
     <string name="placeholder">------</string>
+    <string name="city_label">Miasto</string>
 </resources>
