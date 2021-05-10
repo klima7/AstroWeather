@@ -8,15 +8,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.klima7.astroweather.yahoo.YahooLocation;
+import com.klima7.astroweather.weather.Location;
 
 import java.util.List;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.LocationHolder> {
 
-    private List<YahooLocation> locations;
+    private List<Location> locations;
 
-    public LocationAdapter(List<YahooLocation> locations) {
+    public LocationAdapter(List<Location> locations) {
         this.locations = locations;
     }
 
@@ -28,7 +28,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
 
     @Override
     public void onBindViewHolder(@NonNull LocationHolder holder, int position) {
-        YahooLocation location = locations.get(position);
+        Location location = locations.get(position);
         holder.update(location);
     }
 
@@ -37,7 +37,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         return locations.size();
     }
 
-    public void addLocation(YahooLocation location) {
+    public void addLocation(Location location) {
         locations.add(location);
         notifyDataSetChanged();
     }
@@ -54,7 +54,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             longitudeView = itemView.findViewById(R.id.entry_longitude);
         }
 
-        public void update(YahooLocation location) {
+        public void update(Location location) {
             cityView.setText(location.getCity());
             regionView.setText(location.getRegion().trim());
             latitudeView.setText(String.valueOf(location.getLatitude()));

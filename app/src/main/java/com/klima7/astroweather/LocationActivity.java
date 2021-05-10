@@ -5,16 +5,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.klima7.astroweather.yahoo.YahooLocation;
-import com.klima7.astroweather.yahoo.YahooLocationRequest;
+import com.klima7.astroweather.weather.Location;
+import com.klima7.astroweather.weather.YahooLocationRequest;
 
 import java.util.ArrayList;
 
@@ -43,9 +40,9 @@ public class LocationActivity extends AppCompatActivity {
     private void addLocationClicked() {
         RequestManager requestManager = RequestManager.getInstance(this);
         String locationName = locationEdit.getText().toString();
-        YahooLocationRequest reques = new YahooLocationRequest(locationName, new Response.Listener<YahooLocation>() {
+        YahooLocationRequest reques = new YahooLocationRequest(locationName, new Response.Listener<Location>() {
             @Override
-            public void onResponse(YahooLocation location) {
+            public void onResponse(Location location) {
                 if(location.isValid()) {
                     adapter.addLocation(location);
                 }

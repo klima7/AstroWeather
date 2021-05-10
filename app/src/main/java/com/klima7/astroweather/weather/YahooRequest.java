@@ -1,4 +1,4 @@
-package com.klima7.astroweather.yahoo;
+package com.klima7.astroweather.weather;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;

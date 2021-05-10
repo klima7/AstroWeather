@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.astrocalculator.AstroCalculator;
 import com.astrocalculator.AstroDateTime;
-import com.klima7.astroweather.yahoo.YahooLocation;
-import com.klima7.astroweather.yahoo.YahooWeather;
+import com.klima7.astroweather.weather.Location;
+import com.klima7.astroweather.weather.Weather;
 
 import java.time.LocalDateTime;
 import java.util.GregorianCalendar;
@@ -15,8 +15,8 @@ public class AppData extends ViewModel {
 
     public MutableLiveData<AstroCalculator.SunInfo> sunInfo = new MutableLiveData<>();
     public MutableLiveData<AstroCalculator.MoonInfo> moonInfo = new MutableLiveData<>();
-    public MutableLiveData<YahooWeather> weather = new MutableLiveData<>();
-    public MutableLiveData<YahooLocation> location = new MutableLiveData<>();
+    public MutableLiveData<Weather> weather = new MutableLiveData<>();
+    public MutableLiveData<Location> location = new MutableLiveData<>();
 
     public MutableLiveData<Integer> refreshPeriod = new MutableLiveData<>();
     public MutableLiveData<Long> lastRefresh = new MutableLiveData<>();

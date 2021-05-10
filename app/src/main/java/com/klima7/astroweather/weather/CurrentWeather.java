@@ -1,6 +1,6 @@
-package com.klima7.astroweather.yahoo;
+package com.klima7.astroweather.weather;
 
-public class YahooCurrentWeather {
+public class CurrentWeather {
     private int chill;
     private int direction;
     private double speed;

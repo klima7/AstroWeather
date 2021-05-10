@@ -1,8 +1,8 @@
-package com.klima7.astroweather.yahoo;
+package com.klima7.astroweather.weather;
 
 import com.google.gson.annotations.SerializedName;
 
-public class YahooLocation {
+public class Location {
 
     private String city;
     private String region;

@@ -21,10 +21,10 @@ import com.android.volley.VolleyError;
 import com.klima7.astroweather.fragments.InfoFragment;
 import com.klima7.astroweather.fragments.MoonFragment;
 import com.klima7.astroweather.fragments.SunFragment;
-import com.klima7.astroweather.yahoo.YahooLocation;
-import com.klima7.astroweather.yahoo.YahooWeather;
-import com.klima7.astroweather.yahoo.YahooWeatherRequest;
-import com.klima7.astroweather.yahoo.YahooLocationRequest;
+import com.klima7.astroweather.weather.Location;
+import com.klima7.astroweather.weather.Weather;
+import com.klima7.astroweather.weather.YahooWeatherRequest;
+import com.klima7.astroweather.weather.YahooLocationRequest;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -96,9 +96,9 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         super.onStart();
 
         RequestManager requestManager = RequestManager.getInstance(this);
-        YahooWeatherRequest request = new YahooWeatherRequest(500961, YahooWeatherRequest.METRIC_UNIT, new Response.Listener<YahooWeather>() {
+        YahooWeatherRequest request = new YahooWeatherRequest(500961, YahooWeatherRequest.METRIC_UNIT, new Response.Listener<Weather>() {
             @Override
-            public void onResponse(YahooWeather response) {
+            public void onResponse(Weather response) {
                 Log.i("Hello", "Weather = " + response);
             }
         }, new Response.ErrorListener() {
@@ -109,9 +109,9 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         });
         requestManager.addToRequestQueue(request);
 
-        YahooLocationRequest request2 = new YahooLocationRequest("Kompina", new Response.Listener<YahooLocation>() {
+        YahooLocationRequest request2 = new YahooLocationRequest("Kompina", new Response.Listener<Location>() {
             @Override
-            public void onResponse(YahooLocation location) {
+            public void onResponse(Location location) {
                 Log.i("Hello", "location = " + location);
                 data.location.setValue(location);
                 data.update();

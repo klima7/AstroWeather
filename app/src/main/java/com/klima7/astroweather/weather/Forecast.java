@@ -1,6 +1,6 @@
-package com.klima7.astroweather.yahoo;
+package com.klima7.astroweather.weather;
 
-public class YahooForecast {
+public class Forecast {
     private String day;
     private long date;
     private int low;

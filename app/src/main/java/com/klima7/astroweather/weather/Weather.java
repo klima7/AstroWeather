@@ -1,28 +1,28 @@
-package com.klima7.astroweather.yahoo;
+package com.klima7.astroweather.weather;
 
 import java.util.Arrays;
 
-public class YahooWeather {
+public class Weather {
 
-    private YahooLocation location;
-    private YahooCurrentWeather current;
-    private YahooForecast[] future;
+    private Location location;
+    private CurrentWeather current;
+    private Forecast[] future;
 
-    public YahooWeather(YahooLocation location, YahooCurrentWeather current, YahooForecast[] future) {
+    public Weather(Location location, CurrentWeather current, Forecast[] future) {
         this.location = location;
         this.current = current;
         this.future = future;
     }
 
-    public YahooLocation getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public YahooCurrentWeather getCurrent() {
+    public CurrentWeather getCurrent() {
         return current;
     }
 
-    public YahooForecast[] getFuture() {
+    public Forecast[] getFuture() {
         return future;
     }
 
