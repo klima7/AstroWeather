@@ -14,12 +14,12 @@ import com.klima7.astroweather.yahoo.YahooLocationRequest;
 
 import java.util.ArrayList;
 
-public class PlaceActivity extends AppCompatActivity {
+public class LocationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_place);
+        setContentView(R.layout.activity_location);
 
         RecyclerView recycler = findViewById(R.id.place_recycler);
         LocationAdapter adapter = new LocationAdapter(new ArrayList<>());

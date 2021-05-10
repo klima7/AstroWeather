@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/sun"
         android:supportsRtl="true"
         android:theme="@style/Theme.AstroWeather">
-        <activity android:name=".PlaceActivity"></activity>
+        <activity android:name=".LocationActivity"></activity>
         <activity android:name=".MenuActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>

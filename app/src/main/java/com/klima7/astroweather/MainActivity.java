@@ -134,7 +134,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
     @Override
     public void settingsClicked() {
-        Intent intent = new Intent(this, PlaceActivity.class);
+        Intent intent = new Intent(this, LocationActivity.class);
         startActivity(intent);
     }
 
