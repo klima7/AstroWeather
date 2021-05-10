@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import java.util.ArrayList;
+
 public class PlaceActivity extends AppCompatActivity {
 
     @Override
@@ -14,7 +16,7 @@ public class PlaceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_place);
 
         RecyclerView recycler = findViewById(R.id.place_recycler);
-        LocationAdapter adapter = new LocationAdapter();
+        LocationAdapter adapter = new LocationAdapter(new ArrayList<>());
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(layoutManager);

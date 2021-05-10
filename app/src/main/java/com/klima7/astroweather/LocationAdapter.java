@@ -3,6 +3,7 @@ package com.klima7.astroweather;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,7 +12,7 @@ import com.klima7.astroweather.yahoo.YahooLocation;
 
 import java.util.List;
 
-public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
+public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.LocationHolder> {
 
     private List<YahooLocation> locations;
 
@@ -21,13 +22,14 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.place_entry, parent, false));
+    public LocationHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new LocationHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.place_entry, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull LocationHolder holder, int position) {
+        YahooLocation location = locations.get(position);
+        holder.update(location);
     }
 
     @Override
@@ -35,10 +37,26 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         return locations.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public ViewHolder(@NonNull View itemView) {
+    public void addLocation(YahooLocation location) {
+        locations.add(location);
+        notifyDataSetChanged();
+    }
+
+    public static class LocationHolder extends RecyclerView.ViewHolder {
+
+        private TextView cityView, latitudeView, longitudeView;
+
+        public LocationHolder(@NonNull View itemView) {
             super(itemView);
-            // Get controlls from view and save, set callbacks
+            cityView = itemView.findViewById(R.id.entry_city);
+            latitudeView = itemView.findViewById(R.id.entry_latitude);
+            longitudeView = itemView.findViewById(R.id.entry_longitude);
+        }
+
+        public void update(YahooLocation location) {
+            cityView.setText(location.getCity() + " (" + location.getRegion().trim() + ")");
+            latitudeView.setText(String.valueOf(location.getLatitude()));
+            longitudeView.setText(String.valueOf(location.getLongitude()));
         }
     }
 }
