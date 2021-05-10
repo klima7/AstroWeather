@@ -54,7 +54,7 @@ public class InfoFragment extends Fragment {
         if(data.location.getValue() != null) {
             latitudeView.setText(String.valueOf(data.location.getValue().getLatitude()));
             longitudeView.setText(String.valueOf(data.location.getValue().getLongitude()));
-            cityView.setText(String.valueOf(data.location.getValue().getCity()));
+            cityView.setText(data.location.getValue().getCity() + " (" + data.location.getValue().getRegion().trim() + ")");
         }
         else {
             String placeholder = getResources().getString(R.string.placeholder);

@@ -27,10 +27,10 @@ public class AppData extends ViewModel {
         sunInfo.setValue(null);
         moonInfo.setValue(null);
         refreshPeriod.setValue(10);
-//        refresh();
+        lastRefresh.setValue(0L);
     }
 
-    public void refresh() {
+    public void update() {
         GregorianCalendar cal = new GregorianCalendar();
         int y = cal.get(GregorianCalendar.YEAR);
         int mo = cal.get(GregorianCalendar.MONTH);

@@ -20,9 +20,10 @@ import com.android.volley.VolleyError;
 import com.klima7.astroweather.fragments.InfoFragment;
 import com.klima7.astroweather.fragments.MoonFragment;
 import com.klima7.astroweather.fragments.SunFragment;
+import com.klima7.astroweather.yahoo.YahooLocation;
 import com.klima7.astroweather.yahoo.YahooWeather;
 import com.klima7.astroweather.yahoo.YahooWeatherRequest;
-import com.klima7.astroweather.yahoo.YahooWoeidRequest;
+import com.klima7.astroweather.yahoo.YahooLocationRequest;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -103,10 +104,12 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         });
         requestManager.addToRequestQueue(request);
 
-        YahooWoeidRequest request2 = new YahooWoeidRequest("wertutrcvb", new Response.Listener<Integer>() {
+        YahooLocationRequest request2 = new YahooLocationRequest("Kompina", new Response.Listener<YahooLocation>() {
             @Override
-            public void onResponse(Integer woeid) {
-                Log.i("Hello", "woeid = " + woeid);
+            public void onResponse(YahooLocation location) {
+                Log.i("Hello", "location = " + location);
+                data.location.setValue(location);
+                data.update();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -161,7 +164,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     private void refresh() {
         runOnUiThread(() -> {
             Toast.makeText(MainActivity.this, "Odświeżenie", Toast.LENGTH_SHORT).show();
-            data.refresh();
+            data.update();
         });
     }
 
