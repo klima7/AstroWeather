@@ -134,11 +134,8 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
     @Override
     public void settingsClicked() {
-        Intent intent = new Intent(this, MenuActivity.class);
-//        intent.putExtra(MenuActivity.LATITUDE, data.latitude.getValue());
-//        intent.putExtra(MenuActivity.LONGITUDE, data.longitude.getValue());
-        intent.putExtra(MenuActivity.REFRESH, data.refreshPeriod.getValue());
-        startMenu.launch(intent);
+        Intent intent = new Intent(this, PlaceActivity.class);
+        startActivity(intent);
     }
 
     @Override
