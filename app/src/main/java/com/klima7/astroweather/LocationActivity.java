@@ -6,6 +6,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -16,30 +20,35 @@ import java.util.ArrayList;
 
 public class LocationActivity extends AppCompatActivity {
 
+    private LocationAdapter adapter;
+    private EditText locationEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
+        locationEdit = findViewById(R.id.location_name_edit);
+
+        Button addButton = findViewById(R.id.add_location_button);
+        addButton.setOnClickListener(view -> addLocationClicked());
+
         RecyclerView recycler = findViewById(R.id.place_recycler);
-        LocationAdapter adapter = new LocationAdapter(new ArrayList<>());
+        adapter = new LocationAdapter(new ArrayList<>());
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(layoutManager);
+    }
 
+    private void addLocationClicked() {
         RequestManager requestManager = RequestManager.getInstance(this);
-        YahooLocationRequest reques = new YahooLocationRequest("Kompina", new Response.Listener<YahooLocation>() {
+        String locationName = locationEdit.getText().toString();
+        YahooLocationRequest reques = new YahooLocationRequest(locationName, new Response.Listener<YahooLocation>() {
             @Override
             public void onResponse(YahooLocation location) {
-                Log.i("Hello", "location = " + location);
                 adapter.addLocation(location);
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("Hello", "Error response received");
-            }
-        });
+        }, null);
         requestManager.addToRequestQueue(reques);
     }
 }
