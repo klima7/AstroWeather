@@ -40,6 +40,10 @@ public class YahooLocation {
         return longitude;
     }
 
+    public boolean isValid() {
+        return woeid != 0;
+    }
+
     @Override
     public String toString() {
         return "LocationInfo{" +
