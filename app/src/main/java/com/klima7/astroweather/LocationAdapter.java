@@ -7,7 +7,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
+import com.klima7.astroweather.yahoo.YahooLocation;
+
+import java.util.List;
+
+public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
+
+    private List<YahooLocation> locations;
+
+    public LocationAdapter(List<YahooLocation> locations) {
+        this.locations = locations;
+    }
 
     @NonNull
     @Override
@@ -22,7 +32,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return 20;
+        return locations.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
