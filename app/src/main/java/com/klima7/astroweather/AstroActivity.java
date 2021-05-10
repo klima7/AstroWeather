@@ -10,7 +10,6 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -22,7 +21,9 @@ import com.klima7.astroweather.fragments.InfoFragment;
 import com.klima7.astroweather.fragments.MoonFragment;
 import com.klima7.astroweather.fragments.SunFragment;
 import com.klima7.astroweather.yahoo.YahooWeather;
+import com.klima7.astroweather.yahoo.YahooRequest;
 import com.klima7.astroweather.yahoo.YahooWeatherRequest;
+import com.klima7.astroweather.yahoo.YahooWoeidRequest;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -90,7 +91,7 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         super.onStart();
 
         RequestManager requestManager = RequestManager.getInstance(this);
-        YahooWeatherRequest request = new YahooWeatherRequest(2502265, YahooWeatherRequest.METRIC_UNIT, new Response.Listener<YahooWeather>() {
+        YahooWeatherRequest request = new YahooWeatherRequest(500961, YahooWeatherRequest.METRIC_UNIT, new Response.Listener<YahooWeather>() {
             @Override
             public void onResponse(YahooWeather response) {
                 Log.i("Hello", "Weather = " + response);
@@ -102,6 +103,19 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
             }
         });
         requestManager.addToRequestQueue(request);
+
+        YahooWoeidRequest request2 = new YahooWoeidRequest("wertutrcvb", new Response.Listener<Integer>() {
+            @Override
+            public void onResponse(Integer woeid) {
+                Log.i("Hello", "woeid = " + woeid);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Hello", "Error response received");
+            }
+        });
+        requestManager.addToRequestQueue(request2);
     }
 
     @Override
