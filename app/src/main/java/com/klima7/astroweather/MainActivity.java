@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -28,14 +29,13 @@ import com.klima7.astroweather.yahoo.YahooLocationRequest;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends FragmentActivity implements InfoFragment.InfoInterface {
+public class MainActivity extends FragmentActivity implements InfoFragment.InfoInterface, SwipeRefreshLayout.OnRefreshListener {
 
     private AppData data;
-
     private Timer timer;
     private TimerTask refreshTask;
-
     private ActivityResultLauncher startMenu;
+    private SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +70,11 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
             if(orientation == Configuration.ORIENTATION_PORTRAIT) pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
             else pager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
         }
+
+        // Set refresh layout
+        refreshLayout = findViewById(R.id.swiperefresh);
+        refreshLayout.setOnRefreshListener(this);
+
 
         // Reconfigure timer on refresh change
 //        data.refreshPeriod.observe(this, newRefreshPeriod -> {
@@ -134,6 +139,11 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 //        intent.putExtra(MenuActivity.LONGITUDE, data.longitude.getValue());
         intent.putExtra(MenuActivity.REFRESH, data.refreshPeriod.getValue());
         startMenu.launch(intent);
+    }
+
+    @Override
+    public void onRefresh() {
+        refreshLayout.setRefreshing(false);
     }
 
     private void scheduleRefresh() {
