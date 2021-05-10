@@ -19,6 +19,8 @@ import com.klima7.astroweather.R;
 public class InfoFragment extends Fragment {
 
     private InfoInterface infoInterface;
+    private AppData data;
+    private TextView latitudeView, longitudeView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,19 +37,28 @@ public class InfoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        AppData data = new ViewModelProvider(requireActivity()).get(AppData.class);
+        data = new ViewModelProvider(requireActivity()).get(AppData.class);
 
         ImageButton button = getView().findViewById(R.id.settingsButton);
         button.setOnClickListener(v -> infoInterface.settingsClicked());
 
-        TextView latitudeView = getView().findViewById(R.id.info_latitude);
-        TextView longitudeView = getView().findViewById(R.id.info_longitude);
+        latitudeView = getView().findViewById(R.id.info_latitude);
+        longitudeView = getView().findViewById(R.id.info_longitude);
 
-        latitudeView.setText(String.valueOf(data.latitude.getValue()));
-        longitudeView.setText(String.valueOf(data.longitude.getValue()));
+        updateLocation();
+        data.location.observe(requireActivity(), newLocation -> updateLocation());
+    }
 
-        data.longitude.observe(requireActivity(), longitude -> longitudeView.setText(String.valueOf(longitude)));
-        data.latitude.observe(requireActivity(), latitude -> latitudeView.setText(String.valueOf(latitude)));
+    private void updateLocation() {
+        if(data.location.getValue() != null) {
+            latitudeView.setText(String.valueOf(data.location.getValue().getLatitude()));
+            longitudeView.setText(String.valueOf(data.location.getValue().getLongitude()));
+        }
+        else {
+            String placeholder = getResources().getString(R.string.placeholder);
+            latitudeView.setText(placeholder);
+            longitudeView.setText(placeholder);
+        }
     }
 
     public interface InfoInterface {

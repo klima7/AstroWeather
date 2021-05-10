@@ -27,7 +27,7 @@ import com.klima7.astroweather.yahoo.YahooWoeidRequest;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class AstroActivity extends FragmentActivity implements InfoFragment.InfoInterface {
+public class MainActivity extends FragmentActivity implements InfoFragment.InfoInterface {
 
     private AppData data;
 
@@ -71,11 +71,11 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         }
 
         // Reconfigure timer on refresh change
-        data.refreshPeriod.observe(this, newRefreshPeriod -> {
-            refreshTask.cancel();
-            timer.cancel();
-            scheduleRefresh();
-        });
+//        data.refreshPeriod.observe(this, newRefreshPeriod -> {
+//            refreshTask.cancel();
+//            timer.cancel();
+//            scheduleRefresh();
+//        });
 
         // Create menu launcher
         startMenu = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -85,7 +85,7 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
     @Override
     protected void onStart() {
         super.onStart();
-        scheduleRefresh();
+//        scheduleRefresh();
 
         super.onStart();
 
@@ -120,15 +120,15 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
     @Override
     protected void onStop() {
         super.onStop();
-        refreshTask.cancel();
-        timer.cancel();
+//        refreshTask.cancel();
+//        timer.cancel();
     }
 
     @Override
     public void settingsClicked() {
         Intent intent = new Intent(this, MenuActivity.class);
-        intent.putExtra(MenuActivity.LATITUDE, data.latitude.getValue());
-        intent.putExtra(MenuActivity.LONGITUDE, data.longitude.getValue());
+//        intent.putExtra(MenuActivity.LATITUDE, data.latitude.getValue());
+//        intent.putExtra(MenuActivity.LONGITUDE, data.longitude.getValue());
         intent.putExtra(MenuActivity.REFRESH, data.refreshPeriod.getValue());
         startMenu.launch(intent);
     }
@@ -150,17 +150,17 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         float new_longitude = extras.getFloat(MenuActivity.LONGITUDE);
         int new_refresh = extras.getInt(MenuActivity.REFRESH);
 
-        if(new_latitude != data.latitude.getValue() || new_longitude != data.longitude.getValue() || new_refresh != data.refreshPeriod.getValue()) {
-            data.latitude.setValue(new_latitude);
-            data.longitude.setValue(new_longitude);
-            data.refreshPeriod.setValue(new_refresh);
-            refresh();
-        }
+//        if(new_latitude != data.latitude.getValue() || new_longitude != data.longitude.getValue() || new_refresh != data.refreshPeriod.getValue()) {
+//            data.latitude.setValue(new_latitude);
+//            data.longitude.setValue(new_longitude);
+//            data.refreshPeriod.setValue(new_refresh);
+//            refresh();
+//        }
     }
 
     private void refresh() {
         runOnUiThread(() -> {
-            Toast.makeText(AstroActivity.this, "Odświeżenie", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Odświeżenie", Toast.LENGTH_SHORT).show();
             data.refresh();
         });
     }

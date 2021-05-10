@@ -18,6 +18,9 @@ import com.klima7.astroweather.R;
 
 public class MoonFragment extends Fragment {
 
+    private AppData data;
+    private TextView moonriseTimeView, moonsetTimeView, interlunarTimeView, fullMoonTimeView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_moon, container, false);
@@ -27,25 +30,32 @@ public class MoonFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle saved) {
         super.onViewCreated(view, saved);
 
-        AppData data = new ViewModelProvider(requireActivity()).get(AppData.class);
+        data = new ViewModelProvider(requireActivity()).get(AppData.class);
 
-        TextView moonriseTimeView = getView().findViewById(R.id.moonrise_time);
-        TextView moonsetTimeView = getView().findViewById(R.id.moonset_time);
-        TextView interlunarTimeView = getView().findViewById(R.id.internular_time);
-        TextView fullMoonTimeView = getView().findViewById(R.id.fullmoon_time);
+        moonriseTimeView = getView().findViewById(R.id.moonrise_time);
+        moonsetTimeView = getView().findViewById(R.id.moonset_time);
+        interlunarTimeView = getView().findViewById(R.id.internular_time);
+        fullMoonTimeView = getView().findViewById(R.id.fullmoon_time);
 
+        updateMoonInfo();
+        data.moonInfo.observe(requireActivity(), newInfo -> updateMoonInfo());
+    }
+
+    private void updateMoonInfo() {
         AstroCalculator.MoonInfo info = data.moonInfo.getValue();
 
-        moonriseTimeView.setText(Formatter.formatTime(info.getMoonrise()));
-        moonsetTimeView.setText(Formatter.formatTime(info.getMoonset()));
-        interlunarTimeView.setText(Formatter.formatDate(info.getNextNewMoon()));
-        fullMoonTimeView.setText(Formatter.formatDate(info.getNextFullMoon()));
-
-        data.moonInfo.observe(requireActivity(), newInfo -> {
-            moonriseTimeView.setText(Formatter.formatTime(newInfo.getMoonrise()));
-            moonsetTimeView.setText(Formatter.formatTime(newInfo.getMoonset()));
-            interlunarTimeView.setText(Formatter.formatDate(newInfo.getNextNewMoon()));
-            fullMoonTimeView.setText(Formatter.formatDate(newInfo.getNextFullMoon()));
-        });
+        if(info != null) {
+            moonriseTimeView.setText(Formatter.formatTime(info.getMoonrise()));
+            moonsetTimeView.setText(Formatter.formatTime(info.getMoonset()));
+            interlunarTimeView.setText(Formatter.formatDate(info.getNextNewMoon()));
+            fullMoonTimeView.setText(Formatter.formatDate(info.getNextFullMoon()));
+        }
+        else {
+            String placeholder = getResources().getString(R.string.placeholder);
+            moonriseTimeView.setText(placeholder);
+            moonsetTimeView.setText(placeholder);
+            interlunarTimeView.setText(placeholder);
+            fullMoonTimeView.setText(placeholder);
+        }
     }
 }

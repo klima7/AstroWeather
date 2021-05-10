@@ -3,15 +3,14 @@ package com.klima7.astroweather.yahoo;
 import com.google.gson.annotations.SerializedName;
 
 public class YahooLocation {
+
     private String city;
     private String region;
     private int woeid;
     private String country;
     private String timezone_id;
-    @SerializedName("lat")
-    private double latitude;
-    @SerializedName("long")
-    private double longitude;
+    @SerializedName("lat") private double latitude;
+    @SerializedName("long") private double longitude;
 
     public String getCity() {
         return city;

@@ -27,4 +27,5 @@
     <string name="sunset_azimuth_label">Azymut zachodu</string>
     <string name="dawn_label">Swit cywilny</string>
     <string name="dusk_label">Zmierzch cywilny</string>
+    <string name="placeholder">------</string>
 </resources>

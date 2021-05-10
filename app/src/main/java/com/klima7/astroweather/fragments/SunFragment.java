@@ -40,23 +40,29 @@ public class SunFragment extends Fragment {
         dawnTimeView = getView().findViewById(R.id.dawn_time);
         duskTimeView = getView().findViewById(R.id.dusk_time);
 
+        updateSunInfo();
+        data.sunInfo.observe(requireActivity(), newInfo -> updateSunInfo());
+    }
+
+    private void updateSunInfo() {
         AstroCalculator.SunInfo info = data.sunInfo.getValue();
 
-        sunriseTimeView.setText(Formatter.formatTime(info.getSunrise()));
-        sunriseAzimuthView.setText(Formatter.formatAzimuth(info.getAzimuthRise()));
-        sunsetTimeView.setText(Formatter.formatTime(info.getSunset()));
-        sunsetAzimuthView.setText(Formatter.formatAzimuth(info.getAzimuthSet()));
-        dawnTimeView.setText(Formatter.formatTime(info.getTwilightMorning()));
-        duskTimeView.setText(Formatter.formatTime(info.getTwilightEvening()));
-
-        data.sunInfo.observe(requireActivity(), newInfo -> {
-            Log.i("Hello", ""+data.sunInfo.getValue().getAzimuthRise());
-            sunriseTimeView.setText(Formatter.formatTime(newInfo.getSunrise()));
-            sunriseAzimuthView.setText(Formatter.formatAzimuth(newInfo.getAzimuthRise()));
-            sunsetTimeView.setText(Formatter.formatTime(newInfo.getSunset()));
-            sunsetAzimuthView.setText(Formatter.formatAzimuth(newInfo.getAzimuthSet()));
-            dawnTimeView.setText(Formatter.formatTime(newInfo.getTwilightMorning()));
-            duskTimeView.setText(Formatter.formatTime(newInfo.getTwilightEvening()));
-        });
+        if(info != null) {
+            sunriseTimeView.setText(Formatter.formatTime(info.getSunrise()));
+            sunriseAzimuthView.setText(Formatter.formatAzimuth(info.getAzimuthRise()));
+            sunsetTimeView.setText(Formatter.formatTime(info.getSunset()));
+            sunsetAzimuthView.setText(Formatter.formatAzimuth(info.getAzimuthSet()));
+            dawnTimeView.setText(Formatter.formatTime(info.getTwilightMorning()));
+            duskTimeView.setText(Formatter.formatTime(info.getTwilightEvening()));
+        }
+        else {
+            String placeholder = getResources().getString(R.string.placeholder);
+            sunriseTimeView.setText(placeholder);
+            sunriseAzimuthView.setText(placeholder);
+            sunsetTimeView.setText(placeholder);
+            sunsetAzimuthView.setText(placeholder);
+            dawnTimeView.setText(placeholder);
+            duskTimeView.setText(placeholder);
+        }
     }
 }
