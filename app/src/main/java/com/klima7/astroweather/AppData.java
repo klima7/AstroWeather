@@ -1,7 +1,5 @@
 package com.klima7.astroweather;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -9,10 +7,9 @@ import com.astrocalculator.AstroCalculator;
 import com.astrocalculator.AstroDateTime;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoField;
 import java.util.GregorianCalendar;
 
-public class AstroData extends ViewModel {
+public class AppData extends ViewModel {
 
     public MutableLiveData<AstroCalculator.SunInfo> sunInfo = new MutableLiveData<>();
     public MutableLiveData<AstroCalculator.MoonInfo> moonInfo = new MutableLiveData<>();
@@ -23,7 +20,7 @@ public class AstroData extends ViewModel {
     public MutableLiveData<Integer> refreshPeriod = new MutableLiveData<>();
     public MutableLiveData<Long> lastRefresh = new MutableLiveData<>();
 
-    public AstroData() {
+    public AppData() {
         refreshPeriod.setValue(10);
         latitude.setValue(0f);
         longitude.setValue(0f);

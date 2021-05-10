@@ -21,7 +21,6 @@ import com.klima7.astroweather.fragments.InfoFragment;
 import com.klima7.astroweather.fragments.MoonFragment;
 import com.klima7.astroweather.fragments.SunFragment;
 import com.klima7.astroweather.yahoo.YahooWeather;
-import com.klima7.astroweather.yahoo.YahooRequest;
 import com.klima7.astroweather.yahoo.YahooWeatherRequest;
 import com.klima7.astroweather.yahoo.YahooWoeidRequest;
 
@@ -30,7 +29,7 @@ import java.util.TimerTask;
 
 public class AstroActivity extends FragmentActivity implements InfoFragment.InfoInterface {
 
-    private AstroData data;
+    private AppData data;
 
     private Timer timer;
     private TimerTask refreshTask;
@@ -43,7 +42,7 @@ public class AstroActivity extends FragmentActivity implements InfoFragment.Info
         setContentView(R.layout.activity_astro);
 
         // Attach ViewModel
-        data = new ViewModelProvider(this).get(AstroData.class);
+        data = new ViewModelProvider(this).get(AppData.class);
 
         // Get configuration
         int orientation = getResources().getConfiguration().orientation;

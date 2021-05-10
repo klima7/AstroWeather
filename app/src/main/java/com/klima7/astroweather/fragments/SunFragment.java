@@ -13,13 +13,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.astrocalculator.AstroCalculator;
-import com.klima7.astroweather.AstroData;
+import com.klima7.astroweather.AppData;
 import com.klima7.astroweather.Formatter;
 import com.klima7.astroweather.R;
 
 public class SunFragment extends Fragment {
 
-    private AstroData data;
+    private AppData data;
     private TextView sunriseTimeView, sunriseAzimuthView, sunsetTimeView, sunsetAzimuthView, dawnTimeView, duskTimeView;
 
     @Override
@@ -31,7 +31,7 @@ public class SunFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle saved) {
         super.onViewCreated(view, saved);
 
-        data = new ViewModelProvider(requireActivity()).get(AstroData.class);
+        data = new ViewModelProvider(requireActivity()).get(AppData.class);
 
         sunriseTimeView = getView().findViewById(R.id.sunrise_time);
         sunriseAzimuthView = getView().findViewById(R.id.sunrise_azimuth);

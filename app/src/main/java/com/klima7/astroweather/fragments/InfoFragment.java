@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.klima7.astroweather.AstroData;
+import com.klima7.astroweather.AppData;
 import com.klima7.astroweather.R;
 
 public class InfoFragment extends Fragment {
@@ -35,7 +35,7 @@ public class InfoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        AstroData data = new ViewModelProvider(requireActivity()).get(AstroData.class);
+        AppData data = new ViewModelProvider(requireActivity()).get(AppData.class);
 
         ImageButton button = getView().findViewById(R.id.settingsButton);
         button.setOnClickListener(v -> infoInterface.settingsClicked());

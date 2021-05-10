@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.astrocalculator.AstroCalculator;
-import com.klima7.astroweather.AstroData;
+import com.klima7.astroweather.AppData;
 import com.klima7.astroweather.Formatter;
 import com.klima7.astroweather.R;
 
@@ -27,7 +27,7 @@ public class MoonFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle saved) {
         super.onViewCreated(view, saved);
 
-        AstroData data = new ViewModelProvider(requireActivity()).get(AstroData.class);
+        AppData data = new ViewModelProvider(requireActivity()).get(AppData.class);
 
         TextView moonriseTimeView = getView().findViewById(R.id.moonrise_time);
         TextView moonsetTimeView = getView().findViewById(R.id.moonset_time);
