@@ -44,17 +44,19 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
 
     public static class LocationHolder extends RecyclerView.ViewHolder {
 
-        private TextView cityView, latitudeView, longitudeView;
+        private TextView cityView, regionView, latitudeView, longitudeView;
 
         public LocationHolder(@NonNull View itemView) {
             super(itemView);
             cityView = itemView.findViewById(R.id.entry_city);
+            regionView = itemView.findViewById(R.id.entry_region);
             latitudeView = itemView.findViewById(R.id.entry_latitude);
             longitudeView = itemView.findViewById(R.id.entry_longitude);
         }
 
         public void update(YahooLocation location) {
-            cityView.setText(location.getCity() + " (" + location.getRegion().trim() + ")");
+            cityView.setText(location.getCity());
+            regionView.setText(location.getRegion().trim());
             latitudeView.setText(String.valueOf(location.getLatitude()));
             longitudeView.setText(String.valueOf(location.getLongitude()));
         }
