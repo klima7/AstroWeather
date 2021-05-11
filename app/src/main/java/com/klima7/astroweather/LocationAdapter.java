@@ -10,19 +10,19 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.klima7.astroweather.weather.Entry;
 import com.klima7.astroweather.weather.Location;
-import com.klima7.astroweather.weather.Weather;
 
 import java.util.List;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.WeatherHolder> {
 
-    private Weather weather;
-    private List<Weather> weathers;
+    private Entry entry;
+    private List<Entry> entries;
     private OnLocationSelectedListener listener;
 
-    public LocationAdapter(List<Weather> weathers, OnLocationSelectedListener listener) {
-        this.weathers = weathers;
+    public LocationAdapter(List<Entry> entries, OnLocationSelectedListener listener) {
+        this.entries = entries;
         this.listener = listener;
     }
 
@@ -34,12 +34,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Weathe
 
     @Override
     public void onBindViewHolder(@NonNull WeatherHolder holder, int position) {
-        Weather weather = weathers.get(position);
-        holder.update(weather);
+        Entry entry = entries.get(position);
+        holder.update(entry);
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                setWeather(weather);
+                setEntry(entry);
                 return false;
             }
         });
@@ -47,33 +47,33 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Weathe
 
     @Override
     public int getItemCount() {
-        return weathers.size();
+        return entries.size();
     }
 
-    public void addWeather(Weather weather) {
-        weathers.add(weather);
+    public void addEntry(Entry entry) {
+        entries.add(entry);
         notifyDataSetChanged();
     }
 
-    public void removeWeather(Weather weather) {
-        weathers.remove(weather);
+    public void removeEntry(Entry entry) {
+        entries.remove(entry);
         notifyDataSetChanged();
     }
 
-    public Weather getWeather() {
-        return weather;
+    public Entry getEntry() {
+        return entry;
     }
 
-    public void setWeather(Weather weather) {
-        this.weather = weather;
+    public void setEntry(Entry entry) {
+        this.entry = entry;
     }
 
-    public List<Weather> getWeathers() {
-        return weathers;
+    public List<Entry> getEntries() {
+        return entries;
     }
 
-    public void setWeathers(List<Weather> weathers) {
-        this.weathers = weathers;
+    public void setEntries(List<Entry> entries) {
+        this.entries = entries;
     }
 
     public class WeatherHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
@@ -91,13 +91,13 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Weathe
             itemView.setOnCreateContextMenuListener(this);
         }
 
-        public void update(Weather weather) {
-            Location location = weather.getLocation();
+        public void update(Entry entry) {
+            Location location = entry.getLocation();
             cityView.setText(location.getCity());
             regionView.setText(location.getRegion().trim());
             latitudeView.setText(String.valueOf(location.getLatitude()));
             longitudeView.setText(String.valueOf(location.getLongitude()));
-            locationCard.setOnClickListener(v -> listener.locationSelected(weather));
+            locationCard.setOnClickListener(v -> listener.locationSelected(entry));
         }
 
         @Override
@@ -108,6 +108,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Weathe
     }
 
     public interface OnLocationSelectedListener {
-        void locationSelected(Weather weather);
+        void locationSelected(Entry entry);
     }
 }

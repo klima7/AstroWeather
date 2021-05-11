@@ -30,7 +30,7 @@ public class YahooRequest extends JsonRequest {
     public static final String CONSUMER_SECRET = "6f307dc157458f96a02def7f040b143ae2e3b3f3";
     public static final String baseUrl = "https://weather-ydn-yql.media.yahoo.com/forecastrss";
 
-    public YahooRequest(Response.Listener<Weather> listener, Response.ErrorListener errorListener) {
+    public YahooRequest(Response.Listener<Entry> listener, Response.ErrorListener errorListener) {
         super(Request.Method.GET, null, null, listener, errorListener);
     }
 
@@ -54,12 +54,12 @@ public class YahooRequest extends JsonRequest {
     }
 
     @Override
-    protected Response<Weather> parseNetworkResponse(NetworkResponse response) {
+    protected Response<Entry> parseNetworkResponse(NetworkResponse response) {
         try {
             String json = new String(
                     response.data,
                     HttpHeaderParser.parseCharset(response.headers));
-            Weather parsedResponse = parseResponse(json);
+            Entry parsedResponse = parseResponse(json);
             return Response.success(
                     parsedResponse,
                     HttpHeaderParser.parseCacheHeaders(response));
@@ -68,7 +68,7 @@ public class YahooRequest extends JsonRequest {
         }
     }
 
-    public Weather parseResponse(String jsonObject) {
+    public Entry parseResponse(String jsonObject) {
         JsonObject fullJson = gson.fromJson(jsonObject, JsonObject.class);
 
         JsonObject locationJson = fullJson.getAsJsonObject("location");
@@ -86,7 +86,7 @@ public class YahooRequest extends JsonRequest {
         Forecast[] forecastsArray = gson.fromJson(forecastPartJson, Forecast[].class);
         List<Forecast> forecasts = Arrays.asList(forecastsArray);
 
-        Weather info = new Weather(location, currentWeather, forecasts);
+        Entry info = new Entry(location, currentWeather, forecasts);
         return info;
     }
 

@@ -8,7 +8,7 @@ public class YahooLocationRequest extends YahooRequest {
     private Gson gson = new Gson();
     private String place;
 
-    public YahooLocationRequest(String place, Response.Listener<Weather> listener, Response.ErrorListener errorListener) {
+    public YahooLocationRequest(String place, Response.Listener<Entry> listener, Response.ErrorListener errorListener) {
         super(listener, errorListener);
         setShouldCache(true);
         this.place = place;

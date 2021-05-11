@@ -4,13 +4,10 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.klima7.astroweather.weather.CurrentWeather;
-import com.klima7.astroweather.weather.Forecast;
-import com.klima7.astroweather.weather.Location;
-import com.klima7.astroweather.weather.Weather;
+import com.klima7.astroweather.weather.Entry;
 
-@Database(entities = {Weather.class}, version = 1, exportSchema = false)
+@Database(entities = {Entry.class}, version = 1, exportSchema = false)
 @TypeConverters({DataConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
-    public abstract WeatherDao weatherDao();
+    public abstract EntryDao entryDao();
 }

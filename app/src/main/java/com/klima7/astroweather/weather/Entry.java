@@ -1,6 +1,5 @@
 package com.klima7.astroweather.weather;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -11,20 +10,20 @@ import com.klima7.astroweather.db.DataConverter;
 import java.util.List;
 
 @Entity
-public class Weather {
+public class Entry {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "weather_id")
     private int id;
 
     @Embedded
     private Location location;
+
     @Embedded
     private CurrentWeather current;
 
     private List<Forecast> future;
 
-    public Weather(Location location, CurrentWeather current, List<Forecast> future) {
+    public Entry(Location location, CurrentWeather current, List<Forecast> future) {
         this.location = location;
         this.current = current;
         this.future = future;
@@ -65,7 +64,7 @@ public class Weather {
 
     @Override
     public String toString() {
-        return "Weather{" +
+        return "Entry{" +
                 "id=" + id +
                 ", location=" + location +
                 ", current=" + current +

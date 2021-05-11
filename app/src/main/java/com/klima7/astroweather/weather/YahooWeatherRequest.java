@@ -10,7 +10,7 @@ public class YahooWeatherRequest extends YahooRequest {
     private int woeid;
     private String unit;
 
-    public YahooWeatherRequest(int woeid, String unit, Response.Listener<Weather> listener, Response.ErrorListener errorListener) {
+    public YahooWeatherRequest(int woeid, String unit, Response.Listener<Entry> listener, Response.ErrorListener errorListener) {
         super(listener, errorListener);
         setShouldCache(false);
 

@@ -18,13 +18,10 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.klima7.astroweather.db.AppDatabase;
-import com.klima7.astroweather.db.DatabaseUtil;
 import com.klima7.astroweather.fragments.InfoFragment;
 import com.klima7.astroweather.fragments.MoonFragment;
 import com.klima7.astroweather.fragments.SunFragment;
-import com.klima7.astroweather.weather.Location;
-import com.klima7.astroweather.weather.Weather;
+import com.klima7.astroweather.weather.Entry;
 import com.klima7.astroweather.weather.YahooWeatherRequest;
 import com.klima7.astroweather.weather.YahooLocationRequest;
 
@@ -98,9 +95,9 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         super.onStart();
 
         RequestManager requestManager = RequestManager.getInstance(this);
-        YahooWeatherRequest request = new YahooWeatherRequest(500961, YahooWeatherRequest.METRIC_UNIT, new Response.Listener<Weather>() {
+        YahooWeatherRequest request = new YahooWeatherRequest(500961, YahooWeatherRequest.METRIC_UNIT, new Response.Listener<Entry>() {
             @Override
-            public void onResponse(Weather response) {
+            public void onResponse(Entry response) {
                 Log.i("Hello", "Weather = " + response);
             }
         }, new Response.ErrorListener() {
@@ -111,9 +108,9 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         });
         requestManager.addToRequestQueue(request);
 
-        YahooLocationRequest request2 = new YahooLocationRequest("Kompina", new Response.Listener<Weather>() {
+        YahooLocationRequest request2 = new YahooLocationRequest("Kompina", new Response.Listener<Entry>() {
             @Override
-            public void onResponse(Weather weather) {
+            public void onResponse(Entry weather) {
                 Log.i("Hello", "location = " + weather);
                 data.location.setValue(weather.getLocation());
                 data.update();
