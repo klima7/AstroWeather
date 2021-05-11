@@ -18,7 +18,9 @@ import com.klima7.astroweather.db.AppDatabase;
 import com.klima7.astroweather.db.DatabaseUtil;
 import com.klima7.astroweather.db.LocationDao;
 import com.klima7.astroweather.weather.Location;
+import com.klima7.astroweather.weather.Weather;
 import com.klima7.astroweather.weather.YahooLocationRequest;
+import com.klima7.astroweather.weather.YahooWeatherRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,15 @@ public class LocationActivity extends AppCompatActivity {
         recycler.setLayoutManager(layoutManager);
 
         new Thread(new FetchLocationsTask()).start();
+
+        RequestManager requestManager = RequestManager.getInstance(this);
+        YahooWeatherRequest reques = new YahooWeatherRequest(500961, YahooWeatherRequest.METRIC_UNIT, new Response.Listener<Weather>() {
+            @Override
+            public void onResponse(Weather weather) {
+                new Thread(new AddWeatherTask(weather)).start();
+            }
+        }, null);
+        requestManager.addToRequestQueue(reques);
     }
 
     public void addLocationClicked() {
@@ -104,6 +115,22 @@ public class LocationActivity extends AppCompatActivity {
         @Override
         public void run() {
             db.locationDao().insertAll(this.location);
+        }
+    }
+
+    private class AddWeatherTask implements Runnable {
+        private Weather weather;
+        public AddWeatherTask(Weather weather) {
+            this.weather = weather;
+        }
+        @Override
+        public void run() {
+            List<Weather> weathers = db.weatherDao().getAll();
+            Log.i("Hello", "count: " + (weathers.size()));
+            for(Weather weather : weathers) {
+                Log.i("Hello", "Inserted: " + weather);
+            }
+            db.weatherDao().insertAll(this.weather);
         }
     }
 

@@ -1,24 +1,39 @@
 package com.klima7.astroweather.weather;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import com.klima7.astroweather.db.DataConverter;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Entity
 public class Weather {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "weather_id")
     private int id;
 
+    @Embedded
     private Location location;
+    @Embedded
     private CurrentWeather current;
-    private Forecast[] future;
+    @Embedded
+    private List<Forecast> future;
 
-    public Weather(Location location, CurrentWeather current, Forecast[] future) {
+    public Weather(Location location, CurrentWeather current, List<Forecast> future) {
         this.location = location;
         this.current = current;
         this.future = future;
+    }
+
+    public Weather() {
+
     }
 
     public int getId() {
@@ -33,7 +48,8 @@ public class Weather {
         return current;
     }
 
-    public Forecast[] getFuture() {
+    @TypeConverters(DataConverter.class)
+    public List<Forecast> getFuture() {
         return future;
     }
 
@@ -49,16 +65,17 @@ public class Weather {
         this.current = current;
     }
 
-    public void setFuture(Forecast[] future) {
+    public void setFuture(List<Forecast> future) {
         this.future = future;
     }
 
     @Override
     public String toString() {
-        return "WeatherInfo{" +
-                "location=" + location +
+        return "Weather{" +
+                "id=" + id +
+                ", location=" + location +
                 ", current=" + current +
-                ", future=" + Arrays.toString(future) +
+                ", future=" + future +
                 '}';
     }
 }

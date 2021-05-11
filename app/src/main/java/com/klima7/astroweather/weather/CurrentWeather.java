@@ -1,5 +1,6 @@
 package com.klima7.astroweather.weather;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -7,6 +8,7 @@ import androidx.room.PrimaryKey;
 public class CurrentWeather {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "currentweather_id")
     private int id;
 
     private int chill;

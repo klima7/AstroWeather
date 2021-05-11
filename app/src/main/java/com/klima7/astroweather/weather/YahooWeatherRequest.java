@@ -5,6 +5,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class YahooWeatherRequest extends YahooRequest<Weather> {
 
     public static final String IMPERIAL_UNIT = "f";
@@ -43,7 +46,8 @@ public class YahooWeatherRequest extends YahooRequest<Weather> {
         CurrentWeather currentWeather = gson.fromJson(observationMergedJson, CurrentWeather.class);
 
         JsonArray forecastPartJson = fullJson.getAsJsonArray("forecasts");
-        Forecast[] forecasts = gson.fromJson(forecastPartJson, Forecast[].class);
+        Forecast[] forecastsArray = gson.fromJson(forecastPartJson, Forecast[].class);
+        List<Forecast> forecasts = Arrays.asList(forecastsArray);
 
         Weather info = new Weather(location, currentWeather, forecasts);
         return info;

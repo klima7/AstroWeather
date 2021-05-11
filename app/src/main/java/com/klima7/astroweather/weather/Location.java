@@ -1,5 +1,6 @@
 package com.klima7.astroweather.weather;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -11,6 +12,7 @@ import java.util.Objects;
 public class Location {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "location_id")
     private int id;
     private String city;
     private String region;
