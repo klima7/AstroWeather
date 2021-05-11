@@ -18,6 +18,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.klima7.astroweather.db.AppDatabase;
+import com.klima7.astroweather.db.DatabaseUtil;
 import com.klima7.astroweather.fragments.InfoFragment;
 import com.klima7.astroweather.fragments.MoonFragment;
 import com.klima7.astroweather.fragments.SunFragment;
