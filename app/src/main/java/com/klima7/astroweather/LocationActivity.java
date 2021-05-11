@@ -5,7 +5,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,8 +39,6 @@ public class LocationActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(layoutManager);
-
-//        registerForContextMenu(addButton);
     }
 
     public void addLocationClicked() {
@@ -60,15 +60,10 @@ public class LocationActivity extends AppCompatActivity {
         requestManager.addToRequestQueue(reques);
     }
 
-    public void removeLocationClicked() {
-
-    }
-
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu.setHeaderTitle("Context Menu");
-        menu.add(0, v.getId(), 0, "Upload");
-        menu.add(0, v.getId(), 0, "Search");
+    public boolean onContextItemSelected(MenuItem item) {
+        Location location = adapter.getLocation();
+        adapter.removeLocation(location);
+        return true;
     }
 }
