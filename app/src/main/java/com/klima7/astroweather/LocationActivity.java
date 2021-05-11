@@ -1,5 +1,6 @@
 package com.klima7.astroweather;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -21,7 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class LocationActivity extends AppCompatActivity {
+public class LocationActivity extends AppCompatActivity implements LocationAdapter.OnLocationSelectedListener {
+
+    public static final String WEATHER_ID = "id";
 
     private AppDatabase db;
     private LocationAdapter adapter;
@@ -40,7 +43,7 @@ public class LocationActivity extends AppCompatActivity {
         addButton.setOnClickListener(view -> addLocationClicked());
 
         RecyclerView recycler = findViewById(R.id.place_recycler);
-        adapter = new LocationAdapter(new ArrayList<>());
+        adapter = new LocationAdapter(new ArrayList<>(), this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(layoutManager);
@@ -82,6 +85,14 @@ public class LocationActivity extends AppCompatActivity {
         new Thread(new RemoveWeatherTask(weather)).start();
         adapter.removeWeather(weather);
         return true;
+    }
+
+    @Override
+    public void locationSelected(Weather weather) {
+        Intent data = new Intent();
+        data.putExtra(WEATHER_ID, weather.getId());
+        setResult(RESULT_OK, data);
+        finish();
     }
 
     private class FetchWeathersTask implements Runnable {

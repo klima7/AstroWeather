@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/location_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="10dp"
     card_view:cardCornerRadius="7dp"
-    card_view:cardElevation="5dp"
-    android:layout_margin="10dp">
+    card_view:cardElevation="5dp">
 
 
     <LinearLayout
@@ -17,18 +17,18 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="90dp"
+            android:layout_marginLeft="5dp"
             android:layout_weight="0"
-            card_view:srcCompat="@drawable/location"
-            android:layout_marginLeft="5dp"/>
+            card_view:srcCompat="@drawable/location" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
             android:layout_weight="0"
             android:orientation="vertical"
-            android:layout_marginLeft="5dp"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp">
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"

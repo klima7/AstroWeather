@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.klima7.astroweather.weather.Location;
@@ -18,9 +19,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Weathe
 
     private Weather weather;
     private List<Weather> weathers;
+    private OnLocationSelectedListener listener;
 
-    public LocationAdapter(List<Weather> weathers) {
+    public LocationAdapter(List<Weather> weathers, OnLocationSelectedListener listener) {
         this.weathers = weathers;
+        this.listener = listener;
     }
 
     @NonNull
@@ -73,9 +76,10 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Weathe
         this.weathers = weathers;
     }
 
-    public static class WeatherHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+    public class WeatherHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         private TextView cityView, regionView, latitudeView, longitudeView;
+        private CardView locationCard;
 
         public WeatherHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +87,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Weathe
             regionView = itemView.findViewById(R.id.entry_region);
             latitudeView = itemView.findViewById(R.id.entry_latitude);
             longitudeView = itemView.findViewById(R.id.entry_longitude);
+            locationCard = itemView.findViewById(R.id.location_card);
             itemView.setOnCreateContextMenuListener(this);
         }
 
@@ -92,6 +97,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Weathe
             regionView.setText(location.getRegion().trim());
             latitudeView.setText(String.valueOf(location.getLatitude()));
             longitudeView.setText(String.valueOf(location.getLongitude()));
+            locationCard.setOnClickListener(v -> listener.locationSelected(weather));
         }
 
         @Override
