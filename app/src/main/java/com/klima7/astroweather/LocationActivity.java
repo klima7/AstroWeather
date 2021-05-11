@@ -47,14 +47,21 @@ public class LocationActivity extends AppCompatActivity {
         YahooLocationRequest reques = new YahooLocationRequest(locationName, new Response.Listener<Location>() {
             @Override
             public void onResponse(Location location) {
-                if(location.isValid()) {
-                    adapter.addLocation(location);
-                }
-                else {
+                locationEdit.setText("");
+
+                if(!location.isValid()) {
                     Toast.makeText(getApplicationContext(), "Nieprawidłowa lokalizacja", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
-                locationEdit.setText("");
+                for(Location l : adapter.getLocations()) {
+                    if(l.equals(location)) {
+                        Toast.makeText(getApplicationContext(), "Lokalizacja już jest na liśćie", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
+                adapter.addLocation(location);
             }
         }, null);
         requestManager.addToRequestQueue(reques);
