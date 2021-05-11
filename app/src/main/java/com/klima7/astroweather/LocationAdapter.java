@@ -10,32 +10,33 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.klima7.astroweather.weather.Location;
+import com.klima7.astroweather.weather.Weather;
 
 import java.util.List;
 
-public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.LocationHolder> {
+public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.WeatherHolder> {
 
-    private Location location;
-    private List<Location> locations;
+    private Weather weather;
+    private List<Weather> weathers;
 
-    public LocationAdapter(List<Location> locations) {
-        this.locations = locations;
+    public LocationAdapter(List<Weather> weathers) {
+        this.weathers = weathers;
     }
 
     @NonNull
     @Override
-    public LocationHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new LocationHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.location_entry, parent, false));
+    public WeatherHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new WeatherHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.location_entry, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull LocationHolder holder, int position) {
-        Location location = locations.get(position);
-        holder.update(location);
+    public void onBindViewHolder(@NonNull WeatherHolder holder, int position) {
+        Weather weather = weathers.get(position);
+        holder.update(weather);
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                setLocation(location);
+                setWeather(weather);
                 return false;
             }
         });
@@ -43,40 +44,40 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
 
     @Override
     public int getItemCount() {
-        return locations.size();
+        return weathers.size();
     }
 
-    public void addLocation(Location location) {
-        locations.add(location);
+    public void addWeather(Weather weather) {
+        weathers.add(weather);
         notifyDataSetChanged();
     }
 
-    public void removeLocation(Location location) {
-        locations.remove(location);
+    public void removeWeather(Weather weather) {
+        weathers.remove(weather);
         notifyDataSetChanged();
     }
 
-    public Location getLocation() {
-        return location;
+    public Weather getWeather() {
+        return weather;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setWeather(Weather weather) {
+        this.weather = weather;
     }
 
-    public List<Location> getLocations() {
-        return locations;
+    public List<Weather> getWeathers() {
+        return weathers;
     }
 
-    public void setLocations(List<Location> locations) {
-        this.locations = locations;
+    public void setWeathers(List<Weather> weathers) {
+        this.weathers = weathers;
     }
 
-    public static class LocationHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+    public static class WeatherHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         private TextView cityView, regionView, latitudeView, longitudeView;
 
-        public LocationHolder(@NonNull View itemView) {
+        public WeatherHolder(@NonNull View itemView) {
             super(itemView);
             cityView = itemView.findViewById(R.id.entry_city);
             regionView = itemView.findViewById(R.id.entry_region);
@@ -85,7 +86,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             itemView.setOnCreateContextMenuListener(this);
         }
 
-        public void update(Location location) {
+        public void update(Weather weather) {
+            Location location = weather.getLocation();
             cityView.setText(location.getCity());
             regionView.setText(location.getRegion().trim());
             latitudeView.setText(String.valueOf(location.getLatitude()));
@@ -97,5 +99,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             menu.setHeaderTitle("Akcja");
             menu.add(0, v.getId(), 0, "Usuń");
         }
+    }
+
+    public interface OnLocationSelectedListener {
+        void locationSelected(Weather weather);
     }
 }

@@ -62,14 +62,14 @@ public class LocationActivity extends AppCompatActivity {
                     return;
                 }
 
-                for(Location l : adapter.getLocations()) {
-                    if(l.equals(location)) {
+                for(Weather w : adapter.getWeathers()) {
+                    if(w.equals(location)) {
                         Toast.makeText(getApplicationContext(), "Lokalizacja już jest na liśćie", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
 
-                adapter.addLocation(location);
+                adapter.addWeather(weather);
                 new Thread(new AddWeatherTask(weather)).start();
             }
         }, null);
@@ -78,9 +78,9 @@ public class LocationActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        Location location = adapter.getLocation();
-        new Thread(new RemoveWeatherTask(location)).start();
-        adapter.removeLocation(location);
+        Weather weather = adapter.getWeather();
+        new Thread(new RemoveWeatherTask(weather)).start();
+        adapter.removeWeather(weather);
         return true;
     }
 
@@ -88,9 +88,8 @@ public class LocationActivity extends AppCompatActivity {
         @Override
         public void run() {
             List<Weather> weathers = db.weatherDao().getAll();
-            List<Location> locations = weathers.stream().map(l -> l.getLocation()).collect(Collectors.toList());
             runOnUiThread(() -> {
-                adapter.setLocations(locations);
+                adapter.setWeathers(weathers);
                 adapter.notifyDataSetChanged();
             });
         }
@@ -108,17 +107,13 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     private class RemoveWeatherTask implements Runnable {
-        private Location location;
-        public RemoveWeatherTask(Location location) {
-            this.location = location;
+        private Weather weather;
+        public RemoveWeatherTask(Weather weather) {
+            this.weather = weather;
         }
         @Override
         public void run() {
-            List<Weather> weathers = db.weatherDao().getAll();
-            for(Weather weather : weathers) {
-                if(weather.getLocation().getWoeid() == location.getWoeid())
-                    db.weatherDao().delete(weather);
-            }
+            db.weatherDao().delete(weather);
         }
     }
 }
