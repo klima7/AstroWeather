@@ -1,7 +1,6 @@
 package com.klima7.astroweather;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,10 +16,10 @@ import com.klima7.astroweather.db.DatabaseUtil;
 import com.klima7.astroweather.weather.Location;
 import com.klima7.astroweather.weather.Weather;
 import com.klima7.astroweather.weather.YahooLocationRequest;
-import com.klima7.astroweather.weather.YahooWeatherRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LocationActivity extends AppCompatActivity {
 
@@ -46,24 +45,16 @@ public class LocationActivity extends AppCompatActivity {
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(layoutManager);
 
-        new Thread(new FetchLocationsTask()).start();
-
-        RequestManager requestManager = RequestManager.getInstance(this);
-        YahooWeatherRequest reques = new YahooWeatherRequest(500961, YahooWeatherRequest.METRIC_UNIT, new Response.Listener<Weather>() {
-            @Override
-            public void onResponse(Weather weather) {
-                new Thread(new AddWeatherTask(weather)).start();
-            }
-        }, null);
-        requestManager.addToRequestQueue(reques);
+        new Thread(new FetchWeathersTask()).start();
     }
 
     public void addLocationClicked() {
         RequestManager requestManager = RequestManager.getInstance(this);
         String locationName = locationEdit.getText().toString();
-        YahooLocationRequest reques = new YahooLocationRequest(locationName, new Response.Listener<Location>() {
+        YahooLocationRequest reques = new YahooLocationRequest(locationName, new Response.Listener<Weather>() {
             @Override
-            public void onResponse(Location location) {
+            public void onResponse(Weather weather) {
+                Location location = weather.getLocation();
                 locationEdit.setText("");
 
                 if(!location.isValid()) {
@@ -79,7 +70,7 @@ public class LocationActivity extends AppCompatActivity {
                 }
 
                 adapter.addLocation(location);
-                new Thread(new AddLocationTask(location)).start();
+                new Thread(new AddWeatherTask(weather)).start();
             }
         }, null);
         requestManager.addToRequestQueue(reques);
@@ -88,29 +79,20 @@ public class LocationActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         Location location = adapter.getLocation();
-        new Thread(new RemoveLocationTask(location)).start();
+        new Thread(new RemoveWeatherTask(location)).start();
         adapter.removeLocation(location);
         return true;
     }
 
-    private class FetchLocationsTask implements Runnable {
+    private class FetchWeathersTask implements Runnable {
         @Override
         public void run() {
-//            List<Location> locations = db.locationDao().getAll();
-//            runOnUiThread(() -> {
-//                adapter.setLocations(locations);
-//                adapter.notifyDataSetChanged();
-//            });
-        }
-    }
-
-    private class AddLocationTask implements Runnable {
-        private Location location;
-        public AddLocationTask(Location location) {
-            this.location = location;
-        }
-        @Override
-        public void run() {
+            List<Weather> weathers = db.weatherDao().getAll();
+            List<Location> locations = weathers.stream().map(l -> l.getLocation()).collect(Collectors.toList());
+            runOnUiThread(() -> {
+                adapter.setLocations(locations);
+                adapter.notifyDataSetChanged();
+            });
         }
     }
 
@@ -121,23 +103,22 @@ public class LocationActivity extends AppCompatActivity {
         }
         @Override
         public void run() {
-            List<Weather> weathers = db.weatherDao().getAll();
-            Log.i("Hello", "count: " + (weathers.size()));
-            for(Weather weather : weathers) {
-                Log.i("Hello", "Inserted: " + weather);
-            }
             db.weatherDao().insertAll(this.weather);
         }
     }
 
-    private class RemoveLocationTask implements Runnable {
+    private class RemoveWeatherTask implements Runnable {
         private Location location;
-        public RemoveLocationTask(Location location) {
+        public RemoveWeatherTask(Location location) {
             this.location = location;
         }
         @Override
         public void run() {
-//            db.locationDao().delete(this.location);
+            List<Weather> weathers = db.weatherDao().getAll();
+            for(Weather weather : weathers) {
+                if(weather.getLocation().getWoeid() == location.getWoeid())
+                    db.weatherDao().delete(weather);
+            }
         }
     }
 }

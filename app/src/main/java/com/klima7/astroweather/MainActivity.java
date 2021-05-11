@@ -111,11 +111,11 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         });
         requestManager.addToRequestQueue(request);
 
-        YahooLocationRequest request2 = new YahooLocationRequest("Kompina", new Response.Listener<Location>() {
+        YahooLocationRequest request2 = new YahooLocationRequest("Kompina", new Response.Listener<Weather>() {
             @Override
-            public void onResponse(Location location) {
-                Log.i("Hello", "location = " + location);
-                data.location.setValue(location);
+            public void onResponse(Weather weather) {
+                Log.i("Hello", "location = " + weather);
+                data.location.setValue(weather.getLocation());
                 data.update();
             }
         }, new Response.ErrorListener() {
