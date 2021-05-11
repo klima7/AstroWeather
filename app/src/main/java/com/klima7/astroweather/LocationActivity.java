@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -35,9 +37,11 @@ public class LocationActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(layoutManager);
+
+//        registerForContextMenu(addButton);
     }
 
-    private void addLocationClicked() {
+    public void addLocationClicked() {
         RequestManager requestManager = RequestManager.getInstance(this);
         String locationName = locationEdit.getText().toString();
         YahooLocationRequest reques = new YahooLocationRequest(locationName, new Response.Listener<Location>() {
@@ -54,5 +58,17 @@ public class LocationActivity extends AppCompatActivity {
             }
         }, null);
         requestManager.addToRequestQueue(reques);
+    }
+
+    public void removeLocationClicked() {
+
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Context Menu");
+        menu.add(0, v.getId(), 0, "Upload");
+        menu.add(0, v.getId(), 0, "Search");
     }
 }

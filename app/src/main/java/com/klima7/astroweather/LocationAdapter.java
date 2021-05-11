@@ -1,5 +1,6 @@
 package com.klima7.astroweather;
 
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         notifyDataSetChanged();
     }
 
-    public static class LocationHolder extends RecyclerView.ViewHolder {
+    public static class LocationHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         private TextView cityView, regionView, latitudeView, longitudeView;
 
@@ -52,6 +53,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             regionView = itemView.findViewById(R.id.entry_region);
             latitudeView = itemView.findViewById(R.id.entry_latitude);
             longitudeView = itemView.findViewById(R.id.entry_longitude);
+            itemView.setOnCreateContextMenuListener(this);
         }
 
         public void update(Location location) {
@@ -59,6 +61,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
             regionView.setText(location.getRegion().trim());
             latitudeView.setText(String.valueOf(location.getLatitude()));
             longitudeView.setText(String.valueOf(location.getLongitude()));
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+            menu.setHeaderTitle("Akcja");
+            menu.add(0, v.getId(), 0, "Usuń");
         }
     }
 }
