@@ -1,6 +1,14 @@
 package com.klima7.astroweather.weather;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class CurrentWeather {
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     private int chill;
     private int direction;
     private double speed;
@@ -16,6 +24,10 @@ public class CurrentWeather {
     private String text;
     private int code;
     private int temperature;
+
+    public int getId() {
+        return id;
+    }
 
     public int getChill() {
         return chill;
@@ -63,6 +75,58 @@ public class CurrentWeather {
 
     public int getTemperature() {
         return temperature;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setChill(int chill) {
+        this.chill = chill;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
+    public void setHumidity(int humidity) {
+        this.humidity = humidity;
+    }
+
+    public void setVisibility(double visibility) {
+        this.visibility = visibility;
+    }
+
+    public void setPressure(double pressure) {
+        this.pressure = pressure;
+    }
+
+    public void setRising(int rising) {
+        this.rising = rising;
+    }
+
+    public void setSunrise(String sunrise) {
+        this.sunrise = sunrise;
+    }
+
+    public void setSunset(String sunset) {
+        this.sunset = sunset;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public void setTemperature(int temperature) {
+        this.temperature = temperature;
     }
 
     @Override
