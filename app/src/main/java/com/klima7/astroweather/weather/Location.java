@@ -8,12 +8,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.Objects;
 
-@Entity
 public class Location {
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "location_id")
-    private int id;
     private String city;
     private String region;
     private int woeid;
@@ -21,10 +17,6 @@ public class Location {
     private String timezone_id;
     @SerializedName("lat") private double latitude;
     @SerializedName("long") private double longitude;
-
-    public int getId() {
-        return id;
-    }
 
     public String getCity() {
         return city;
@@ -58,9 +50,6 @@ public class Location {
         return woeid != 0;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public void setCity(String city) {
         this.city = city;

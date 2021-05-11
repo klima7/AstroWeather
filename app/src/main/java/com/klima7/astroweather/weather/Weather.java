@@ -3,13 +3,11 @@ package com.klima7.astroweather.weather;
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.klima7.astroweather.db.DataConverter;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Entity
@@ -23,17 +21,13 @@ public class Weather {
     private Location location;
     @Embedded
     private CurrentWeather current;
-    @Embedded
+
     private List<Forecast> future;
 
     public Weather(Location location, CurrentWeather current, List<Forecast> future) {
         this.location = location;
         this.current = current;
         this.future = future;
-    }
-
-    public Weather() {
-
     }
 
     public int getId() {

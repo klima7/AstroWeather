@@ -1,22 +1,19 @@
 package com.klima7.astroweather;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.Response;
 import com.klima7.astroweather.db.AppDatabase;
 import com.klima7.astroweather.db.DatabaseUtil;
-import com.klima7.astroweather.db.LocationDao;
 import com.klima7.astroweather.weather.Location;
 import com.klima7.astroweather.weather.Weather;
 import com.klima7.astroweather.weather.YahooLocationRequest;
@@ -99,11 +96,11 @@ public class LocationActivity extends AppCompatActivity {
     private class FetchLocationsTask implements Runnable {
         @Override
         public void run() {
-            List<Location> locations = db.locationDao().getAll();
-            runOnUiThread(() -> {
-                adapter.setLocations(locations);
-                adapter.notifyDataSetChanged();
-            });
+//            List<Location> locations = db.locationDao().getAll();
+//            runOnUiThread(() -> {
+//                adapter.setLocations(locations);
+//                adapter.notifyDataSetChanged();
+//            });
         }
     }
 
@@ -114,7 +111,6 @@ public class LocationActivity extends AppCompatActivity {
         }
         @Override
         public void run() {
-            db.locationDao().insertAll(this.location);
         }
     }
 
@@ -141,7 +137,7 @@ public class LocationActivity extends AppCompatActivity {
         }
         @Override
         public void run() {
-            db.locationDao().delete(this.location);
+//            db.locationDao().delete(this.location);
         }
     }
 }
