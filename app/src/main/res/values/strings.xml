@@ -31,4 +31,8 @@
     <string name="city_label">Miasto</string>
     <string name="region_label">Region</string>
     <string name="enter_location_hint">Podaj nową lokalizację</string>
+    <string name="temperature_label">Temperatura</string>
+    <string name="preassure_label">Ciśnienie</string>
+    <string name="description_label">Opis</string>
+    <string name="condition_label">Warunki</string>
 </resources>

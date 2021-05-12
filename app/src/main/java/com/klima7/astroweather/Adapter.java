@@ -6,6 +6,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.klima7.astroweather.fragments.MoonFragment;
 import com.klima7.astroweather.fragments.SunFragment;
+import com.klima7.astroweather.fragments.WeatherGeneralFragment;
 
 class Adapter extends FragmentStateAdapter {
 
@@ -18,12 +19,13 @@ class Adapter extends FragmentStateAdapter {
         switch (position) {
             case 0: return new SunFragment();
             case 1: return new MoonFragment();
+            case 2: return new WeatherGeneralFragment();
             default: return null;
         }
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return 3;
     }
 }
