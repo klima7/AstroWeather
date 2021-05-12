@@ -10,7 +10,6 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -19,10 +18,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.klima7.astroweather.fragments.InfoFragment;
-import com.klima7.astroweather.fragments.MoonFragment;
-import com.klima7.astroweather.fragments.SunFragment;
 import com.klima7.astroweather.weather.Entry;
-import com.klima7.astroweather.weather.YahooWeatherRequest;
 import com.klima7.astroweather.weather.YahooLocationRequest;
 
 import java.util.Timer;
@@ -53,7 +49,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         if(!tablet) {
             ViewPager2 pager = findViewById(R.id.pager);
 
-            FragmentStateAdapter adapter = new Adapter(this);
+            FragmentStateAdapter adapter = new PagerAdapter(this);
             pager.setAdapter(adapter);
 
             if(orientation == Configuration.ORIENTATION_PORTRAIT) pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
@@ -89,6 +85,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
                 Log.i("Hello", "location = " + weather);
                 data.location.setValue(weather.getLocation());
                 data.currentWeather.setValue(weather.getCurrent());
+                data.forecasts.setValue(weather.getFuture());
                 data.update();
             }
         }, new Response.ErrorListener() {

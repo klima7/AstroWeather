@@ -7,11 +7,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import com.klima7.astroweather.fragments.MoonFragment;
 import com.klima7.astroweather.fragments.SunFragment;
 import com.klima7.astroweather.fragments.WeatherAdditionalFragment;
+import com.klima7.astroweather.fragments.WeatherForecastFragment;
 import com.klima7.astroweather.fragments.WeatherGeneralFragment;
 
-class Adapter extends FragmentStateAdapter {
+class PagerAdapter extends FragmentStateAdapter {
 
-    public Adapter(FragmentActivity fa) {
+    public PagerAdapter(FragmentActivity fa) {
         super(fa);
     }
 
@@ -22,12 +23,13 @@ class Adapter extends FragmentStateAdapter {
             case 1: return new MoonFragment();
             case 2: return new WeatherGeneralFragment();
             case 3: return new WeatherAdditionalFragment();
+            case 4: return new WeatherForecastFragment();
             default: return null;
         }
     }
 
     @Override
     public int getItemCount() {
-        return 4;
+        return 5;
     }
 }
