@@ -49,18 +49,8 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         int size = getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
         boolean tablet = size == Configuration.SCREENLAYOUT_SIZE_LARGE || size == Configuration.SCREENLAYOUT_SIZE_XLARGE;
 
-        // Tablet
-        if (tablet) {
-            if(savedInstanceState == null) {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.sun_container, new SunFragment(), "sunFragment");
-                transaction.add(R.id.moon_container, new MoonFragment(), "moonFragment");
-                transaction.commit();
-            }
-        }
-
         // Mobile
-        else {
+        if(!tablet) {
             ViewPager2 pager = findViewById(R.id.pager);
 
             FragmentStateAdapter adapter = new Adapter(this);

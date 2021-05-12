@@ -11,8 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/moon_container"
+        <fragment
+            android:name="com.klima7.astroweather.fragments.MoonFragment"
+            android:id="@+id/moon_fragment"
             android:layout_width="445dp"
             android:layout_height="177dp"
             android:layout_marginTop="4dp"
@@ -21,10 +22,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.634"
             app:layout_constraintStart_toEndOf="@+id/sun_container"
-            app:layout_constraintTop_toTopOf="@+id/sun_container"></FrameLayout>
+            app:layout_constraintTop_toTopOf="@+id/sun_container"></fragment>
 
-        <FrameLayout
-            android:id="@+id/sun_container"
+        <fragment
+            android:name="com.klima7.astroweather.fragments.SunFragment"
+            android:id="@+id/sun_fragment"
             android:layout_width="462dp"
             android:layout_height="0dp"
             android:layout_marginStart="208dp"
@@ -32,7 +34,7 @@
             android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/info_fragment"></FrameLayout>
+            app:layout_constraintTop_toBottomOf="@+id/info_fragment"></fragment>
 
         <fragment
             android:name="com.klima7.astroweather.fragments.InfoFragment"
