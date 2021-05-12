@@ -5,32 +5,49 @@ import androidx.lifecycle.ViewModel;
 
 import com.astrocalculator.AstroCalculator;
 import com.astrocalculator.AstroDateTime;
+import com.klima7.astroweather.weather.CurrentWeather;
+import com.klima7.astroweather.weather.Forecast;
 import com.klima7.astroweather.weather.Location;
 import com.klima7.astroweather.weather.Entry;
 
 import java.time.LocalDateTime;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 public class AppData extends ViewModel {
 
     public MutableLiveData<AstroCalculator.SunInfo> sunInfo = new MutableLiveData<>();
     public MutableLiveData<AstroCalculator.MoonInfo> moonInfo = new MutableLiveData<>();
-    public MutableLiveData<Entry> weather = new MutableLiveData<>();
     public MutableLiveData<Location> location = new MutableLiveData<>();
+    public MutableLiveData<CurrentWeather> currentWeather = new MutableLiveData<>();
+    public MutableLiveData<List<Forecast>> forecasts = new MutableLiveData<>();
 
     public MutableLiveData<Integer> refreshPeriod = new MutableLiveData<>();
     public MutableLiveData<Long> lastRefresh = new MutableLiveData<>();
 
     public AppData() {
         location.setValue(null);
-        weather.setValue(null);
         sunInfo.setValue(null);
         moonInfo.setValue(null);
+        currentWeather.setValue(null);
+        forecasts.setValue(null);
         refreshPeriod.setValue(10);
         lastRefresh.setValue(0L);
     }
 
     public void update() {
+        updateAstro();
+        updateWeather();
+        lastRefresh.setValue(System.currentTimeMillis());
+    }
+
+    private void updateAstro() {
+        if(location.getValue() == null) {
+            sunInfo.setValue(null);
+            moonInfo.setValue(null);
+            return;
+        }
+
         GregorianCalendar cal = new GregorianCalendar();
         int y = cal.get(GregorianCalendar.YEAR);
         int mo = cal.get(GregorianCalendar.MONTH);
@@ -46,6 +63,9 @@ public class AppData extends ViewModel {
 
         sunInfo.setValue(calculator.getSunInfo());
         moonInfo.setValue(calculator.getMoonInfo());
-        lastRefresh.setValue(System.currentTimeMillis());
+    }
+
+    private void updateWeather() {
+
     }
 }

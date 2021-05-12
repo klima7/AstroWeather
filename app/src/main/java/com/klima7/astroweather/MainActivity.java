@@ -90,51 +90,20 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     @Override
     protected void onStart() {
         super.onStart();
-//        scheduleRefresh();
-
-        super.onStart();
-
-        RequestManager requestManager = RequestManager.getInstance(this);
-        YahooWeatherRequest request = new YahooWeatherRequest(500961, YahooWeatherRequest.METRIC_UNIT, new Response.Listener<Entry>() {
-            @Override
-            public void onResponse(Entry response) {
-                Log.i("Hello", "Weather = " + response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("Hello", "Error response received");
-            }
-        });
-        requestManager.addToRequestQueue(request);
-
-        YahooLocationRequest request2 = new YahooLocationRequest("Kompina", new Response.Listener<Entry>() {
-            @Override
-            public void onResponse(Entry weather) {
-                Log.i("Hello", "location = " + weather);
-                data.location.setValue(weather.getLocation());
-                data.update();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("Hello", "Error response received");
-            }
-        });
-        requestManager.addToRequestQueue(request2);
+        scheduleRefresh();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-//        refreshTask.cancel();
-//        timer.cancel();
+        refreshTask.cancel();
+        timer.cancel();
     }
 
     @Override
     public void settingsClicked() {
         Intent intent = new Intent(this, LocationActivity.class);
-        startActivity(intent);
+        startMenu.launch(intent);
     }
 
     @Override
@@ -151,13 +120,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     }
 
     private void applyConfig(ActivityResult result) {
-        Intent intent = result.getData();
-        if(intent == null) return;
-        Bundle extras = intent.getExtras();
-
-        float new_latitude = extras.getFloat(MenuActivity.LATITUDE);
-        float new_longitude = extras.getFloat(MenuActivity.LONGITUDE);
-        int new_refresh = extras.getInt(MenuActivity.REFRESH);
+        Log.i("Hello", "Receiving data");
 
 //        if(new_latitude != data.latitude.getValue() || new_longitude != data.longitude.getValue() || new_refresh != data.refreshPeriod.getValue()) {
 //            data.latitude.setValue(new_latitude);
