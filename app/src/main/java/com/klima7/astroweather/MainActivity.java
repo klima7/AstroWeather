@@ -91,6 +91,22 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     protected void onStart() {
         super.onStart();
         scheduleRefresh();
+
+        RequestManager requestManager = RequestManager.getInstance(this);
+        YahooLocationRequest request2 = new YahooLocationRequest("Kompina", new Response.Listener<Entry>() {
+            @Override
+            public void onResponse(Entry weather) {
+                Log.i("Hello", "location = " + weather);
+                data.location.setValue(weather.getLocation());
+                data.update();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Hello", "Error response received");
+            }
+        });
+        requestManager.addToRequestQueue(request2);
     }
 
     @Override

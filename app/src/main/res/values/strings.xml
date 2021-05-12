@@ -35,4 +35,9 @@
     <string name="preassure_label">Ciśnienie</string>
     <string name="description_label">Opis</string>
     <string name="condition_label">Warunki</string>
+    <string name="windchill_label">Chłód wiatru</string>
+    <string name="wind_direction_label">Kierunek wiatru</string>
+    <string name="wind_speed_label">Prędkość wiatru</string>
+    <string name="humidity_label">Wilgotność</string>
+    <string name="visibility_label">Widoczność</string>
 </resources>
