@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.klima7.astroweather.AppData;
 import com.klima7.astroweather.R;
+import com.klima7.astroweather.weather.CurrentWeather;
 
 public class WeatherGeneralFragment extends Fragment {
 
@@ -42,13 +42,17 @@ public class WeatherGeneralFragment extends Fragment {
         descriptionView = getView().findViewById(R.id.description_view);
         conditionView = getView().findViewById(R.id.condition_view);
 
-        updateLocation();
-        data.location.observe(requireActivity(), newLocation -> updateLocation());
+        updateCurrentWeather();
+        data.currentWeather.observe(requireActivity(), newWeather -> updateCurrentWeather());
     }
 
-    private void updateLocation() {
-        if(data.location.getValue() != null) {
-
+    private void updateCurrentWeather() {
+        if(data.currentWeather.getValue() != null) {
+            CurrentWeather weather = data.currentWeather.getValue();
+            temperatureView.setText(String.valueOf(weather.getTemperature()));
+            pressureView.setText(String.valueOf(weather.getPressure()));
+            descriptionView.setText(weather.getText());
+            conditionView.setText(String.valueOf(weather.getCode()));
         }
         else {
             String placeholder = getResources().getString(R.string.placeholder);

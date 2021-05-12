@@ -98,6 +98,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
             public void onResponse(Entry weather) {
                 Log.i("Hello", "location = " + weather);
                 data.location.setValue(weather.getLocation());
+                data.currentWeather.setValue(weather.getCurrent());
                 data.update();
             }
         }, new Response.ErrorListener() {
