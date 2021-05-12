@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.klima7.astroweather.AppData;
 import com.klima7.astroweather.R;
+import com.klima7.astroweather.weather.CurrentWeather;
 
 public class WeatherAdditionalFragment extends Fragment {
 
@@ -42,13 +43,18 @@ public class WeatherAdditionalFragment extends Fragment {
         humidityView = getView().findViewById(R.id.humidity_view);
         visibilityView = getView().findViewById(R.id.visibility_view);
 
-        updateLocation();
-        data.location.observe(requireActivity(), newLocation -> updateLocation());
+        update();
+        data.currentWeather.observe(requireActivity(), newWeather -> update());
     }
 
-    private void updateLocation() {
+    private void update() {
         if(data.location.getValue() != null) {
-
+            CurrentWeather weather = data.currentWeather.getValue();
+            windChillView.setText(String.valueOf(weather.getChill()));
+            windDirectionView.setText(String.valueOf(weather.getDirection()));
+            windSpeedView.setText(String.valueOf(weather.getSpeed()));
+            humidityView.setText(String.valueOf(weather.getHumidity()));
+            visibilityView.setText(String.valueOf(weather.getVisibility()));
         }
         else {
             String placeholder = getResources().getString(R.string.placeholder);
