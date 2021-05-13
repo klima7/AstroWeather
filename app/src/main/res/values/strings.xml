@@ -40,4 +40,8 @@
     <string name="wind_speed_label">Prędkość wiatru</string>
     <string name="humidity_label">Wilgotność</string>
     <string name="visibility_label">Widoczność</string>
+    <string name="forecast_temperature">Temperatura</string>
+    <string name="forecast_description_label">Opis</string>
+    <string name="forecast_condition_label">Warunki</string>
+    <string name="forecast_date_label">Data</string>
 </resources>
