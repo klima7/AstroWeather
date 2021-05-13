@@ -13,6 +13,7 @@
         android:theme="@style/Theme.AstroWeather">
         <activity android:name=".LocationActivity"></activity>
         <activity android:name=".MenuActivity"></activity>
+        <activity android:name=".SettingsActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

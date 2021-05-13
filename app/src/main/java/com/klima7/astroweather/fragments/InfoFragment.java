@@ -39,8 +39,11 @@ public class InfoFragment extends Fragment {
 
         data = new ViewModelProvider(requireActivity()).get(AppData.class);
 
-        ImageButton button = getView().findViewById(R.id.settingsButton);
-        button.setOnClickListener(v -> infoInterface.settingsClicked());
+        ImageButton locationButton = getView().findViewById(R.id.location_change_button);
+        locationButton.setOnClickListener(v -> infoInterface.locationChangeClicked());
+
+        ImageButton settingsButton = getView().findViewById(R.id.settings_button);
+        settingsButton.setOnClickListener(v -> infoInterface.settingsClicked());
 
         latitudeView = getView().findViewById(R.id.info_latitude);
         longitudeView = getView().findViewById(R.id.info_longitude);
@@ -65,6 +68,7 @@ public class InfoFragment extends Fragment {
     }
 
     public interface InfoInterface {
+        void locationChangeClicked();
         void settingsClicked();
     }
 }
