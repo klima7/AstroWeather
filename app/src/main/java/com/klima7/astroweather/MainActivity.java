@@ -111,7 +111,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
     private void onLocationChanged(ActivityResult result) {
         Log.i("Hello", "Receiving data");
-        if(result != null) {
+        if(result.getData()!=null) {
             int woeid = result.getData().getIntExtra(LocationActivity.RET_ID, 0);
             new Thread(new setLocationTask(woeid)).start();
         }
@@ -189,6 +189,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
     public void update() {
         updateAstro();
+        updateWeather();
         data.lastRefresh.setValue(System.currentTimeMillis());
     }
 
