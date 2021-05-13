@@ -3,6 +3,7 @@ package com.klima7.astroweather;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,11 +48,21 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
     public class ForecastHolder extends RecyclerView.ViewHolder {
 
+        private TextView dateView, temperatureView, descriptionView, conditionView;
+
         public ForecastHolder(@NonNull View itemView) {
             super(itemView);
+            dateView = itemView.findViewById(R.id.forecast_date);
+            temperatureView = itemView.findViewById(R.id.forecast_temperature);
+            descriptionView = itemView.findViewById(R.id.forecast_description);
+            conditionView = itemView.findViewById(R.id.forecast_conditions);
         }
 
         public void update(Forecast forecast) {
+            dateView.setText(String.valueOf(forecast.getDay()));
+            temperatureView.setText(forecast.getLow() + "-" + forecast.getHigh());
+            descriptionView.setText(String.valueOf(forecast.getText()));
+            conditionView.setText(String.valueOf(forecast.getCode()));
         }
     }
 }

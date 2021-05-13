@@ -41,7 +41,6 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         data = new ViewModelProvider(this).get(AppData.class);
 
         // Get configuration
-        int orientation = getResources().getConfiguration().orientation;
         int size = getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
         boolean tablet = size == Configuration.SCREENLAYOUT_SIZE_LARGE || size == Configuration.SCREENLAYOUT_SIZE_XLARGE;
 
@@ -51,9 +50,6 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
             FragmentStateAdapter adapter = new PagerAdapter(this);
             pager.setAdapter(adapter);
-
-            if(orientation == Configuration.ORIENTATION_PORTRAIT) pager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
-            else pager.setOrientation(ViewPager2.ORIENTATION_VERTICAL);
         }
 
         // Set refresh layout
