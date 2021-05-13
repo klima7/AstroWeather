@@ -22,5 +22,5 @@ public interface EntryDao {
     void delete(Entry entry);
 
     @Update
-    int updateWeather(Entry entry);
+    int update(Entry entry);
 }

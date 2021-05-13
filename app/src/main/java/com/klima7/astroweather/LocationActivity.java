@@ -23,7 +23,7 @@ import java.util.List;
 
 public class LocationActivity extends AppCompatActivity implements LocationAdapter.OnLocationSelectedListener {
 
-    public static final String WEATHER_ID = "id";
+    public static final String RET_ID = "id";
 
     private AppDatabase db;
     private LocationAdapter adapter;
@@ -89,7 +89,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
     @Override
     public void locationSelected(Entry entry) {
         Intent data = new Intent();
-        data.putExtra(WEATHER_ID, entry.getId());
+        data.putExtra(RET_ID, entry.getLocation().getWoeid());
         setResult(RESULT_OK, data);
         finish();
     }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -19,14 +20,25 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.astrocalculator.AstroCalculator;
+import com.astrocalculator.AstroDateTime;
+import com.klima7.astroweather.db.AppDatabase;
+import com.klima7.astroweather.db.DatabaseUtil;
 import com.klima7.astroweather.fragments.InfoFragment;
 import com.klima7.astroweather.weather.Entry;
 import com.klima7.astroweather.weather.YahooLocationRequest;
+import com.klima7.astroweather.weather.YahooWeatherRequest;
 
+import java.time.LocalDateTime;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends FragmentActivity implements InfoFragment.InfoInterface, SwipeRefreshLayout.OnRefreshListener {
+
+    private AppDatabase db;
+    private RequestManager requestManager;
 
     private AppData data;
     private Timer timer;
@@ -39,6 +51,9 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_astro);
+
+        db = DatabaseUtil.getDatabase(getApplicationContext());
+        requestManager = RequestManager.getInstance(getApplication());
 
         // Attach ViewModel
         data = new ViewModelProvider(this).get(AppData.class);
@@ -79,24 +94,6 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     protected void onStart() {
         super.onStart();
         scheduleRefresh();
-
-        RequestManager requestManager = RequestManager.getInstance(this);
-        YahooLocationRequest request2 = new YahooLocationRequest("Kompina", "c", new Response.Listener<Entry>() {
-            @Override
-            public void onResponse(Entry weather) {
-                Log.i("Hello", "location = " + weather);
-                data.location.setValue(weather.getLocation());
-                data.currentWeather.setValue(weather.getCurrent());
-                data.forecasts.setValue(weather.getFuture());
-                data.update();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.i("Hello", "Error response received");
-            }
-        });
-        requestManager.addToRequestQueue(request2);
     }
 
     @Override
@@ -114,6 +111,10 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
     private void onLocationChanged(ActivityResult result) {
         Log.i("Hello", "Receiving data");
+        if(result != null) {
+            int woeid = result.getData().getIntExtra(LocationActivity.RET_ID, 0);
+            new Thread(new setLocationTask(woeid)).start();
+        }
 
 //        if(new_latitude != data.latitude.getValue() || new_longitude != data.longitude.getValue() || new_refresh != data.refreshPeriod.getValue()) {
 //            data.latitude.setValue(new_latitude);
@@ -151,7 +152,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     private void refresh() {
         runOnUiThread(() -> {
             Toast.makeText(MainActivity.this, "Odświeżenie", Toast.LENGTH_SHORT).show();
-            data.update();
+            update();
         });
     }
 
@@ -159,6 +160,92 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         @Override
         public void run() {
             refresh();
+        }
+    }
+
+    private void updateAstro() {
+        if(data.location.getValue() == null) {
+            data.sunInfo.setValue(null);
+            data.moonInfo.setValue(null);
+            return;
+        }
+
+        GregorianCalendar cal = new GregorianCalendar();
+        int y = cal.get(GregorianCalendar.YEAR);
+        int mo = cal.get(GregorianCalendar.MONTH);
+        int d = cal.get(GregorianCalendar.DAY_OF_MONTH);
+        int h = cal.get(GregorianCalendar.HOUR);
+        int mi = cal.get(GregorianCalendar.MINUTE);
+        int s = cal.get(GregorianCalendar.SECOND);
+        int zoneOffset = cal.toZonedDateTime().getZone().getRules().getOffset(LocalDateTime.now()).getTotalSeconds()/3600;
+        AstroDateTime time = new AstroDateTime(y, mo, d, h, mi, s, zoneOffset, true);
+
+        AstroCalculator.Location astroLocation = new AstroCalculator.Location(data.location.getValue().getLatitude(), data.location.getValue().getLongitude());
+        AstroCalculator calculator = new AstroCalculator(time, astroLocation);
+
+        data.sunInfo.setValue(calculator.getSunInfo());
+        data.moonInfo.setValue(calculator.getMoonInfo());
+    }
+
+    public void update() {
+        updateAstro();
+        data.lastRefresh.setValue(System.currentTimeMillis());
+    }
+
+    private void updateWeather() {
+        if(data.location.getValue() == null) {
+            data.currentWeather.setValue(null);
+            data.forecasts.setValue(null);
+            return;
+        }
+
+        YahooWeatherRequest request = new YahooWeatherRequest(data.location.getValue().getWoeid(), data.unit.getValue(), new Response.Listener<Entry>() {
+            @Override
+            public void onResponse(Entry weather) {
+                Log.i("Hello", "Updating weather: " + weather);
+                data.currentWeather.setValue(weather.getCurrent());
+                data.forecasts.setValue(weather.getFuture());
+                new Thread(new updateWeatherTask(weather)).start();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Hello", "Updating weather: Error response received");
+            }
+        });
+        requestManager.addToRequestQueue(request);
+    }
+
+    private class updateWeatherTask implements Runnable {
+        private Entry entry;
+        public updateWeatherTask(Entry entry) {
+            this.entry = entry;
+        }
+        @Override
+        public void run() {
+            db.entryDao().insertAll(this.entry);
+        }
+    }
+
+    private class setLocationTask implements Runnable {
+        private int woeid;
+        public setLocationTask(int woeid) {
+            this.woeid = woeid;
+        }
+        @Override
+        public void run() {
+            List<Entry> entries = db.entryDao().getAll();
+            for(Entry entry : entries) {
+                if(entry.getLocation().getWoeid() == woeid) {
+
+                    runOnUiThread(() -> {
+                        data.location.setValue(entry.getLocation());
+                        data.currentWeather.setValue(entry.getCurrent());
+                        data.forecasts.setValue(entry.getFuture());
+//                        data.entryId = entry.getId();
+                    });
+                }
+            }
         }
     }
 
