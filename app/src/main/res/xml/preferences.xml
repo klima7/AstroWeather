@@ -1,52 +1,28 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="Messages">
-
-        <EditTextPreference
-            app:key="signature"
-            app:title="Signature"
-            app:useSimpleSummaryProvider="true" />
+    <PreferenceCategory app:title="Synchronizacja">
 
         <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="Reply"
+            app:defaultValue="10"
+            app:entries="@array/refresh_entries"
+            app:entryValues="@array/refresh_values"
+            app:key="refresh"
+            app:title="Czas odświeżania"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Category">
+    <PreferenceCategory app:title="Jednostki">
 
-        <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
-
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+    <ListPreference
+        app:defaultValue="metric"
+        app:entries="@array/unit_entries"
+        app:entryValues="@array/unit_values"
+        app:key="units"
+        app:title="Preferowany system jednostek"
+        app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="check_box_preference_1"
-        android:title="Check box preference" />
-    <EditTextPreference
-        android:defaultValue="Default value"
-        android:key="edit_text_preference_1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="Edit text preference" />
-    <MultiSelectListPreference
-        android:defaultValue="@array/reply_entries"
-        android:entries="@array/reply_entries"
-        android:entryValues="@array/reply_values"
-        android:key="multi_select_list_preference_1"
-        android:title="Multi select list preference" />
 
 </PreferenceScreen>
