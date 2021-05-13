@@ -1,6 +1,7 @@
 package com.klima7.astroweather;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -29,7 +31,8 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     private AppData data;
     private Timer timer;
     private TimerTask refreshTask;
-    private ActivityResultLauncher startMenu;
+    private ActivityResultLauncher locationLauncher;
+    private ActivityResultLauncher settingsLauncher;
     private SwipeRefreshLayout refreshLayout;
 
     @Override
@@ -64,9 +67,12 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 //            scheduleRefresh();
 //        });
 
-        // Create menu launcher
-        startMenu = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                result -> applyConfig(result));
+        // Create launchers
+        locationLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> onLocationChanged(result));
+
+        settingsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> onSettingsChanged(result));
     }
 
     @Override
@@ -75,7 +81,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         scheduleRefresh();
 
         RequestManager requestManager = RequestManager.getInstance(this);
-        YahooLocationRequest request2 = new YahooLocationRequest("Kompina", new Response.Listener<Entry>() {
+        YahooLocationRequest request2 = new YahooLocationRequest("Kompina", Unit.METRIC, new Response.Listener<Entry>() {
             @Override
             public void onResponse(Entry weather) {
                 Log.i("Hello", "location = " + weather);
@@ -103,13 +109,30 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     @Override
     public void locationChangeClicked() {
         Intent intent = new Intent(this, LocationActivity.class);
-        startMenu.launch(intent);
+        locationLauncher.launch(intent);
+    }
+
+    private void onLocationChanged(ActivityResult result) {
+        Log.i("Hello", "Receiving data");
+
+//        if(new_latitude != data.latitude.getValue() || new_longitude != data.longitude.getValue() || new_refresh != data.refreshPeriod.getValue()) {
+//            data.latitude.setValue(new_latitude);
+//            data.longitude.setValue(new_longitude);
+//            data.refreshPeriod.setValue(new_refresh);
+//            refresh();
+//        }
     }
 
     @Override
     public void settingsClicked() {
         Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        settingsLauncher.launch(intent);
+    }
+
+    private void onSettingsChanged(ActivityResult result) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this /* Activity context */);
+        String name = sharedPreferences.getString("refresh", "none");
+        Log.i("Hello", "Settings changed: " + name);
     }
 
     @Override
@@ -123,17 +146,6 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         long nextRefreshTime = data.lastRefresh.getValue() + data.refreshPeriod.getValue()*1000;
         long nextRefreshDelay = Math.max(nextRefreshTime - System.currentTimeMillis(), 0);
         timer.scheduleAtFixedRate(refreshTask, nextRefreshDelay, data.refreshPeriod.getValue() * 1000);
-    }
-
-    private void applyConfig(ActivityResult result) {
-        Log.i("Hello", "Receiving data");
-
-//        if(new_latitude != data.latitude.getValue() || new_longitude != data.longitude.getValue() || new_refresh != data.refreshPeriod.getValue()) {
-//            data.latitude.setValue(new_latitude);
-//            data.longitude.setValue(new_longitude);
-//            data.refreshPeriod.setValue(new_refresh);
-//            refresh();
-//        }
     }
 
     private void refresh() {

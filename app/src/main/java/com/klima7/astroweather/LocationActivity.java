@@ -53,7 +53,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
     public void addLocationClicked() {
         RequestManager requestManager = RequestManager.getInstance(this);
         String locationName = locationEdit.getText().toString();
-        YahooLocationRequest reques = new YahooLocationRequest(locationName, new Response.Listener<Entry>() {
+        YahooLocationRequest reques = new YahooLocationRequest(locationName, Unit.METRIC, new Response.Listener<Entry>() {
             @Override
             public void onResponse(Entry entry) {
                 Location location = entry.getLocation();

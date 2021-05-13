@@ -10,6 +10,7 @@ import com.android.volley.toolbox.JsonRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.klima7.astroweather.Unit;
 
 import net.oauth.OAuth;
 import net.oauth.OAuthAccessor;
@@ -24,14 +25,16 @@ import java.util.Map;
 public class YahooRequest extends JsonRequest {
 
     private Gson gson = new Gson();
+    private Unit unit;
 
     public static final String appId = "e4fr98gu";
     public static final String CONSUMER_KEY = "dj0yJmk9UnhwNXhycDNSdGhBJmQ9WVdrOVpUUm1jams0WjNVbWNHbzlNQT09JnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTRm";
     public static final String CONSUMER_SECRET = "6f307dc157458f96a02def7f040b143ae2e3b3f3";
     public static final String baseUrl = "https://weather-ydn-yql.media.yahoo.com/forecastrss";
 
-    public YahooRequest(Response.Listener<Entry> listener, Response.ErrorListener errorListener) {
+    public YahooRequest(Unit unit, Response.Listener<Entry> listener, Response.ErrorListener errorListener) {
         super(Request.Method.GET, null, null, listener, errorListener);
+        this.unit = unit;
     }
 
     @Override
@@ -88,6 +91,10 @@ public class YahooRequest extends JsonRequest {
 
         Entry info = new Entry(location, currentWeather, forecasts);
         return info;
+    }
+
+    public Unit getUnit() {
+        return unit;
     }
 
     private JsonObject merge(JsonObject... objects) {
