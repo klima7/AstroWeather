@@ -29,7 +29,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Weathe
     @NonNull
     @Override
     public WeatherHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new WeatherHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.location_entry, parent, false));
+        return new WeatherHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.entry_location, parent, false));
     }
 
     @Override

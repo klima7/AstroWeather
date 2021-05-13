@@ -9,9 +9,9 @@ import com.klima7.astroweather.fragments.SunAndMoonFragment;
 import com.klima7.astroweather.fragments.WeatherAdditionalFragment;
 import com.klima7.astroweather.fragments.WeatherForecastFragment;
 
-class PagerAdapter extends FragmentStateAdapter {
+class MobilePagerAdapter extends FragmentStateAdapter {
 
-    public PagerAdapter(FragmentActivity fa) {
+    public MobilePagerAdapter(FragmentActivity fa) {
         super(fa);
     }
 

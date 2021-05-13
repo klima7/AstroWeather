@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/swiperefresh"
@@ -9,31 +8,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="40dp">
+        android:orientation="vertical">
 
         <fragment
             android:name="com.klima7.astroweather.fragments.InfoFragment"
             android:id="@+id/info_fragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
-
-        <fragment
-            android:name="com.klima7.astroweather.fragments.SunFragment"
-            android:id="@+id/sun_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content">
         </fragment>
 
-        <fragment
-            android:name="com.klima7.astroweather.fragments.MoonFragment"
-            android:id="@+id/moon_fragment"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-        </fragment>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

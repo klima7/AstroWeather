@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -26,7 +25,6 @@ import com.klima7.astroweather.db.AppDatabase;
 import com.klima7.astroweather.db.DatabaseUtil;
 import com.klima7.astroweather.fragments.InfoFragment;
 import com.klima7.astroweather.weather.Entry;
-import com.klima7.astroweather.weather.YahooLocationRequest;
 import com.klima7.astroweather.weather.YahooWeatherRequest;
 
 import java.time.LocalDateTime;
@@ -62,15 +60,12 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         int size = getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK;
         boolean tablet = size == Configuration.SCREENLAYOUT_SIZE_LARGE || size == Configuration.SCREENLAYOUT_SIZE_XLARGE;
 
-        // Mobile
-        if(!tablet) {
-            ViewPager2 pager = findViewById(R.id.pager);
+        // Set view pager
+        ViewPager2 pager = findViewById(R.id.pager);
+        FragmentStateAdapter adapter = tablet ? new TabletPagerAdapter(this) : new MobilePagerAdapter(this);
+        pager.setAdapter(adapter);
 
-            FragmentStateAdapter adapter = new PagerAdapter(this);
-            pager.setAdapter(adapter);
-        }
-
-        // Set refresh layout
+        // get refresh layout
         refreshLayout = findViewById(R.id.swiperefresh);
         refreshLayout.setOnRefreshListener(this);
 
