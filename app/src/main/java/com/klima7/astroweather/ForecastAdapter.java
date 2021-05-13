@@ -10,14 +10,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.klima7.astroweather.weather.Forecast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastHolder> {
 
-    private List<Forecast> forecasts;
+    private List<Forecast> forecasts = new ArrayList<>();
+    private View noForecastMessage;
 
-    public ForecastAdapter(List<Forecast> forecasts) {
-        this.forecasts = forecasts;
+    public ForecastAdapter(View noForecastMessage) {
+        this.noForecastMessage = noForecastMessage;
     }
 
     @NonNull
@@ -44,6 +46,14 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     public void setForecasts(List<Forecast> forecasts) {
         this.forecasts = forecasts;
         this.notifyDataSetChanged();
+        updateNoForecastMessage();
+    }
+
+    private void updateNoForecastMessage() {
+        if(forecasts.isEmpty())
+            noForecastMessage.setVisibility(View.VISIBLE);
+        else
+            noForecastMessage.setVisibility(View.INVISIBLE);
     }
 
     public class ForecastHolder extends RecyclerView.ViewHolder {

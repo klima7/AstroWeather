@@ -43,7 +43,7 @@ public class WeatherForecastFragment extends Fragment {
         data = new ViewModelProvider(requireActivity()).get(AppData.class);
 
         RecyclerView recycler = view.findViewById(R.id.forecast_recycler);
-        adapter = new ForecastAdapter(new ArrayList<>());
+        adapter = new ForecastAdapter(view.findViewById(R.id.no_forecast_message));
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(layoutManager);
@@ -58,7 +58,7 @@ public class WeatherForecastFragment extends Fragment {
             adapter.setForecasts(forecasts);
         }
         else {
-            adapter = new ForecastAdapter(new ArrayList<>());
+            adapter.setForecasts(new ArrayList<>());
         }
     }
 }
