@@ -23,10 +23,13 @@ public class Entry {
 
     private List<Forecast> future;
 
-    public Entry(Location location, CurrentWeather current, List<Forecast> future) {
+    private String unit;
+
+    public Entry(Location location, String unit, CurrentWeather current, List<Forecast> future) {
         this.location = location;
         this.current = current;
         this.future = future;
+        this.unit = unit;
     }
 
     public int getId() {
@@ -60,6 +63,14 @@ public class Entry {
 
     public void setFuture(List<Forecast> future) {
         this.future = future;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     @Override

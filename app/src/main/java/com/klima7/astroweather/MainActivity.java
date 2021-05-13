@@ -81,7 +81,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         scheduleRefresh();
 
         RequestManager requestManager = RequestManager.getInstance(this);
-        YahooLocationRequest request2 = new YahooLocationRequest("Kompina", Unit.METRIC, new Response.Listener<Entry>() {
+        YahooLocationRequest request2 = new YahooLocationRequest("Kompina", "c", new Response.Listener<Entry>() {
             @Override
             public void onResponse(Entry weather) {
                 Log.i("Hello", "location = " + weather);
