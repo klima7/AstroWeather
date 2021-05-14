@@ -16,4 +16,17 @@ public class Location {
     public String timezone_id;
     @SerializedName("lat") public double latitude;
     @SerializedName("long") public double longitude;
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "woeid=" + woeid +
+                ", city='" + city + '\'' +
+                ", region='" + region + '\'' +
+                ", country='" + country + '\'' +
+                ", timezone_id='" + timezone_id + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
+    }
 }

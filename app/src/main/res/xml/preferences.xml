@@ -16,13 +16,12 @@
     <PreferenceCategory app:title="Jednostki">
 
     <ListPreference
-        app:defaultValue="metric"
+        app:defaultValue="c"
         app:entries="@array/unit_entries"
         app:entryValues="@array/unit_values"
-        app:key="units"
+        app:key="unit"
         app:title="Preferowany system jednostek"
         app:useSimpleSummaryProvider="true" />
-
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -1,9 +1,11 @@
 package com.klima7.astroweather;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.preference.PreferenceManager;
 
 import com.astrocalculator.AstroCalculator;
 import com.klima7.astroweather.weather.Location;
@@ -25,13 +27,16 @@ public class AppData extends AndroidViewModel {
 
     public AppData(Application application) {
         super(application);
+
         connected.setValue(true);
         location.setValue(null);
         sunInfo.setValue(null);
         moonInfo.setValue(null);
         weather.setValue(null);
-        refreshPeriod.setValue(10);
         lastRefresh.setValue(0L);
-        unit.setValue("c");
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
+        unit.setValue(sharedPreferences.getString("unit", "c"));
+        refreshPeriod.setValue(Integer.parseInt(sharedPreferences.getString("refresh", "10")));
     }
 }

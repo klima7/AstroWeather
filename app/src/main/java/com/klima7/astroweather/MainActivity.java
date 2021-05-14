@@ -26,6 +26,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.klima7.astroweather.db.AppDatabase;
 import com.klima7.astroweather.db.DatabaseUtil;
 import com.klima7.astroweather.fragments.InfoFragment;
+import com.klima7.astroweather.weather.Location;
 
 import java.time.LocalDateTime;
 import java.util.GregorianCalendar;
@@ -42,6 +43,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     private TimerTask refreshTask;
     private ActivityResultLauncher locationLauncher;
     private ActivityResultLauncher settingsLauncher;
+    private NetworkChangeReceiver networkReceiver;
     private SwipeRefreshLayout refreshLayout;
 
     @Override
@@ -74,18 +76,19 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
         settingsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> onSettingsChanged(result));
-
-        registerReceiver(new NetworkChangeReceiver(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        networkReceiver = new NetworkChangeReceiver();
+        registerReceiver(networkReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        unregisterReceiver(networkReceiver);
     }
 
     @Override
@@ -95,6 +98,10 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     }
 
     private void onLocationChanged(ActivityResult result) {
+        if(result == null || result.getData() == null)
+            return;
+
+        int woeid = result.getData().getIntExtra(LocationActivity.RET_ID, 0);
     }
 
     @Override
@@ -104,9 +111,10 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     }
 
     private void onSettingsChanged(ActivityResult result) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this /* Activity context */);
-        String name = sharedPreferences.getString("refresh", "none");
-        Log.i("Hello", "Settings changed: " + name);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        int refresh = Integer.parseInt(sharedPreferences.getString("refresh", "10"));
+        String unit = sharedPreferences.getString("unit", "c");
+        Log.i("Hello", "" + refresh + "/" + unit);
     }
 
     @Override
@@ -114,7 +122,11 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         refreshLayout.setRefreshing(false);
     }
 
-    public void update() {
+    private void update(int woeid, String unit) {
+
+    }
+
+/*    public void update() {
         updateAstro();
         updateWeather();
         data.lastRefresh.setValue(System.currentTimeMillis());
@@ -152,6 +164,12 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         }
 
         // TODO: update and assign data.weather
+    }*/
+
+    public class UpdateTask {
+        public UpdateTask(int woeid, String unit) {
+
+        }
     }
 
     public class NetworkChangeReceiver extends BroadcastReceiver {
