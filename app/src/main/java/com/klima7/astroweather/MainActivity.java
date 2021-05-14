@@ -25,6 +25,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.astrocalculator.AstroCalculator;
 import com.astrocalculator.AstroDateTime;
+import com.google.android.material.snackbar.Snackbar;
 import com.klima7.astroweather.db.AppDatabase;
 import com.klima7.astroweather.db.DatabaseUtil;
 import com.klima7.astroweather.fragments.InfoFragment;
@@ -260,12 +261,17 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
             final ConnectivityManager connMgr = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
 
-            if(connMgr.getActiveNetworkInfo() != null && connMgr.getActiveNetworkInfo().isConnected()) {
+            boolean old_connected = data.connected.getValue();
+            boolean new_connected = connMgr.getActiveNetworkInfo() != null && connMgr.getActiveNetworkInfo().isConnected();
+
+            if(new_connected && !old_connected) {
                 data.connected.setValue(true);
             }
 
-            else {
+            else if(!new_connected && old_connected) {
                 data.connected.setValue(false);
+                Snackbar snackbar = Snackbar.make(refreshLayout, "Brak połączenia z internetem", Snackbar.LENGTH_LONG);
+                snackbar.show();
             }
         }
     }
