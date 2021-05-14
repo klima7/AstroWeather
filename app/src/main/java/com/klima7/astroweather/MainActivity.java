@@ -1,8 +1,12 @@
 package com.klima7.astroweather;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -83,6 +87,8 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
         settingsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> onSettingsChanged(result));
+
+        registerReceiver(new NetworkChangeReceiver(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
     }
 
     @Override
@@ -241,6 +247,23 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 //                        data.entryId = entry.getId();
                     });
                 }
+            }
+        }
+    }
+
+    public class NetworkChangeReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final ConnectivityManager connMgr = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            if(connMgr.getActiveNetworkInfo() != null && connMgr.getActiveNetworkInfo().isConnected()) {
+                Log.i("Hello", "Connected");
+            }
+
+            else {
+                Log.i("Hello", "Disconnected");
             }
         }
     }
