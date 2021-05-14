@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +35,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
     private LocationAdapter adapter;
     private EditText locationEdit;
     private LinearLayout addLocationView;
+    private TextView noInternetMessageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
 
         locationEdit = findViewById(R.id.location_name_edit);
         addLocationView = findViewById(R.id.add_location_pane);
+        noInternetMessageView = findViewById(R.id.no_internet_message);
 
         Button addButton = findViewById(R.id.add_location_button);
         addButton.setOnClickListener(view -> addClicked());
@@ -140,6 +143,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
 
             boolean connected = connMgr.getActiveNetworkInfo() != null && connMgr.getActiveNetworkInfo().isConnected();
             addLocationView.setVisibility(connected ? View.VISIBLE : View.INVISIBLE);
+            noInternetMessageView.setVisibility(connected ? View.INVISIBLE : View.VISIBLE);
         }
     }
 }
