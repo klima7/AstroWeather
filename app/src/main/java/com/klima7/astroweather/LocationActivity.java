@@ -1,17 +1,25 @@
 package com.klima7.astroweather;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Response;
+import com.google.android.material.snackbar.Snackbar;
 import com.klima7.astroweather.db.AppDatabase;
 import com.klima7.astroweather.db.DatabaseUtil;
 import com.klima7.astroweather.weather.Location;
@@ -28,6 +36,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
     private AppDatabase db;
     private LocationAdapter adapter;
     private EditText locationEdit;
+    private LinearLayout addLocationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +46,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
         db = DatabaseUtil.getDatabase(getApplicationContext());
 
         locationEdit = findViewById(R.id.location_name_edit);
+        addLocationView = findViewById(R.id.add_location_pane);
 
         Button addButton = findViewById(R.id.add_location_button);
         addButton.setOnClickListener(view -> addLocationClicked());
@@ -46,6 +56,8 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(layoutManager);
+
+        registerReceiver(new LocationActivity.NetworkChangeReceiver(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
 
         new Thread(new FetchWeathersTask()).start();
     }
@@ -124,6 +136,18 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
         @Override
         public void run() {
             db.entryDao().delete(entry);
+        }
+    }
+
+    public class NetworkChangeReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final ConnectivityManager connMgr = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+            boolean connected = connMgr.getActiveNetworkInfo() != null && connMgr.getActiveNetworkInfo().isConnected();
+            addLocationView.setVisibility(connected ? View.VISIBLE : View.INVISIBLE);
         }
     }
 }

@@ -266,12 +266,14 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
             if(new_connected && !old_connected) {
                 data.connected.setValue(true);
+                Log.i("Hello", "Internet: lost");
             }
 
             else if(!new_connected && old_connected) {
                 data.connected.setValue(false);
                 Snackbar snackbar = Snackbar.make(refreshLayout, "Brak połączenia z internetem", Snackbar.LENGTH_LONG);
                 snackbar.show();
+                Log.i("Hello", "Internet: connected");
             }
         }
     }
