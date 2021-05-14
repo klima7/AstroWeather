@@ -21,19 +21,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class YahooRequest extends JsonRequest {
-
-    private Gson gson = new Gson();
-    private String unit;
+public abstract class YahooRequest<T> extends JsonRequest {
 
     public static final String appId = "e4fr98gu";
     public static final String CONSUMER_KEY = "dj0yJmk9UnhwNXhycDNSdGhBJmQ9WVdrOVpUUm1jams0WjNVbWNHbzlNQT09JnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTRm";
     public static final String CONSUMER_SECRET = "6f307dc157458f96a02def7f040b143ae2e3b3f3";
-    public static final String baseUrl = "https://weather-ydn-yql.media.yahoo.com/forecastrss";
+    public static final String BASE_URL = "https://weather-ydn-yql.media.yahoo.com/forecastrss";
 
-    public YahooRequest(String unit, Response.Listener<Entry> listener, Response.ErrorListener errorListener) {
-        super(Request.Method.GET, null, null, listener, errorListener);
-        this.unit = unit;
+    public YahooRequest(String unit, String url, Response.Listener<T> listener, Response.ErrorListener errorListener) {
+        super(Request.Method.GET, BASE_URL+url, null, listener, errorListener);
     }
 
     @Override
@@ -56,12 +52,12 @@ public class YahooRequest extends JsonRequest {
     }
 
     @Override
-    protected Response<Entry> parseNetworkResponse(NetworkResponse response) {
+    protected Response<T> parseNetworkResponse(NetworkResponse response) {
         try {
             String json = new String(
                     response.data,
                     HttpHeaderParser.parseCharset(response.headers));
-            Entry parsedResponse = parseResponse(json);
+            T parsedResponse = parseResponse(json);
             return Response.success(
                     parsedResponse,
                     HttpHeaderParser.parseCacheHeaders(response));
@@ -70,40 +66,5 @@ public class YahooRequest extends JsonRequest {
         }
     }
 
-    public Entry parseResponse(String jsonObject) {
-        JsonObject fullJson = gson.fromJson(jsonObject, JsonObject.class);
-
-        JsonObject locationJson = fullJson.getAsJsonObject("location");
-        Location location = gson.fromJson(locationJson, Location.class);
-
-        JsonObject observationPartJson = fullJson.getAsJsonObject("current_observation");
-        JsonObject windPartJson = observationPartJson.getAsJsonObject("wind");
-        JsonObject atmospherePartJson = observationPartJson.getAsJsonObject("atmosphere");
-        JsonObject astronomyPartJson = observationPartJson.getAsJsonObject("astronomy");
-        JsonObject conditionPartJson = observationPartJson.getAsJsonObject("condition");
-        JsonObject observationMergedJson = merge(windPartJson, atmospherePartJson, astronomyPartJson, conditionPartJson);
-        CurrentWeather currentWeather = gson.fromJson(observationMergedJson, CurrentWeather.class);
-
-        JsonArray forecastPartJson = fullJson.getAsJsonArray("forecasts");
-        Forecast[] forecastsArray = gson.fromJson(forecastPartJson, Forecast[].class);
-        List<Forecast> forecasts = Arrays.asList(forecastsArray);
-
-        Entry info = new Entry(location, unit, currentWeather, forecasts);
-        return info;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    private JsonObject merge(JsonObject... objects) {
-        JsonObject merged = new JsonObject();
-        for(JsonObject object : objects) {
-            for (String key : object.keySet()) {
-                merged.add(key, object.get(key));
-            }
-        }
-        return merged;
-    }
-
+    public abstract T parseResponse(String jsonObject);
 }

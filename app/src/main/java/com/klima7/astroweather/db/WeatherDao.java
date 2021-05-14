@@ -6,21 +6,22 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.klima7.astroweather.weather.Entry;
+import com.klima7.astroweather.weather.Weather;
 
 import java.util.List;
 
 @Dao
-public interface EntryDao {
-    @Query("SELECT * FROM Entry")
-    List<Entry> getAll();
+public interface WeatherDao {
+
+    @Query("SELECT * FROM Weather")
+    List<Weather> getAll();
 
     @Insert
-    void insertAll(Entry... entries);
+    void insertAll(Weather... entries);
 
     @Delete
-    void delete(Entry entry);
+    void delete(Weather entry);
 
     @Update
-    int update(Entry entry);
+    int update(Weather entry);
 }

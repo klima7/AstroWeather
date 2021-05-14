@@ -1,9 +1,11 @@
 package com.klima7.astroweather.weather;
 
+import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
+@Entity
 public class Location {
 
     @PrimaryKey

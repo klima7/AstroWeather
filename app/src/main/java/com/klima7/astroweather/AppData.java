@@ -6,21 +6,17 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.astrocalculator.AstroCalculator;
-import com.klima7.astroweather.weather.CurrentWeather;
-import com.klima7.astroweather.weather.Forecast;
 import com.klima7.astroweather.weather.Location;
-
-import java.util.List;
+import com.klima7.astroweather.weather.Weather;
 
 public class AppData extends AndroidViewModel {
 
     public MutableLiveData<Boolean> connected = new MutableLiveData<>();
 
+    public MutableLiveData<Location> location = new MutableLiveData<>();
     public MutableLiveData<AstroCalculator.SunInfo> sunInfo = new MutableLiveData<>();
     public MutableLiveData<AstroCalculator.MoonInfo> moonInfo = new MutableLiveData<>();
-    public MutableLiveData<Location> location = new MutableLiveData<>();
-    public MutableLiveData<CurrentWeather> currentWeather = new MutableLiveData<>();
-    public MutableLiveData<List<Forecast>> forecasts = new MutableLiveData<>();
+    public MutableLiveData<Weather> weather = new MutableLiveData<>();
 
     public MutableLiveData<String> unit = new MutableLiveData<>();
 
@@ -33,9 +29,9 @@ public class AppData extends AndroidViewModel {
         location.setValue(null);
         sunInfo.setValue(null);
         moonInfo.setValue(null);
-        currentWeather.setValue(null);
-        forecasts.setValue(null);
+        weather.setValue(null);
         refreshPeriod.setValue(10);
         lastRefresh.setValue(0L);
+        unit.setValue("c");
     }
 }

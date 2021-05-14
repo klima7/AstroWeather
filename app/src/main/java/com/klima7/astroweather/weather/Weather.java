@@ -1,5 +1,6 @@
 package com.klima7.astroweather.weather;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public class Weather {
 
     public int woeid;
-    public String unit;
+    @NonNull public String unit;
 
     public int chill;
     public int direction;
@@ -26,7 +27,7 @@ public class Weather {
     public int code;
     public int temperature;
 
-    public List<Forecast> forecast;
+    public List<Forecast> forecasts;
 
     @Override
     public String toString() {
@@ -45,7 +46,7 @@ public class Weather {
                 ", text='" + text + '\'' +
                 ", code=" + code +
                 ", temperature=" + temperature +
-                ", forecast=" + forecast +
+                ", forecast=" + forecasts +
                 '}';
     }
 }

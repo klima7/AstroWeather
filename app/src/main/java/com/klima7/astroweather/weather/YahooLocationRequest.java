@@ -1,19 +1,22 @@
 package com.klima7.astroweather.weather;
 
 import com.android.volley.Response;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
-public class YahooLocationRequest extends YahooRequest {
+public class YahooLocationRequest extends YahooRequest<Location> {
 
-    private String place;
-
-    public YahooLocationRequest(String place, String unit, Response.Listener<Entry> listener, Response.ErrorListener errorListener) {
-        super(unit, listener, errorListener);
+    public YahooLocationRequest(String place, Response.Listener<Location> listener, Response.ErrorListener errorListener) {
+        super("c", String.format("?location=%s&format=json", place), listener, errorListener);
         setShouldCache(true);
-        this.place = place;
     }
 
     @Override
-    public String getUrl() {
-        return baseUrl + String.format("?location=%s&format=json&u=%s", place, getUnit());
+    public Location parseResponse(String jsonObject) {
+        Gson gson = new Gson();
+        JsonObject fullJson = gson.fromJson(jsonObject, JsonObject.class);
+        JsonObject locationJson = fullJson.getAsJsonObject("location");
+        Location location = gson.fromJson(locationJson, Location.class);
+        return location;
     }
 }

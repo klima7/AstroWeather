@@ -69,10 +69,10 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
         }
 
         public void update(Forecast forecast) {
-            dateView.setText(String.valueOf(forecast.getDay()));
-            temperatureView.setText(forecast.getLow() + "-" + forecast.getHigh());
-            descriptionView.setText(String.valueOf(forecast.getText()));
-            conditionView.setText(String.valueOf(forecast.getCode()));
+            dateView.setText(String.valueOf(forecast.day));
+            temperatureView.setText(forecast.low + "-" + forecast.high);
+            descriptionView.setText(String.valueOf(forecast.text));
+            conditionView.setText(String.valueOf(forecast.code));
         }
     }
 }

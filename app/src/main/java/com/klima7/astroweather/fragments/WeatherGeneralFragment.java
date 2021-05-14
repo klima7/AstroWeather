@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.klima7.astroweather.AppData;
 import com.klima7.astroweather.R;
-import com.klima7.astroweather.weather.CurrentWeather;
+import com.klima7.astroweather.weather.Weather;
 
 public class WeatherGeneralFragment extends Fragment {
 
@@ -42,17 +42,16 @@ public class WeatherGeneralFragment extends Fragment {
         descriptionView = getView().findViewById(R.id.description_view);
         conditionView = getView().findViewById(R.id.condition_view);
 
-        updateCurrentWeather();
-        data.currentWeather.observe(requireActivity(), newWeather -> updateCurrentWeather());
+        updateCurrentWeather(data.weather.getValue());
+        data.weather.observe(requireActivity(), newWeather -> updateCurrentWeather(newWeather));
     }
 
-    private void updateCurrentWeather() {
-        if(data.currentWeather.getValue() != null) {
-            CurrentWeather weather = data.currentWeather.getValue();
-            temperatureView.setText(String.valueOf(weather.getTemperature()));
-            pressureView.setText(String.valueOf(weather.getPressure()));
-            descriptionView.setText(weather.getText());
-            conditionView.setText(String.valueOf(weather.getCode()));
+    private void updateCurrentWeather(Weather weather) {
+        if(weather != null) {
+            temperatureView.setText(String.valueOf(weather.temperature));
+            pressureView.setText(String.valueOf(weather.pressure));
+            descriptionView.setText(weather.text);
+            conditionView.setText(String.valueOf(weather.code));
         }
         else {
             String placeholder = getResources().getString(R.string.placeholder);

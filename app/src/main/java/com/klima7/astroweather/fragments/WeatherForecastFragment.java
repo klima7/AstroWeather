@@ -17,6 +17,7 @@ import com.klima7.astroweather.AppData;
 import com.klima7.astroweather.ForecastAdapter;
 import com.klima7.astroweather.R;
 import com.klima7.astroweather.weather.Forecast;
+import com.klima7.astroweather.weather.Weather;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,14 +49,13 @@ public class WeatherForecastFragment extends Fragment {
         recycler.setAdapter(adapter);
         recycler.setLayoutManager(layoutManager);
 
-        update();
-        data.forecasts.observe(requireActivity(), newForecasts -> update());
+        update(data.weather.getValue());
+        data.weather.observe(requireActivity(), newWeather -> update(newWeather));
     }
 
-    private void update() {
-        if(data.forecasts.getValue() != null) {
-            List<Forecast> forecasts = data.forecasts.getValue();
-            adapter.setForecasts(forecasts);
+    private void update(Weather weather) {
+        if(weather != null) {
+            adapter.setForecasts(weather.forecasts);
         }
         else {
             adapter.setForecasts(new ArrayList<>());

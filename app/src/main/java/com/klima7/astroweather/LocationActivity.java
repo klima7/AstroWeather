@@ -23,7 +23,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.klima7.astroweather.db.AppDatabase;
 import com.klima7.astroweather.db.DatabaseUtil;
 import com.klima7.astroweather.weather.Location;
-import com.klima7.astroweather.weather.Entry;
+import com.klima7.astroweather.weather.Location;
 import com.klima7.astroweather.weather.YahooLocationRequest;
 
 import java.util.ArrayList;
@@ -65,26 +65,25 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
     public void addLocationClicked() {
         RequestManager requestManager = RequestManager.getInstance(this);
         String locationName = locationEdit.getText().toString();
-        YahooLocationRequest reques = new YahooLocationRequest(locationName, "c", new Response.Listener<Entry>() {
+        YahooLocationRequest reques = new YahooLocationRequest(locationName, new Response.Listener<Location>() {
             @Override
-            public void onResponse(Entry entry) {
-                Location location = entry.getLocation();
+            public void onResponse(Location location) {
                 locationEdit.setText("");
 
-                if(!location.isValid()) {
+                if(location.woeid != 0) {
                     Toast.makeText(getApplicationContext(), "Nieprawidłowa lokalizacja", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                for(Entry w : adapter.getEntries()) {
+                for(Location w : adapter.getEntries()) {
                     if(w.equals(location)) {
                         Toast.makeText(getApplicationContext(), "Lokalizacja już jest na liśćie", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
 
-                adapter.addEntry(entry);
-                new Thread(new AddWeatherTask(entry)).start();
+                adapter.addLocation(location);
+                new Thread(new AddWeatherTask(location)).start();
             }
         }, null);
         requestManager.addToRequestQueue(reques);
@@ -92,16 +91,16 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        Entry entry = adapter.getEntry();
-        new Thread(new RemoveWeatherTask(entry)).start();
-        adapter.removeEntry(entry);
+        Location location = adapter.getLocation();
+        new Thread(new RemoveWeatherTask(location)).start();
+        adapter.removeLocation(location);
         return true;
     }
 
     @Override
-    public void locationSelected(Entry entry) {
+    public void locationSelected(Location location) {
         Intent data = new Intent();
-        data.putExtra(RET_ID, entry.getLocation().getWoeid());
+        data.putExtra(RET_ID, location.woeid);
         setResult(RESULT_OK, data);
         finish();
     }
@@ -109,33 +108,33 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
     private class FetchWeathersTask implements Runnable {
         @Override
         public void run() {
-            List<Entry> entries = db.entryDao().getAll();
-            runOnUiThread(() -> {
-                adapter.setEntries(entries);
-                adapter.notifyDataSetChanged();
-            });
+//            List<Location> entries = db.locationDao().getAll();
+//            runOnUiThread(() -> {
+//                adapter.setEntries(entries);
+//                adapter.notifyDataSetChanged();
+//            });
         }
     }
 
     private class AddWeatherTask implements Runnable {
-        private Entry entry;
-        public AddWeatherTask(Entry entry) {
-            this.entry = entry;
+        private Location location;
+        public AddWeatherTask(Location location) {
+            this.location = location;
         }
         @Override
         public void run() {
-            db.entryDao().insertAll(this.entry);
+//            db.locationDao().insertAll(this.location);
         }
     }
 
     private class RemoveWeatherTask implements Runnable {
-        private Entry entry;
-        public RemoveWeatherTask(Entry entry) {
-            this.entry = entry;
+        private Location location;
+        public RemoveWeatherTask(Location location) {
+            this.location = location;
         }
         @Override
         public void run() {
-            db.entryDao().delete(entry);
+//            db.locationDao().delete(location);
         }
     }
 
