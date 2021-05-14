@@ -28,7 +28,7 @@ public class AppData extends AndroidViewModel {
     public AppData(Application application) {
         super(application);
 
-        connected.setValue(true);
+        connected.setValue(false);
         location.setValue(null);
         sunInfo.setValue(null);
         moonInfo.setValue(null);

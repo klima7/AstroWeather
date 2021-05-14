@@ -20,6 +20,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.android.volley.Response;
 import com.astrocalculator.AstroCalculator;
 import com.astrocalculator.AstroDateTime;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,6 +28,8 @@ import com.klima7.astroweather.db.AppDatabase;
 import com.klima7.astroweather.db.DatabaseUtil;
 import com.klima7.astroweather.fragments.InfoFragment;
 import com.klima7.astroweather.weather.Location;
+import com.klima7.astroweather.weather.Weather;
+import com.klima7.astroweather.weather.YahooWeatherRequest;
 
 import java.time.LocalDateTime;
 import java.util.GregorianCalendar;
@@ -37,6 +40,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
     private AppDatabase db;
     private RequestManager requestManager;
+    SharedPreferences sharedPreferences;
 
     private AppData data;
     private Timer timer;
@@ -53,6 +57,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
         db = DatabaseUtil.getDatabase(getApplicationContext());
         requestManager = RequestManager.getInstance(getApplication());
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // Attach ViewModel
         data = new ViewModelProvider(this).get(AppData.class);
@@ -76,6 +81,10 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
         settingsLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
                 result -> onSettingsChanged(result));
+
+        if(savedInstanceState == null) {
+            update(sharedPreferences.getInt("woeid", 0), data.unit.getValue());
+        }
     }
 
     @Override
@@ -102,6 +111,8 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
             return;
 
         int woeid = result.getData().getIntExtra(LocationActivity.RET_ID, 0);
+        sharedPreferences.edit().putInt("woeid", woeid).apply();
+        update(woeid, data.unit.getValue());
     }
 
     @Override
@@ -111,7 +122,6 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     }
 
     private void onSettingsChanged(ActivityResult result) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         int refresh = Integer.parseInt(sharedPreferences.getString("refresh", "10"));
         String unit = sharedPreferences.getString("unit", "c");
         Log.i("Hello", "" + refresh + "/" + unit);
@@ -119,24 +129,57 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
     @Override
     public void onRefresh() {
+        update();
         refreshLayout.setRefreshing(false);
     }
 
-    private void update(int woeid, String unit) {
-
+    private void update() {
+        int woeid = data.location.getValue() != null ? data.location.getValue().woeid : 0;
+        String unit = data.unit.getValue();
+        update(woeid, unit);
     }
 
-/*    public void update() {
-        updateAstro();
-        updateWeather();
-        data.lastRefresh.setValue(System.currentTimeMillis());
+    private void update(int woeid, String unit) {
+        updateLocationAndAstro(woeid);
+        updateWeather(woeid, unit);
+    }
+
+    private void updateLocationAndAstro(int woeid) {
+        if(woeid == 0) {
+            data.location.setValue(null);
+            return;
+        }
+
+        new Thread(new UpdateLocationAndAstroTask(woeid)).start();
+    }
+
+    private void updateWeather(int woeid, String unit) {
+        if(woeid == 0) {
+            data.weather.setValue(null);
+            return;
+        }
+
+        if(data.connected.getValue()) {
+            YahooWeatherRequest request = new YahooWeatherRequest(woeid, unit, new Response.Listener<Weather>() {
+                @Override
+                public void onResponse(Weather weather) {
+                    data.weather.setValue(weather);
+                    new Thread(new InsertWeatherTask(weather)).start();
+                }
+            }, null);
+
+            requestManager.addToRequestQueue(request);
+        }
+
+        else {
+            new Thread(new SetSavedWeatherTask(woeid, unit)).start();
+        }
     }
 
     private void updateAstro() {
         if(data.location.getValue() == null) {
             data.sunInfo.setValue(null);
             data.moonInfo.setValue(null);
-            data.weather.setValue(null);
             return;
         }
 
@@ -157,23 +200,55 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         data.moonInfo.setValue(calculator.getMoonInfo());
     }
 
-    private void updateWeather() {
-        if(data.location.getValue() == null) {
-            data.weather.setValue(null);
-            return;
+    private class UpdateLocationAndAstroTask implements Runnable {
+        private int woeid;
+
+        public UpdateLocationAndAstroTask(int woeid) {
+            this.woeid = woeid;
         }
 
-        // TODO: update and assign data.weather
-    }*/
+        @Override
+        public void run() {
+            Location location = db.locationDao().getSingle(woeid);
+            runOnUiThread(() -> {
+                data.location.setValue(location);
+                updateAstro();
+            });
+        }
+    }
 
-    public class UpdateTask {
-        public UpdateTask(int woeid, String unit) {
+    private class InsertWeatherTask implements Runnable {
+        private Weather weather;
 
+        public InsertWeatherTask(Weather weather) {
+            this.weather = weather;
+        }
+
+        @Override
+        public void run() {
+            Weather current = db.weatherDao().getSingle(weather.woeid, weather.unit);
+            if(current == null) db.weatherDao().insertAll(weather);
+            else db.weatherDao().update(weather);
+        }
+    }
+
+    private class SetSavedWeatherTask implements Runnable {
+        private int woeid;
+        private String unit;
+
+        public SetSavedWeatherTask(int woeid, String unit) {
+            this.woeid = woeid;
+            this.unit = unit;
+        }
+
+        @Override
+        public void run() {
+            Weather weather = db.weatherDao().getSingle(woeid, unit);
+            runOnUiThread(() -> data.weather.setValue(weather));
         }
     }
 
     public class NetworkChangeReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final ConnectivityManager connMgr = (ConnectivityManager) context
@@ -184,10 +259,12 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
             if(new_connected && !old_connected) {
                 data.connected.setValue(true);
+                refreshLayout.setEnabled(true);
             }
 
             else if(!new_connected && old_connected) {
                 data.connected.setValue(false);
+                refreshLayout.setEnabled(false);
                 Snackbar snackbar = Snackbar.make(refreshLayout, "Brak połączenia z internetem", Snackbar.LENGTH_LONG);
                 snackbar.show();
             }

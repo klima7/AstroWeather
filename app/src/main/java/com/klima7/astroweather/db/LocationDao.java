@@ -16,6 +16,9 @@ public interface LocationDao {
     @Query("SELECT * FROM Location")
     List<Location> getAll();
 
+    @Query("SELECT * FROM Location WHERE woeid=:woeid")
+    Location getSingle(int woeid);
+
     @Insert
     void insertAll(Location... entries);
 
