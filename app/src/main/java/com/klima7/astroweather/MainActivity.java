@@ -186,6 +186,8 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
         data.sunInfo.setValue(calculator.getSunInfo());
         data.moonInfo.setValue(calculator.getMoonInfo());
+
+        data.connected.setValue(true);
     }
 
     public void update() {

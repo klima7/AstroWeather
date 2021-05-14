@@ -2,10 +2,12 @@ package com.klima7.astroweather.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,12 +17,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.klima7.astroweather.AppData;
 import com.klima7.astroweather.R;
+import com.klima7.astroweather.weather.Location;
 
 public class InfoFragment extends Fragment {
 
     private InfoInterface infoInterface;
     private AppData data;
     private TextView cityView, latitudeView, longitudeView;
+    private ImageView disconnectedIconView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,16 +52,20 @@ public class InfoFragment extends Fragment {
         latitudeView = getView().findViewById(R.id.info_latitude);
         longitudeView = getView().findViewById(R.id.info_longitude);
         cityView = getView().findViewById(R.id.info_city);
+        disconnectedIconView = getView().findViewById(R.id.disconnected_icon);
 
-        updateLocation();
-        data.location.observe(requireActivity(), newLocation -> updateLocation());
+        updateLocation(data.location.getValue());
+        updateConnected(data.connected.getValue());
+
+        data.location.observe(requireActivity(), this::updateLocation);
+        data.connected.observe(requireActivity(), this::updateConnected);
     }
 
-    private void updateLocation() {
-        if(data.location.getValue() != null) {
-            latitudeView.setText(String.valueOf(data.location.getValue().getLatitude()));
-            longitudeView.setText(String.valueOf(data.location.getValue().getLongitude()));
-            cityView.setText(data.location.getValue().getCity() + " (" + data.location.getValue().getRegion().trim() + ")");
+    private void updateLocation(Location location) {
+        if(location != null) {
+            latitudeView.setText(String.valueOf(location.getLatitude()));
+            longitudeView.setText(String.valueOf(location.getLongitude()));
+            cityView.setText(data.location.getValue().getCity() + " (" + location.getRegion().trim() + ")");
         }
         else {
             String placeholder = getResources().getString(R.string.placeholder);
@@ -65,6 +73,10 @@ public class InfoFragment extends Fragment {
             longitudeView.setText(placeholder);
             cityView.setText(placeholder);
         }
+    }
+
+    private void updateConnected(boolean connected) {
+        disconnectedIconView.setVisibility(connected ? View.INVISIBLE : View.VISIBLE);
     }
 
     public interface InfoInterface {
