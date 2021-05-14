@@ -261,11 +261,11 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
 
             if(connMgr.getActiveNetworkInfo() != null && connMgr.getActiveNetworkInfo().isConnected()) {
-                Log.i("Hello", "Connected");
+                data.connected.setValue(true);
             }
 
             else {
-                Log.i("Hello", "Disconnected");
+                data.connected.setValue(false);
             }
         }
     }
