@@ -13,16 +13,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Response;
-import com.google.android.material.snackbar.Snackbar;
 import com.klima7.astroweather.db.AppDatabase;
 import com.klima7.astroweather.db.DatabaseUtil;
-import com.klima7.astroweather.weather.Location;
 import com.klima7.astroweather.weather.Location;
 import com.klima7.astroweather.weather.YahooLocationRequest;
 
@@ -49,7 +46,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
         addLocationView = findViewById(R.id.add_location_pane);
 
         Button addButton = findViewById(R.id.add_location_button);
-        addButton.setOnClickListener(view -> addLocationClicked());
+        addButton.setOnClickListener(view -> addClicked());
 
         RecyclerView recycler = findViewById(R.id.place_recycler);
         adapter = new LocationAdapter(new ArrayList<>(), this);
@@ -62,7 +59,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
         new Thread(new FetchWeathersTask()).start();
     }
 
-    public void addLocationClicked() {
+    public void addClicked() {
         RequestManager requestManager = RequestManager.getInstance(this);
         String locationName = locationEdit.getText().toString();
         YahooLocationRequest reques = new YahooLocationRequest(locationName, new Response.Listener<Location>() {
@@ -70,12 +67,12 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
             public void onResponse(Location location) {
                 locationEdit.setText("");
 
-                if(location.woeid != 0) {
+                if(location.woeid == 0) {
                     Toast.makeText(getApplicationContext(), "Nieprawidłowa lokalizacja", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                for(Location w : adapter.getEntries()) {
+                for(Location w : adapter.getLocations()) {
                     if(w.equals(location)) {
                         Toast.makeText(getApplicationContext(), "Lokalizacja już jest na liśćie", Toast.LENGTH_SHORT).show();
                         return;
@@ -90,14 +87,6 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        Location location = adapter.getLocation();
-        new Thread(new RemoveWeatherTask(location)).start();
-        adapter.removeLocation(location);
-        return true;
-    }
-
-    @Override
     public void locationSelected(Location location) {
         Intent data = new Intent();
         data.putExtra(RET_ID, location.woeid);
@@ -105,14 +94,19 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
         finish();
     }
 
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        Location location = adapter.getLocation();
+        new Thread(new RemoveWeatherTask(location)).start();
+        adapter.removeLocation(location);
+        return true;
+    }
+
     private class FetchWeathersTask implements Runnable {
         @Override
         public void run() {
-//            List<Location> entries = db.locationDao().getAll();
-//            runOnUiThread(() -> {
-//                adapter.setEntries(entries);
-//                adapter.notifyDataSetChanged();
-//            });
+            List<Location> locations = db.locationDao().getAll();
+            runOnUiThread(() -> adapter.setLocations(locations));
         }
     }
 
@@ -123,7 +117,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
         }
         @Override
         public void run() {
-//            db.locationDao().insertAll(this.location);
+            db.locationDao().insertAll(this.location);
         }
     }
 
@@ -134,12 +128,11 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
         }
         @Override
         public void run() {
-//            db.locationDao().delete(location);
+            db.locationDao().delete(location);
         }
     }
 
     public class NetworkChangeReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final ConnectivityManager connMgr = (ConnectivityManager) context

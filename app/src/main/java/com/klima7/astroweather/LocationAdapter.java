@@ -11,11 +11,10 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.klima7.astroweather.weather.Location;
-import com.klima7.astroweather.weather.Location;
 
 import java.util.List;
 
-public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.WeatherHolder> {
+public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.LocationHolder> {
 
     private Location location;
     private List<Location> entries;
@@ -28,12 +27,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Weathe
 
     @NonNull
     @Override
-    public WeatherHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new WeatherHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.entry_location, parent, false));
+    public LocationHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new LocationHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.entry_location, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WeatherHolder holder, int position) {
+    public void onBindViewHolder(@NonNull LocationHolder holder, int position) {
         Location location = entries.get(position);
         holder.update(location);
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -68,20 +67,21 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Weathe
         this.location = location;
     }
 
-    public List<Location> getEntries() {
+    public List<Location> getLocations() {
         return entries;
     }
 
-    public void setEntries(List<Location> entries) {
+    public void setLocations(List<Location> entries) {
         this.entries = entries;
+        notifyDataSetChanged();
     }
 
-    public class WeatherHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
+    public class LocationHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
 
         private TextView cityView, regionView, latitudeView, longitudeView;
         private CardView locationCard;
 
-        public WeatherHolder(@NonNull View itemView) {
+        public LocationHolder(@NonNull View itemView) {
             super(itemView);
             cityView = itemView.findViewById(R.id.entry_city);
             regionView = itemView.findViewById(R.id.entry_region);
