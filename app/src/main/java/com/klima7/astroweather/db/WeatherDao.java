@@ -26,6 +26,9 @@ public interface WeatherDao {
     @Delete
     void delete(Weather entry);
 
+    @Query("DELETE FROM Weather WHERE woeid = :woeid")
+    void delete(int woeid);
+
     @Update
     int update(Weather entry);
 }

@@ -110,7 +110,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         if(result == null || result.getData() == null)
             return;
 
-        int woeid = result.getData().getIntExtra(LocationActivity.RET_ID, 0);
+        int woeid = result.getData().getIntExtra(LocationActivity.RET_WOEID, 0);
         sharedPreferences.edit().putInt("woeid", woeid).apply();
         update(woeid, data.unit.getValue());
     }
@@ -147,6 +147,8 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     private void updateLocationAndAstro(int woeid) {
         if(woeid == 0) {
             data.location.setValue(null);
+            data.sunInfo.setValue(null);
+            data.moonInfo.setValue(null);
             return;
         }
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -29,13 +30,16 @@ import java.util.List;
 
 public class LocationActivity extends AppCompatActivity implements LocationAdapter.OnLocationSelectedListener {
 
-    public static final String RET_ID = "id";
+    public static final String EXTRA_WOEID = "input_woeid";
+    public static final String RET_WOEID = "output_woeid";
 
     private AppDatabase db;
     private LocationAdapter adapter;
     private EditText locationEdit;
     private LinearLayout addLocationView;
     private TextView noInternetMessageView;
+
+    private int input_woeid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,10 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
         registerReceiver(new LocationActivity.NetworkChangeReceiver(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
 
         new Thread(new FetchWeathersTask()).start();
+
+        Intent data = new Intent();
+        data.putExtra(RET_WOEID, 0);
+        setResult(RESULT_OK, data);
     }
 
     public void addClicked() {
@@ -92,7 +100,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
     @Override
     public void locationSelected(Location location) {
         Intent data = new Intent();
-        data.putExtra(RET_ID, location.woeid);
+        data.putExtra(RET_WOEID, location.woeid);
         setResult(RESULT_OK, data);
         finish();
     }
@@ -131,7 +139,13 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
         }
         @Override
         public void run() {
+            if(location.woeid == input_woeid) {
+                Intent data = new Intent();
+                data.putExtra(RET_WOEID, 0);
+                setResult(RESULT_OK, data);
+            }
             db.locationDao().delete(location);
+            db.weatherDao().delete(location.woeid);
         }
     }
 
