@@ -46,19 +46,17 @@ public class WeatherAdditionalFragment extends Fragment {
 
         update();
         data.weather.observe(requireActivity(), newWeather -> update());
-        data.unit.observe(requireActivity(), newUnit -> update());
     }
 
     private void update() {
         Weather weather = data.weather.getValue();
-        Unit unit = data.unit.getValue();
 
         if(weather != null) {
-            windChillView.setText(String.valueOf(weather.chill) + unit.getTemperatureUnit());
-            windDirectionView.setText(String.valueOf(weather.direction) + unit.getWindDirectionUnit());
-            windSpeedView.setText(String.valueOf(weather.speed) + unit.getWindSpeedUnit());
-            humidityView.setText(String.valueOf(weather.humidity) + unit.getHumidityUnit());
-            visibilityView.setText(String.valueOf(weather.visibility) + unit.getDistanceUnit());
+            windChillView.setText(String.valueOf(weather.chill) + weather.unit.getTemperatureUnit());
+            windDirectionView.setText(String.valueOf(weather.direction) + weather.unit.getWindDirectionUnit());
+            windSpeedView.setText(String.valueOf(weather.speed) + weather.unit.getWindSpeedUnit());
+            humidityView.setText(String.valueOf(weather.humidity) + weather.unit.getHumidityUnit());
+            visibilityView.setText(String.valueOf(weather.visibility) + weather.unit.getDistanceUnit());
         }
         else {
             String placeholder = getResources().getString(R.string.placeholder);

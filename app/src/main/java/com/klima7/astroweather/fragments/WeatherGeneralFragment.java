@@ -45,16 +45,14 @@ public class WeatherGeneralFragment extends Fragment {
 
         update();
         data.weather.observe(requireActivity(), newWeather -> update());
-        data.unit.observe(requireActivity(), newUnit -> update());
     }
 
     private void update() {
         Weather weather = data.weather.getValue();
-        Unit unit = data.unit.getValue();
 
-        if(weather != null && unit != null) {
-            temperatureView.setText(String.valueOf(weather.temperature) + unit.getTemperatureUnit());
-            pressureView.setText(String.valueOf(weather.pressure) + unit.getPressureUnit());
+        if(weather != null) {
+            temperatureView.setText(String.valueOf(weather.temperature) + weather.unit.getTemperatureUnit());
+            pressureView.setText(String.valueOf(weather.pressure) + weather.unit.getPressureUnit());
             descriptionView.setText(weather.text);
             conditionView.setText(String.valueOf(weather.code));
         }

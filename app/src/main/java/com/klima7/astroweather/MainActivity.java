@@ -123,8 +123,11 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
     private void onSettingsChanged(ActivityResult result) {
         int refresh = Integer.parseInt(sharedPreferences.getString("refresh", "10"));
-        String unit = sharedPreferences.getString("unit", "c");
-        Log.i("Hello", "" + refresh + "/" + unit);
+        Unit newUnit = Unit.fromCode(sharedPreferences.getString("unit", "c"));
+        if(data.unit.getValue() != newUnit) {
+            data.unit.setValue(newUnit);
+            update();
+        }
     }
 
     @Override

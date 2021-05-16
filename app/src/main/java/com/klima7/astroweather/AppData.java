@@ -16,11 +16,11 @@ public class AppData extends AndroidViewModel {
     public MutableLiveData<Boolean> connected = new MutableLiveData<>();
 
     public MutableLiveData<Location> location = new MutableLiveData<>();
+    public MutableLiveData<Unit> unit = new MutableLiveData<>();
+
     public MutableLiveData<AstroCalculator.SunInfo> sunInfo = new MutableLiveData<>();
     public MutableLiveData<AstroCalculator.MoonInfo> moonInfo = new MutableLiveData<>();
     public MutableLiveData<Weather> weather = new MutableLiveData<>();
-
-    public MutableLiveData<Unit> unit = new MutableLiveData<>();
 
     public MutableLiveData<Integer> refreshPeriod = new MutableLiveData<>();
     public MutableLiveData<Long> lastRefresh = new MutableLiveData<>();
