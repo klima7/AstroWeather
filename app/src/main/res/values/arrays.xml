@@ -1,12 +1,12 @@
 <resources>
     <string-array name="refresh_entries">
-        <item>2 sekundy</item>
-        <item>10 sekund</item>
-        <item>30 sekund</item>
-        <item>minuta</item>
-        <item>10 minut</item>
-        <item>30 minut</item>
-        <item>godzina</item>
+        <item>2 seconds</item>
+        <item>10 seconds</item>
+        <item>30 seconds</item>
+        <item>1 minute</item>
+        <item>10 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
     </string-array>
 
     <string-array name="refresh_values">
@@ -20,8 +20,8 @@
     </string-array>
 
     <string-array name="unit_entries">
-        <item>Metryczny</item>
-        <item>Imperialny</item>
+        <item>Metric</item>
+        <item>Imperial</item>
     </string-array>
 
     <string-array name="unit_values">

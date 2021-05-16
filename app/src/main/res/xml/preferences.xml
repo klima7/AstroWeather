@@ -1,26 +1,26 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="Synchronizacja">
+    <PreferenceCategory app:title="Synchronization">
 
         <ListPreference
             app:defaultValue="10"
             app:entries="@array/refresh_entries"
             app:entryValues="@array/refresh_values"
             app:key="refresh"
-            app:title="Czas odświeżania"
+            app:title="Refresh period"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Jednostki">
+    <PreferenceCategory app:title="Unit">
 
     <ListPreference
         app:defaultValue="c"
         app:entries="@array/unit_entries"
         app:entryValues="@array/unit_values"
         app:key="unit"
-        app:title="Preferowany system jednostek"
+        app:title="Preferred unit system"
         app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 

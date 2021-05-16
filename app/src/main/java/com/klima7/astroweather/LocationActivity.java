@@ -30,7 +30,6 @@ import java.util.List;
 
 public class LocationActivity extends AppCompatActivity implements LocationAdapter.OnLocationSelectedListener {
 
-    public static final String EXTRA_WOEID = "input_woeid";
     public static final String RET_WOEID = "output_woeid";
 
     private AppDatabase db;
@@ -38,8 +37,6 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
     private EditText locationEdit;
     private LinearLayout addLocationView;
     private TextView noInternetMessageView;
-
-    private int input_woeid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +76,13 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
                 locationEdit.setText("");
 
                 if(location.woeid == 0) {
-                    Toast.makeText(getApplicationContext(), "Nieprawidłowa lokalizacja", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Invalid location", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 for(Location w : adapter.getLocations()) {
                     if(w.equals(location)) {
-                        Toast.makeText(getApplicationContext(), "Lokalizacja już jest na liśćie", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "This location is already on the list", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
@@ -139,11 +136,6 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
         }
         @Override
         public void run() {
-            if(location.woeid == input_woeid) {
-                Intent data = new Intent();
-                data.putExtra(RET_WOEID, 0);
-                setResult(RESULT_OK, data);
-            }
             db.locationDao().delete(location);
             db.weatherDao().delete(location.woeid);
         }

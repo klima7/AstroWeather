@@ -270,7 +270,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
             else if(!new_connected && old_connected) {
                 data.connected.setValue(false);
                 refreshLayout.setEnabled(false);
-                Snackbar snackbar = Snackbar.make(refreshLayout, "Brak połączenia z internetem", Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(refreshLayout, "No Internet connection", Snackbar.LENGTH_LONG);
                 snackbar.show();
             }
         }

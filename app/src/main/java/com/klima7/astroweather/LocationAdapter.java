@@ -101,8 +101,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
 
         @Override
         public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-            menu.setHeaderTitle("Akcja");
-            menu.add(0, v.getId(), 0, "Usuń");
+            menu.setHeaderTitle("Actions");
+            menu.add(0, v.getId(), 0, "Remove");
         }
     }
 
