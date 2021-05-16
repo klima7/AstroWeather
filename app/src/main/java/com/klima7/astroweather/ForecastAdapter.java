@@ -16,6 +16,7 @@ import java.util.List;
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastHolder> {
 
     private List<Forecast> forecasts = new ArrayList<>();
+    private Unit unit;
     private View noForecastMessage;
 
     public ForecastAdapter(View noForecastMessage) {
@@ -39,12 +40,9 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
         return forecasts.size();
     }
 
-    public List<Forecast> getForecasts() {
-        return forecasts;
-    }
-
-    public void setForecasts(List<Forecast> forecasts) {
+    public void setForecasts(List<Forecast> forecasts, Unit unit) {
         this.forecasts = forecasts;
+        this.unit = unit;
         this.notifyDataSetChanged();
         updateNoForecastMessage();
     }
@@ -70,7 +68,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
         public void update(Forecast forecast) {
             dateView.setText(String.valueOf(forecast.day));
-            temperatureView.setText(forecast.low + "-" + forecast.high);
+            temperatureView.setText(forecast.low + "-" + forecast.high + unit.getTemperatureUnit());
             descriptionView.setText(String.valueOf(forecast.text));
             conditionView.setText(String.valueOf(forecast.code));
         }

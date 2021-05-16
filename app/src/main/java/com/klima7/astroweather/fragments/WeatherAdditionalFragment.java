@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.klima7.astroweather.AppData;
 import com.klima7.astroweather.R;
+import com.klima7.astroweather.Unit;
 import com.klima7.astroweather.weather.Weather;
 
 public class WeatherAdditionalFragment extends Fragment {
@@ -43,17 +44,21 @@ public class WeatherAdditionalFragment extends Fragment {
         humidityView = getView().findViewById(R.id.humidity_view);
         visibilityView = getView().findViewById(R.id.visibility_view);
 
-        update(data.weather.getValue());
-        data.weather.observe(requireActivity(), newWeather -> update(newWeather));
+        update();
+        data.weather.observe(requireActivity(), newWeather -> update());
+        data.unit.observe(requireActivity(), newUnit -> update());
     }
 
-    private void update(Weather weather) {
+    private void update() {
+        Weather weather = data.weather.getValue();
+        Unit unit = data.unit.getValue();
+
         if(weather != null) {
-            windChillView.setText(String.valueOf(weather.chill));
-            windDirectionView.setText(String.valueOf(weather.direction));
-            windSpeedView.setText(String.valueOf(weather.speed));
-            humidityView.setText(String.valueOf(weather.humidity));
-            visibilityView.setText(String.valueOf(weather.visibility));
+            windChillView.setText(String.valueOf(weather.chill) + unit.getTemperatureUnit());
+            windDirectionView.setText(String.valueOf(weather.direction) + unit.getWindDirectionUnit());
+            windSpeedView.setText(String.valueOf(weather.speed) + unit.getWindSpeedUnit());
+            humidityView.setText(String.valueOf(weather.humidity) + unit.getHumidityUnit());
+            visibilityView.setText(String.valueOf(weather.visibility) + unit.getDistanceUnit());
         }
         else {
             String placeholder = getResources().getString(R.string.placeholder);

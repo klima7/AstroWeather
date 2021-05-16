@@ -35,19 +35,19 @@ public enum Unit {
     }
 
     public String getTemperatureUnit() {
-        return temperature;
+        return " " + temperature;
     }
 
     public String getDistanceUnit() {
-        return distance;
+        return " " + distance;
     }
 
     public String getWindDirectionUnit() {
-        return windDirection;
+        return " " + windDirection;
     }
 
     public String getWindSpeedUnit() {
-        return windSpeed;
+        return " " + windSpeed;
     }
 
     public String getHumidityUnit() {
@@ -55,6 +55,6 @@ public enum Unit {
     }
 
     public String getPressureUnit() {
-        return pressure;
+        return " " + pressure;
     }
 }

@@ -55,10 +55,10 @@ public class WeatherForecastFragment extends Fragment {
 
     private void update(Weather weather) {
         if(weather != null) {
-            adapter.setForecasts(weather.forecasts);
+            adapter.setForecasts(weather.forecasts, weather.unit);
         }
         else {
-            adapter.setForecasts(new ArrayList<>());
+            adapter.setForecasts(new ArrayList<>(), null);
         }
     }
 }
