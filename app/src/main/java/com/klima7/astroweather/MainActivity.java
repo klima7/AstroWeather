@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
@@ -92,24 +93,27 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         super.onStart();
         networkReceiver = new NetworkChangeReceiver();
         registerReceiver(networkReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+        scheduleRefresh();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         unregisterReceiver(networkReceiver);
+        refreshTask.cancel();
+        timer.cancel();
     }
 
     @Override
     public void locationChangeClicked() {
         Intent intent = new Intent(this, LocationActivity.class);
+        intent.putExtra(LocationActivity.EXTRA_WOEID, data.location.getValue() != null ? data.location.getValue().woeid : 0);
         locationLauncher.launch(intent);
     }
 
     private void onLocationChanged(ActivityResult result) {
         if(result == null || result.getData() == null)
             return;
-
         int woeid = result.getData().getIntExtra(LocationActivity.RET_WOEID, 0);
         sharedPreferences.edit().putInt("woeid", woeid).apply();
         update(woeid, data.unit.getValue());
@@ -130,6 +134,14 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         }
     }
 
+    private void scheduleRefresh() {
+        timer = new Timer();
+        refreshTask = new RefreshTask();
+        long nextRefreshTime = data.lastRefresh.getValue() + data.refreshPeriod.getValue()*1000;
+        long nextRefreshDelay = Math.max(nextRefreshTime - System.currentTimeMillis(), 0);
+        timer.scheduleAtFixedRate(refreshTask, nextRefreshDelay, data.refreshPeriod.getValue() * 1000);
+    }
+
     @Override
     public void onRefresh() {
         update();
@@ -139,7 +151,6 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     private void update() {
         int woeid = data.location.getValue() != null ? data.location.getValue().woeid : 0;
         Unit unit = data.unit.getValue();
-        Log.i("Hello", "Update with unit: " + unit);
         update(woeid, unit);
     }
 
@@ -204,6 +215,16 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
         data.sunInfo.setValue(calculator.getSunInfo());
         data.moonInfo.setValue(calculator.getMoonInfo());
+    }
+
+    class RefreshTask extends TimerTask {
+        @Override
+        public void run() {
+            runOnUiThread(()-> {
+                update();
+                Toast.makeText(MainActivity.this, "Refresh", Toast.LENGTH_SHORT).show();
+            });
+        }
     }
 
     private class UpdateLocationAndAstroTask implements Runnable {
@@ -276,5 +297,4 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
             }
         }
     }
-
 }

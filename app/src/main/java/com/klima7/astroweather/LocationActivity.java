@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +29,7 @@ import java.util.List;
 
 public class LocationActivity extends AppCompatActivity implements LocationAdapter.OnLocationSelectedListener {
 
+    public static final String EXTRA_WOEID = "output_woeid";
     public static final String RET_WOEID = "output_woeid";
 
     private AppDatabase db;
@@ -37,6 +37,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
     private EditText locationEdit;
     private LinearLayout addLocationView;
     private TextView noInternetMessageView;
+    private int input_woeid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +61,9 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
 
         registerReceiver(new LocationActivity.NetworkChangeReceiver(), new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
 
-        new Thread(new FetchWeathersTask()).start();
+        new Thread(new FetchLocationsTask()).start();
 
-        Intent data = new Intent();
-        data.putExtra(RET_WOEID, 0);
-        setResult(RESULT_OK, data);
+        input_woeid = getIntent().getIntExtra(EXTRA_WOEID, 0);
     }
 
     public void addClicked() {
@@ -88,7 +87,7 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
                 }
 
                 adapter.addLocation(location);
-                new Thread(new AddWeatherTask(location)).start();
+                new Thread(new AddLocationTask(location)).start();
             }
         }, null);
         requestManager.addToRequestQueue(reques);
@@ -96,21 +95,27 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
 
     @Override
     public void locationSelected(Location location) {
-        Intent data = new Intent();
-        data.putExtra(RET_WOEID, location.woeid);
-        setResult(RESULT_OK, data);
+        setWoeidResult(location.woeid);
         finish();
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         Location location = adapter.getLocation();
-        new Thread(new RemoveWeatherTask(location)).start();
+        if(location.woeid == input_woeid)
+            setWoeidResult(0);
+        new Thread(new RemoveLocationTask(location)).start();
         adapter.removeLocation(location);
         return true;
     }
 
-    private class FetchWeathersTask implements Runnable {
+    private void setWoeidResult(int woeid) {
+        Intent data = new Intent();
+        data.putExtra(RET_WOEID, woeid);
+        setResult(RESULT_OK, data);
+    }
+
+    private class FetchLocationsTask implements Runnable {
         @Override
         public void run() {
             List<Location> locations = db.locationDao().getAll();
@@ -118,9 +123,9 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
         }
     }
 
-    private class AddWeatherTask implements Runnable {
+    private class AddLocationTask implements Runnable {
         private Location location;
-        public AddWeatherTask(Location location) {
+        public AddLocationTask(Location location) {
             this.location = location;
         }
         @Override
@@ -129,9 +134,9 @@ public class LocationActivity extends AppCompatActivity implements LocationAdapt
         }
     }
 
-    private class RemoveWeatherTask implements Runnable {
+    private class RemoveLocationTask implements Runnable {
         private Location location;
-        public RemoveWeatherTask(Location location) {
+        public RemoveLocationTask(Location location) {
             this.location = location;
         }
         @Override
