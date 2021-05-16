@@ -24,6 +24,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.android.volley.Response;
 import com.astrocalculator.AstroCalculator;
 import com.astrocalculator.AstroDateTime;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.klima7.astroweather.db.AppDatabase;
 import com.klima7.astroweather.db.DatabaseUtil;
@@ -50,6 +51,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     private ActivityResultLauncher settingsLauncher;
     private NetworkChangeReceiver networkReceiver;
     private SwipeRefreshLayout refreshLayout;
+    private LinearProgressIndicator refreshIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +88,9 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         if(savedInstanceState == null) {
             update(sharedPreferences.getInt("woeid", 0), data.unit.getValue());
         }
+
+        refreshIndicator = findViewById(R.id.refresh_indicator);
+        refreshIndicator.hide();
     }
 
     @Override
@@ -228,10 +233,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     class RefreshTask extends TimerTask {
         @Override
         public void run() {
-            runOnUiThread(()-> {
-                update();
-                Toast.makeText(MainActivity.this, "Refresh", Toast.LENGTH_SHORT).show();
-            });
+            runOnUiThread(()-> update());
         }
     }
 
@@ -246,9 +248,18 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         public void run() {
             Location location = db.locationDao().getSingle(woeid);
             runOnUiThread(() -> {
+                refreshIndicator.show();
                 data.location.setValue(location);
                 updateAstro();
             });
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            runOnUiThread(() -> refreshIndicator.hide());
         }
     }
 

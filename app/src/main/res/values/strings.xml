@@ -42,4 +42,5 @@
     <string name="forecast_condition_label">Conditions</string>
     <string name="forecast_date_label">Date</string>
     <string name="no_forecast_data">No forecast data</string>
+    <string name="location_no_internet">Connect to the Internet to add new location</string>
 </resources>
