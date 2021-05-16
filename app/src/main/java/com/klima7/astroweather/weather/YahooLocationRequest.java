@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 public class YahooLocationRequest extends YahooRequest<Location> {
 
     public YahooLocationRequest(String place, Response.Listener<Location> listener, Response.ErrorListener errorListener) {
-        super("c", String.format("?location=%s&format=json", place), listener, errorListener);
+        super(String.format("?location=%s&format=json", place), listener, errorListener);
         setShouldCache(true);
     }
 

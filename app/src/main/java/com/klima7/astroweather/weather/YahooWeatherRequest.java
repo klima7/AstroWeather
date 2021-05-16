@@ -4,6 +4,7 @@ import com.android.volley.Response;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.klima7.astroweather.Unit;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,10 +12,10 @@ import java.util.List;
 public class YahooWeatherRequest extends YahooRequest<Weather> {
 
     private int woeid;
-    private String unit;
+    private Unit unit;
 
-    public YahooWeatherRequest(int woeid, String unit, Response.Listener<Weather> listener, Response.ErrorListener errorListener) {
-        super(unit, String.format("?woeid=%d&format=json&u=%s", woeid, unit), listener, errorListener);
+    public YahooWeatherRequest(int woeid, Unit unit, Response.Listener<Weather> listener, Response.ErrorListener errorListener) {
+        super(String.format("?woeid=%d&format=json&u=%s", woeid, unit), listener, errorListener);
         setShouldCache(false);
         this.woeid = woeid;
         this.unit = unit;

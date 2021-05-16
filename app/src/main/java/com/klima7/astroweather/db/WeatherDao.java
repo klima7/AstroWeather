@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.klima7.astroweather.Unit;
 import com.klima7.astroweather.weather.Location;
 import com.klima7.astroweather.weather.Weather;
 
@@ -18,10 +19,10 @@ public interface WeatherDao {
     List<Weather> getAll();
 
     @Query("SELECT * FROM Weather WHERE woeid=:woeid AND unit=:unit")
-    Weather getSingle(int woeid, String unit);
+    Weather getSingle(int woeid, Unit unit);
 
     @Insert
-    void insertAll(Weather... entries);
+    void insertAll(Weather... weathers);
 
     @Delete
     void delete(Weather entry);

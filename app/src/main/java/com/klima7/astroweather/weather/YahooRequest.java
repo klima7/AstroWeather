@@ -28,7 +28,7 @@ public abstract class YahooRequest<T> extends JsonRequest {
     public static final String CONSUMER_SECRET = "6f307dc157458f96a02def7f040b143ae2e3b3f3";
     public static final String BASE_URL = "https://weather-ydn-yql.media.yahoo.com/forecastrss";
 
-    public YahooRequest(String unit, String url, Response.Listener<T> listener, Response.ErrorListener errorListener) {
+    public YahooRequest(String url, Response.Listener<T> listener, Response.ErrorListener errorListener) {
         super(Request.Method.GET, BASE_URL+url, null, listener, errorListener);
     }
 

@@ -135,11 +135,11 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
     private void update() {
         int woeid = data.location.getValue() != null ? data.location.getValue().woeid : 0;
-        String unit = data.unit.getValue();
+        Unit unit = data.unit.getValue();
         update(woeid, unit);
     }
 
-    private void update(int woeid, String unit) {
+    private void update(int woeid, Unit unit) {
         updateLocationAndAstro(woeid);
         updateWeather(woeid, unit);
     }
@@ -155,7 +155,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         new Thread(new UpdateLocationAndAstroTask(woeid)).start();
     }
 
-    private void updateWeather(int woeid, String unit) {
+    private void updateWeather(int woeid, Unit unit) {
         if(woeid == 0) {
             data.weather.setValue(null);
             return;
@@ -236,9 +236,9 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
 
     private class SetSavedWeatherTask implements Runnable {
         private int woeid;
-        private String unit;
+        private Unit unit;
 
-        public SetSavedWeatherTask(int woeid, String unit) {
+        public SetSavedWeatherTask(int woeid, Unit unit) {
             this.woeid = woeid;
             this.unit = unit;
         }

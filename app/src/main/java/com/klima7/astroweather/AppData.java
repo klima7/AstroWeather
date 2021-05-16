@@ -20,7 +20,7 @@ public class AppData extends AndroidViewModel {
     public MutableLiveData<AstroCalculator.MoonInfo> moonInfo = new MutableLiveData<>();
     public MutableLiveData<Weather> weather = new MutableLiveData<>();
 
-    public MutableLiveData<String> unit = new MutableLiveData<>();
+    public MutableLiveData<Unit> unit = new MutableLiveData<>();
 
     public MutableLiveData<Integer> refreshPeriod = new MutableLiveData<>();
     public MutableLiveData<Long> lastRefresh = new MutableLiveData<>();
@@ -36,7 +36,7 @@ public class AppData extends AndroidViewModel {
         lastRefresh.setValue(0L);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
-        unit.setValue(sharedPreferences.getString("unit", "c"));
+        unit.setValue(Unit.fromCode(sharedPreferences.getString("unit", "c")));
         refreshPeriod.setValue(Integer.parseInt(sharedPreferences.getString("refresh", "10")));
     }
 }

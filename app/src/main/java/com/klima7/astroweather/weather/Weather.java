@@ -3,13 +3,15 @@ package com.klima7.astroweather.weather;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
+import com.klima7.astroweather.Unit;
+
 import java.util.List;
 
 @Entity(primaryKeys = {"woeid", "unit"})
 public class Weather {
 
     public int woeid;
-    @NonNull public String unit;
+    @NonNull public Unit unit;
 
     public int chill;
     public int direction;
@@ -33,7 +35,7 @@ public class Weather {
     public String toString() {
         return "Weather{" +
                 "woeid=" + woeid +
-                ", unit='" + unit + '\'' +
+                ", unit=" + unit +
                 ", chill=" + chill +
                 ", direction=" + direction +
                 ", speed=" + speed +
@@ -46,7 +48,7 @@ public class Weather {
                 ", text='" + text + '\'' +
                 ", code=" + code +
                 ", temperature=" + temperature +
-                ", forecast=" + forecasts +
+                ", forecasts=" + forecasts +
                 '}';
     }
 }

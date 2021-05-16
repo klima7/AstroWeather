@@ -4,6 +4,7 @@ import androidx.room.TypeConverter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.klima7.astroweather.Unit;
 import com.klima7.astroweather.weather.Forecast;
 
 import java.lang.reflect.Type;
@@ -31,5 +32,15 @@ public class DataConverter {
         Type type = new TypeToken<List<Forecast>>() {}.getType();
         List<Forecast> ForecastList = gson.fromJson(ForecastString, type);
         return ForecastList;
+    }
+
+    @TypeConverter
+    public String fromUnit(Unit unit) {
+        return unit.getCode();
+    }
+
+    @TypeConverter
+    public Unit toUnit(String code) {
+        return Unit.fromCode(code);
     }
 }
