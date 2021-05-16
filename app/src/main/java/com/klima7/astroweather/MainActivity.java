@@ -126,11 +126,18 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     }
 
     private void onSettingsChanged(ActivityResult result) {
-        int refresh = Integer.parseInt(sharedPreferences.getString("refresh", "10"));
         Unit newUnit = Unit.fromCode(sharedPreferences.getString("unit", "c"));
         if(data.unit.getValue() != newUnit) {
             data.unit.setValue(newUnit);
             update();
+        }
+
+        int newRefreshPeriod = Integer.parseInt(sharedPreferences.getString("refresh", "10"));
+        if(data.refreshPeriod.getValue() != newRefreshPeriod) {
+            data.refreshPeriod.setValue(newRefreshPeriod);
+            refreshTask.cancel();
+            timer.cancel();
+            scheduleRefresh();
         }
     }
 
@@ -157,6 +164,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     private void update(int woeid, Unit unit) {
         updateLocationAndAstro(woeid);
         updateWeather(woeid, unit);
+        data.lastRefresh.setValue(System.currentTimeMillis());
     }
 
     private void updateLocationAndAstro(int woeid) {
