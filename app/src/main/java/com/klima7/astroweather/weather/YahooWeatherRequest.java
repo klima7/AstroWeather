@@ -15,7 +15,7 @@ public class YahooWeatherRequest extends YahooRequest<Weather> {
     private Unit unit;
 
     public YahooWeatherRequest(int woeid, Unit unit, Response.Listener<Weather> listener, Response.ErrorListener errorListener) {
-        super(String.format("?woeid=%d&format=json&u=%s", woeid, unit), listener, errorListener);
+        super(String.format("?woeid=%d&format=json&u=%s", woeid, unit.getCode()), listener, errorListener);
         setShouldCache(false);
         this.woeid = woeid;
         this.unit = unit;

@@ -139,6 +139,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     private void update() {
         int woeid = data.location.getValue() != null ? data.location.getValue().woeid : 0;
         Unit unit = data.unit.getValue();
+        Log.i("Hello", "Update with unit: " + unit);
         update(woeid, unit);
     }
 
