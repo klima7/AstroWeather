@@ -20,7 +20,7 @@ import com.klima7.astroweather.weather.Weather;
 public class WeatherGeneralFragment extends Fragment {
 
     private AppData data;
-    private TextView temperatureView, pressureView, descriptionView, conditionView;
+    private TextView temperatureView, pressureView, conditionView, measurementView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,8 +40,8 @@ public class WeatherGeneralFragment extends Fragment {
 
         temperatureView = getView().findViewById(R.id.temperature_view);
         pressureView = getView().findViewById(R.id.pressure_view);
-        descriptionView = getView().findViewById(R.id.description_view);
         conditionView = getView().findViewById(R.id.condition_view);
+        measurementView = getView().findViewById(R.id.measurement_view);
 
         update();
         data.weather.observe(requireActivity(), newWeather -> update());
@@ -51,16 +51,16 @@ public class WeatherGeneralFragment extends Fragment {
         Weather weather = data.weather.getValue();
 
         if(weather != null) {
+            measurementView.setText(weather.date.substring(0, weather.date.length()-7));
             temperatureView.setText(String.valueOf(weather.temperature) + weather.unit.getTemperatureUnit());
             pressureView.setText(String.valueOf(weather.pressure) + weather.unit.getPressureUnit());
-            descriptionView.setText(weather.text);
-            conditionView.setText(String.valueOf(weather.code));
+            conditionView.setText(String.valueOf(weather.text));
         }
         else {
             String placeholder = getResources().getString(R.string.placeholder);
+            measurementView.setText(placeholder);
             temperatureView.setText(placeholder);
             pressureView.setText(placeholder);
-            descriptionView.setText(placeholder);
             conditionView.setText(placeholder);
         }
     }

@@ -56,21 +56,21 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
     public class ForecastHolder extends RecyclerView.ViewHolder {
 
-        private TextView dateView, temperatureView, descriptionView, conditionView;
+        private TextView dateView, dayView, temperatureView, conditionView;
 
         public ForecastHolder(@NonNull View itemView) {
             super(itemView);
             dateView = itemView.findViewById(R.id.forecast_date);
+            dayView = itemView.findViewById(R.id.forecast_day);
             temperatureView = itemView.findViewById(R.id.forecast_temperature);
-            descriptionView = itemView.findViewById(R.id.forecast_description);
             conditionView = itemView.findViewById(R.id.forecast_conditions);
         }
 
         public void update(Forecast forecast) {
-            dateView.setText(String.valueOf(forecast.day));
+            dateView.setText(String.valueOf(forecast.date));
+            dayView.setText(String.valueOf(forecast.day));
             temperatureView.setText(forecast.low + "-" + forecast.high + unit.getTemperatureUnit());
-            descriptionView.setText(String.valueOf(forecast.text));
-            conditionView.setText(String.valueOf(forecast.code));
+            conditionView.setText(String.valueOf(forecast.text));
         }
     }
 }

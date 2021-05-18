@@ -60,10 +60,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/forecast_temperature" />
+                    android:text="@string/forecast_day_label" />
 
                 <TextView
-                    android:id="@+id/forecast_temperature"
+                    android:id="@+id/forecast_day"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -80,10 +80,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/forecast_description_label" />
+                    android:text="@string/forecast_temperature" />
 
                 <TextView
-                    android:id="@+id/forecast_description"
+                    android:id="@+id/forecast_temperature"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

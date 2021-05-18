@@ -90,7 +90,7 @@ public class YahooWeatherRequest extends YahooRequest<Weather> {
         forecast.low = Integer.parseInt(attributes.getNamedItem("low").getTextContent());
         forecast.high = Integer.parseInt(attributes.getNamedItem("high").getTextContent());
         forecast.code = Integer.parseInt(attributes.getNamedItem("code").getTextContent());
-        forecast.day = attributes.getNamedItem("code").getTextContent();
+        forecast.day = attributes.getNamedItem("day").getTextContent();
         forecast.date = attributes.getNamedItem("date").getTextContent();
         forecast.text = attributes.getNamedItem("text").getTextContent();
 
