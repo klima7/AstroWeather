@@ -3,7 +3,6 @@ package com.klima7.astroweather.weather;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.util.Log;
 
 import com.android.volley.Response;
 import com.klima7.astroweather.Unit;
@@ -19,7 +18,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +45,7 @@ public class YahooWeatherRequest extends YahooRequest<Weather> {
 
         NamedNodeMap windAttributes = document.getElementsByTagName("yweather:wind").item(0).getAttributes();
         weather.chill = Integer.parseInt(windAttributes.getNamedItem("chill").getTextContent());
-        weather.speed = Integer.parseInt(windAttributes.getNamedItem("speed").getTextContent());
+        weather.speed = Double.parseDouble(windAttributes.getNamedItem("speed").getTextContent());
         weather.direction = Integer.parseInt(windAttributes.getNamedItem("direction").getTextContent());
 
         NamedNodeMap atmosphereAttributes = document.getElementsByTagName("yweather:atmosphere").item(0).getAttributes();

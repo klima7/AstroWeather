@@ -94,16 +94,16 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         networkReceiver = new NetworkChangeReceiver();
         registerReceiver(networkReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
         scheduleRefresh();
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         unregisterReceiver(networkReceiver);
         refreshTask.cancel();
         timer.cancel();
@@ -140,9 +140,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         int newRefreshPeriod = Integer.parseInt(sharedPreferences.getString("refresh", "10"));
         if(data.refreshPeriod.getValue() != newRefreshPeriod) {
             data.refreshPeriod.setValue(newRefreshPeriod);
-            refreshTask.cancel();
-            timer.cancel();
-            scheduleRefresh();
+            rescheduleRefresh();
         }
     }
 
@@ -152,6 +150,14 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         long nextRefreshTime = data.lastRefresh.getValue() + data.refreshPeriod.getValue()*1000;
         long nextRefreshDelay = Math.max(nextRefreshTime - System.currentTimeMillis(), 0);
         timer.scheduleAtFixedRate(refreshTask, nextRefreshDelay, data.refreshPeriod.getValue() * 1000);
+    }
+
+    private void rescheduleRefresh() {
+        if(refreshTask != null)
+            refreshTask.cancel();
+        if(timer != null)
+            timer.cancel();
+        scheduleRefresh();
     }
 
     @Override
@@ -170,6 +176,7 @@ public class MainActivity extends FragmentActivity implements InfoFragment.InfoI
         updateLocationAndAstro(woeid);
         updateWeather(woeid, unit);
         data.lastRefresh.setValue(System.currentTimeMillis());
+        rescheduleRefresh();
     }
 
     private void updateLocationAndAstro(int woeid) {

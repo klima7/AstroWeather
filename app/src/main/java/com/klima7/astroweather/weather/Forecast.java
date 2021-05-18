@@ -4,8 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
-import androidx.room.ColumnInfo;
-
 public class Forecast {
 
     public String day;
@@ -14,7 +12,6 @@ public class Forecast {
     public int high;
     public String text;
     public int code;
-
     public String image;
 
     public Bitmap decodeBase64() {

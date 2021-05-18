@@ -3,15 +3,12 @@ package com.klima7.astroweather.weather;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 
 import com.klima7.astroweather.Unit;
 
-import java.nio.ByteBuffer;
 import java.util.List;
 
 @Entity(primaryKeys = {"woeid", "unit"})
