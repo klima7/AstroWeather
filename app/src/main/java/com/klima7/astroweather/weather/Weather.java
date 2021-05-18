@@ -22,33 +22,11 @@ public class Weather {
     public double pressure;
     public int rising;
 
-    public String sunrise;
-    public String sunset;
-
     public String text;
     public int code;
     public int temperature;
 
-    public List<Forecast> forecasts;
+    public String date;
 
-    @Override
-    public String toString() {
-        return "Weather{" +
-                "woeid=" + woeid +
-                ", unit=" + unit +
-                ", chill=" + chill +
-                ", direction=" + direction +
-                ", speed=" + speed +
-                ", humidity=" + humidity +
-                ", visibility=" + visibility +
-                ", pressure=" + pressure +
-                ", rising=" + rising +
-                ", sunrise='" + sunrise + '\'' +
-                ", sunset='" + sunset + '\'' +
-                ", text='" + text + '\'' +
-                ", code=" + code +
-                ", temperature=" + temperature +
-                ", forecasts=" + forecasts +
-                '}';
-    }
+    public List<Forecast> forecasts;
 }
