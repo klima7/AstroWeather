@@ -1,5 +1,11 @@
 package com.klima7.astroweather.weather;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
+import androidx.room.ColumnInfo;
+
 public class Forecast {
 
     public String day;
@@ -9,15 +15,10 @@ public class Forecast {
     public String text;
     public int code;
 
-    @Override
-    public String toString() {
-        return "ForecastInfo{" +
-                "day='" + day + '\'' +
-                ", date=" + date +
-                ", low=" + low +
-                ", high=" + high +
-                ", text='" + text + '\'' +
-                ", code=" + code +
-                '}';
+    public String image;
+
+    public Bitmap decodeBase64() {
+        byte[] decodedByte = Base64.decode(image, 0);
+        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 }

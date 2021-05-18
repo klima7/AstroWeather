@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ public class WeatherGeneralFragment extends Fragment {
 
     private AppData data;
     private TextView temperatureView, pressureView, conditionView, measurementView;
+    private ImageView imageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class WeatherGeneralFragment extends Fragment {
         pressureView = getView().findViewById(R.id.pressure_view);
         conditionView = getView().findViewById(R.id.condition_view);
         measurementView = getView().findViewById(R.id.measurement_view);
+        imageView = getView().findViewById(R.id.weather_image);
 
         update();
         data.weather.observe(requireActivity(), newWeather -> update());
@@ -55,6 +58,7 @@ public class WeatherGeneralFragment extends Fragment {
             temperatureView.setText(String.valueOf(weather.temperature) + weather.unit.getTemperatureUnit());
             pressureView.setText(String.valueOf(weather.pressure) + weather.unit.getPressureUnit());
             conditionView.setText(String.valueOf(weather.text));
+            imageView.setImageBitmap(weather.decodeBase64());
         }
         else {
             String placeholder = getResources().getString(R.string.placeholder);
@@ -62,6 +66,7 @@ public class WeatherGeneralFragment extends Fragment {
             temperatureView.setText(placeholder);
             pressureView.setText(placeholder);
             conditionView.setText(placeholder);
+            imageView.setImageResource(R.drawable.question_mark);
         }
     }
 }

@@ -3,6 +3,7 @@ package com.klima7.astroweather;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -57,6 +58,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
     public class ForecastHolder extends RecyclerView.ViewHolder {
 
         private TextView dateView, dayView, temperatureView, conditionView;
+        private ImageView imageView;
 
         public ForecastHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,6 +66,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
             dayView = itemView.findViewById(R.id.forecast_day);
             temperatureView = itemView.findViewById(R.id.forecast_temperature);
             conditionView = itemView.findViewById(R.id.forecast_conditions);
+            imageView = itemView.findViewById(R.id.forecast_weather_image);
         }
 
         public void update(Forecast forecast) {
@@ -71,6 +74,10 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
             dayView.setText(String.valueOf(forecast.day));
             temperatureView.setText(forecast.low + "-" + forecast.high + unit.getTemperatureUnit());
             conditionView.setText(String.valueOf(forecast.text));
+            if(forecast.image != null)
+                imageView.setImageBitmap(forecast.decodeBase64());
+            else
+                imageView.setImageResource(R.drawable.question_mark);
         }
     }
 }
